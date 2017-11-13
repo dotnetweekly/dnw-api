@@ -17,6 +17,11 @@ var linkSchema = new Schema({
     required: true,
     validate: stringValidate.requiredStringValidator
   },
+  slug: {
+    type: String,
+    require: true,
+    unique: true
+  },
   url: {
     type: String,
     required: true,
@@ -24,8 +29,7 @@ var linkSchema = new Schema({
   },
   image: {
     type: String,
-    required: true,
-    validate: stringValidate.requiredStringValidator
+    required: false
   },
   upvotes: {
     type: Number,

@@ -11,6 +11,7 @@ var categorySchema = new Schema({
   slug: {
     type: String,
     required: true,
+    unique: true,
     validate: stringValidate.requiredStringValidator
   },
   createdOn: { type: Date, default: Date.now }

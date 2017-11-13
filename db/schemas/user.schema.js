@@ -3,10 +3,16 @@ var Schema = mongoose.Schema;
 var stringValidate = require("../validations/strings.validate");
 
 var userSchema = new Schema({
-  name: {
+  email: {
     type: String,
     required: true,
     validate: stringValidate.requiredStringValidator
+  },
+  firstName: {
+    type: String
+  },
+  lastName: {
+    type: String
   },
   subscribed: {
     type: Boolean,

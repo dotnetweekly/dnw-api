@@ -1,6 +1,7 @@
+var mongoose = require("mongoose");
 var Category = require("../category.model");
-
 var categories = [];
+
 categories.push(
   new Category({
     _id: new mongoose.Types.ObjectId(),
