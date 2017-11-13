@@ -1,4 +1,4 @@
-var Link = require('../models/links.model.js');
+var Link = require('../models/link.model.js');
 
 exports.list = function(req, res) {
     var query = Link.find();
