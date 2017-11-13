@@ -1,5 +1,5 @@
 var mongoose = require("mongoose");
-var Category = require("../category.model");
+var Category = require("../models/category.model");
 var categories = [];
 
 categories.push(

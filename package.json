@@ -14,7 +14,7 @@
   },
   "scripts": {
     "start": "nodemon ./bin/www",
-    "seed": "node ./models/seed/"
+    "seed": "node ./db/seed/"
   },
   "devDependencies": {
     "nodemon": "^1.12.1"

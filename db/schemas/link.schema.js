@@ -2,9 +2,7 @@ var mongoose = require("mongoose");
 var Schema = mongoose.Schema;
 var stringValidate = require("../validations/strings.validate");
 
-var categorySchema = require("./category.schema");
 var tagSchema = require("./tag.schema");
-var userSchema = require("./user.schema");
 
 var linkSchema = new Schema({
   title: {
