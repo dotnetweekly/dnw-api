@@ -1,6 +1,6 @@
 var mongoose = require("mongoose");
 var Schema = mongoose.Schema;
-var stringValidate = require("validations/strings.validate");
+var stringValidate = require("./validations/strings.validate");
 
 var categorySchema = new Schema({
   name: {
@@ -16,4 +16,4 @@ var categorySchema = new Schema({
   createdOn: { type: Date, default: Date.now }
 });
 
-module.exports = mongoose.model("Category", categorySchema);
+module.exports = categorySchema;

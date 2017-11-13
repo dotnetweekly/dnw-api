@@ -1,10 +1,10 @@
 var mongoose = require("mongoose");
 var Schema = mongoose.Schema;
-var stringValidate = require("validations/strings.validate");
+var stringValidate = require("./validations/strings.validate");
 
-var categorySchema = require("category.model");
-var tagSchema = require("tag.model");
-var userSchema = require("user.model");
+var categorySchema = require("./category.model");
+var tagSchema = require("./tag.model");
+var userSchema = require("./user.model");
 
 var linkSchema = new Schema({
   title: {
@@ -32,9 +32,9 @@ var linkSchema = new Schema({
     required: true,
     default: 0
   },
-  category: categorySchema,
+  category: [categorySchema],
   tags: [tagSchema],
-  user: userSchema,
+  user: [userSchema],
   createdOn: { type: Date, default: Date.now }
 });
 
