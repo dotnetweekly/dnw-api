@@ -1,6 +1,6 @@
 var mongoose = require("mongoose");
 var Schema = mongoose.Schema;
-var stringValidate = require("./validations/strings.validate");
+var stringValidate = require("../validations/strings.validate");
 
 var tagSchema = new Schema({
   name: {

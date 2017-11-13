@@ -1,19 +1,3 @@
-var mongoose = require("mongoose");
-var Schema = mongoose.Schema;
-var stringValidate = require("./validations/strings.validate");
+var schema = require("./schemas/category.schema");
 
-var categorySchema = new Schema({
-  name: {
-    type: String,
-    required: true,
-    validate: stringValidate.requiredStringValidator
-  },
-  slug: {
-    type: String,
-    required: true,
-    validate: stringValidate.requiredStringValidator
-  },
-  createdOn: { type: Date, default: Date.now }
-});
-
-module.exports = categorySchema;
+module.exports = mongoose.model("Category", schema);
