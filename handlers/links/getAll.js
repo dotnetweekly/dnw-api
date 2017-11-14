@@ -1,3 +1,5 @@
+var Link = require("../../db/models/link.model");
+
 const getAll = function(req, callback) {
   var query = Link.find({}, [
     "title",
@@ -12,26 +14,15 @@ const getAll = function(req, callback) {
     .populate("category")
     .populate("user")
     .sort({ title: "desc" })
-    .limit(12)
-    .exec(function(err, results) {
-      res.json(results);
-    });
+    .limit(12);
 
-  new Promise(function(resolve, reject) {
-    query.exec(function(err, posts) {
-      if (err !== null) {
-        reject(err);
-      } else {
-        resolve(posts);
-      }
-    });
-  })
-    .then(posts => {
-      callback.onSuccess(posts);
-    })
-    .catch(error => {
-      callback.onError(error);
-    });
+  query.exec(function(err, data) {
+    if (err) {
+      callback.onError({});
+    } else {
+      callback.onSuccess(data);
+    }
+  });
 };
 
 module.exports = getAll;

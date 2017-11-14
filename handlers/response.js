@@ -32,27 +32,6 @@ class ResponseManager {
     };
   }
 
-  static getDefaultResponseHandlerData(res) {
-    return {
-      onSuccess: function(data, message, code) {
-        ResponseManager.respondWithSuccess(
-          res,
-          code || ResponseManager.HTTP_STATUS.OK,
-          data,
-          message
-        );
-      },
-      onError: function(error) {
-        ResponseManager.respondWithErrorData(
-          res,
-          error.status,
-          error.message,
-          error.data
-        );
-      }
-    };
-  }
-
   static getDefaultResponseHandlerError(res, successCallback) {
     return {
       onSuccess: function(data, message, code) {
@@ -64,22 +43,6 @@ class ResponseManager {
           error.status || 500,
           error.message || "Unknown error"
         );
-      }
-    };
-  }
-
-  static getDefaultResponseHandlerSuccess(res, errorCallback) {
-    return {
-      onSuccess: function(data, message, code) {
-        ResponseManager.respondWithSuccess(
-          res,
-          code || ResponseManager.HTTP_STATUS.OK,
-          data,
-          message
-        );
-      },
-      onError: function(error) {
-        errorCallback(error);
       }
     };
   }

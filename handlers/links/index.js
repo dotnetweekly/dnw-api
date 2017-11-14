@@ -2,8 +2,9 @@ const BaseAutoBindedClass = require("../../base.autobind");
 const getAll = require("./getAll");
 
 class LinkHandler extends BaseAutoBindedClass {
-  getAll(req, callback) {
-    callback.onSuccess([{ id: 2 }]);
+  constructor() {
+    super();
+    this.getAll = (req, callback) => getAll(req, callback);
   }
 }
 
