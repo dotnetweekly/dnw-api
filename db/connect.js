@@ -1,4 +1,5 @@
 var mongoose = require("mongoose");
+var config = require("../config/index");
 
 mongoose.Promise = global.Promise;
-mongoose.connect("mongodb://127.0.0.1:27017/dnwdb", { useMongoClient: true });
+mongoose.connect(config.database.local, { useMongoClient: true });

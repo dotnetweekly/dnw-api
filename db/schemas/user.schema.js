@@ -1,8 +1,9 @@
-var mongoose = require("mongoose");
-var Schema = mongoose.Schema;
-var stringValidate = require("../validations/strings.validate");
+const mongoose = require("mongoose");
+const Schema = mongoose.Schema;
+const stringValidate = require("../validations/strings.validate");
+const crypto = require("crypto");
 
-var userSchema = new Schema({
+const userSchema = new Schema({
   username: {
     type: String,
     required: true,
@@ -30,7 +31,45 @@ var userSchema = new Schema({
     required: true,
     default: false
   },
-  createdOn: { type: Date, default: Date.now }
+  isActive: { type: Boolean, default: true },
+  createdOn: { type: Date, default: Date.now },
+  hashedPassword: {
+    type: String,
+    required: true
+  },
+  salt: {
+    type: String,
+    required: true
+  }
 });
+
+userSchema
+  .virtual("password")
+  .set(function(password) {
+    this.salt = crypto.randomBytes(32).toString("base64");
+    this.hashedPassword = this.encryptPassword(password, this.salt);
+  })
+  .get(function() {
+    return this.hashedPassword;
+  });
+
+userSchema.methods.encryptPassword = function(password, salt) {
+  return crypto
+    .createHmac("sha1", salt)
+    .update(password)
+    .digest("hex");
+};
+
+userSchema.methods.checkPassword = function(password) {
+  return this.encryptPassword(password, this.salt) === this.hashedPassword;
+};
+
+userSchema.methods.toJSON = function() {
+  let obj = this.toObject();
+  delete obj.hashedPassword;
+  delete obj.__v;
+  delete obj.salt;
+  return obj;
+};
 
 module.exports = userSchema;

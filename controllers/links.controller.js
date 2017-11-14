@@ -1,21 +1,18 @@
-var Link = require("../db/models/link.model");
+const BaseController = require("./base.controller");
+const LinkHandler = require("../handlers/links");
 
-exports.list = function(req, res) {
-  var query = Link.find({}, [
-    "title",
-    "content",
-    "tags",
-    "url",
-    "user",
-    "category"
-  ]);
+class LinkController extends BaseController {
+  constructor() {
+    super();
+    this._handler = new LinkHandler();
+  }
 
-  query
-    .populate("category")
-    .populate("user")
-    .sort({ title: "desc" })
-    .limit(12)
-    .exec(function(err, results) {
-      res.json(results);
-    });
-};
+  getAll(req, res, next) {
+    this._handler.getAll(
+      req,
+      this._responseManager.getDefaultResponseHandler(res)
+    );
+  }
+}
+
+module.exports = LinkController;
