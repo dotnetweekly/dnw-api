@@ -52,22 +52,14 @@ class ResponseManager {
     response.success = true;
     response.message = message;
     response.data = data;
-    response.links = links;
     res.status(code).json(response);
   }
 
-  static respondWithErrorData(
-    res,
-    errorCode,
-    message = "",
-    data = "",
-    links = []
-  ) {
+  static respondWithErrorData(res, errorCode, message = "", data = "") {
     let response = Object.assign({}, BasicResponse);
     response.success = false;
     response.message = message;
     response.data = data;
-    response.links = links;
     res.status(errorCode).json(response);
   }
 
@@ -75,7 +67,6 @@ class ResponseManager {
     let response = Object.assign({}, BasicResponse);
     response.success = false;
     response.message = message;
-    response.links = links;
     res.status(errorCode).json(response);
   }
 }
