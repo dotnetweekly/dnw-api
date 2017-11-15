@@ -55,14 +55,6 @@ class ResponseManager {
     res.status(code).json(response);
   }
 
-  static respondWithErrorData(res, errorCode, message = "", data = "") {
-    let response = Object.assign({}, BasicResponse);
-    response.success = false;
-    response.message = message;
-    response.data = data;
-    res.status(errorCode).json(response);
-  }
-
   static respondWithError(res, errorCode, message = "", links = []) {
     let response = Object.assign({}, BasicResponse);
     response.success = false;

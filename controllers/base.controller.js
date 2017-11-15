@@ -1,6 +1,8 @@
 const BaseAutoBindedClass = require("../base.autobind");
 const ResponseManager = require("../handlers/response");
 const AuthHandler = require("../handlers/auth");
+const config = require("../config");
+const UnauthorizedError = require("../error/unauthorized");
 
 class BaseController extends BaseAutoBindedClass {
   constructor() {
@@ -23,16 +25,15 @@ class BaseController extends BaseAutoBindedClass {
   remove(req, res) {}
 
   authenticate(req, res, callback) {
-    AuthHandler.authenticate(req, function(err, user) {
+    const authHandler = new AuthHandler();
+    const response = this._responseManager.getDefaultResponseHandler(res);
+
+    authHandler.validate(req, function(err, payload) {
       if (err) {
-        responseManager.respondWithError(
-          res,
-          err.status || 401,
-          err.message || ""
-        );
-      } else {
-        callback(user);
+        response.onError(new UnauthorizedError());
+        return;
       }
+      callback(payload.data);
     });
   }
 }

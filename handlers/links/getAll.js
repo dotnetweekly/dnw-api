@@ -18,7 +18,8 @@ const getAll = function(req, callback) {
 
   query.exec(function(err, data) {
     if (err) {
-      callback.onError({});
+      callback.onError([]);
+      return;
     } else {
       callback.onSuccess(data);
     }

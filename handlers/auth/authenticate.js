@@ -1,6 +1,9 @@
 const jwt = require("jsonwebtoken");
 const config = require("../../config");
-var User = require("../../db/models/user.model");
+const User = require("../../db/models/user.model");
+
+const NotFoundError = require("../../error/not-found");
+const UnauthorizedError = require("../../error/unauthorized");
 
 const authenticate = function(req, callback) {
   const username = req.body.username;
@@ -12,12 +15,12 @@ const authenticate = function(req, callback) {
 
   User.findOne(credentialName, function(error, user) {
     if (error || !user) {
-      callback.onError({ message: "No user found", status: 401 });
+      callback.onError(new NotFoundError("User not found"));
       return;
     }
 
     if (!user.checkPassword(password)) {
-      callback.onError({ message: "Wrong password", status: 401 });
+      callback.onError(new UnauthorizedError());
       return;
     }
 
@@ -25,6 +28,7 @@ const authenticate = function(req, callback) {
       jwt.sign(
         {
           data: {
+            id: user._id,
             username: user.username,
             email: user.email,
             isAdmin: user.isAdmin

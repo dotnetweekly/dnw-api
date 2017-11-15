@@ -4,14 +4,12 @@ const LinkHandler = require("../handlers/links");
 class LinkController extends BaseController {
   constructor() {
     super();
-    this._handler = new LinkHandler();
+    this._linkHandler = new LinkHandler();
   }
 
   getAll(req, res, next) {
-    this._handler.getAll(
-      req,
-      this._responseManager.getDefaultResponseHandler(res)
-    );
+    const response = this._responseManager.getDefaultResponseHandler(res);
+    this._linkHandler.getAll(req, response);
   }
 }
 
