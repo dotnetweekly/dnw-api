@@ -15,7 +15,7 @@ const authenticate = function(req, callback) {
 
   User.findOne(credentialName, function(error, user) {
     if (error || !user) {
-      callback.onError(new NotFoundError("User not found"));
+      callback.onError(new NotFoundError());
       return;
     }
 
