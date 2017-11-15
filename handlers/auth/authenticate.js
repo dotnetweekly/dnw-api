@@ -24,20 +24,24 @@ const authenticate = function(req, callback) {
       return;
     }
 
-    callback.onSuccess(
-      jwt.sign(
-        {
-          data: {
-            id: user._id,
-            username: user.username,
-            email: user.email,
-            isAdmin: user.isAdmin
-          }
-        },
-        config.auth.secret,
-        { expiresIn: 60 * 60 * 24 * 365 }
-      )
+    const timeToLive = 60 * 60 * 24 * 365;
+
+    const token = jwt.sign(
+      {
+        data: {
+          id: user._id,
+          username: user.username,
+          email: user.email,
+          isAdmin: user.isAdmin
+        }
+      },
+      config.auth.secret,
+      { expiresIn: timeToLive }
     );
+
+    var expirationDate = Math.floor(Date.now() / 1000) + timeToLive;
+
+    callback.onSuccess({ token: token, expiration: expirationDate });
   });
 };
 

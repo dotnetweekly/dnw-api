@@ -12,6 +12,22 @@ app.use(logger("dev")); /* 'default', 'short', 'tiny', 'dev' */
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 
+function allowCrossDomain(req, res, next) {
+  res.setHeader("Access-Control-Allow-Methods", "GET, POST, OPTIONS");
+
+  var origin = req.headers.origin;
+  res.setHeader("Access-Control-Allow-Origin", origin);
+  res.setHeader("Access-Control-Allow-Headers", "content-type, Authorization");
+
+  if (req.method === "OPTIONS") {
+    res.send(200);
+  } else {
+    next();
+  }
+}
+
+app.use(allowCrossDomain);
+
 app.use("/api", routes);
 
 // catch 404 and forward to error handler
