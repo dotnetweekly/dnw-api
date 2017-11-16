@@ -1,4 +1,6 @@
 const HttpStatus = require("http-status-codes");
+const AuthHandler = require("./auth");
+
 const BasicResponse = {
   success: false,
   message: "",
@@ -12,7 +14,24 @@ class ResponseManager {
     return HttpStatus;
   }
 
-  static getDefaultResponseHandler(res) {
+  static authenticate(req, res) {
+    const authHandler = new AuthHandler();
+    const payload = authHandler.validate(req);
+    const unauthorizedError = new UnauthorizedError();
+
+    if (!payload) {
+      res.status(unauthorizedError.status);
+      return;
+    }
+
+    return payload.data;
+  }
+
+  static getResponseHandler(req, res, noAuth) {
+    if (!noAuth && !authenticate(req, res)) {
+      return null;
+    }
+
     return {
       onSuccess: function(data, message, code) {
         ResponseManager.respondWithSuccess(
@@ -32,7 +51,11 @@ class ResponseManager {
     };
   }
 
-  static getDefaultResponseHandlerError(res, successCallback) {
+  static getResponseHandlerError(req, res, successCallback) {
+    if (authenticate(req, res)) {
+      return null;
+    }
+
     return {
       onSuccess: function(data, message, code) {
         successCallback(data, message, code);
