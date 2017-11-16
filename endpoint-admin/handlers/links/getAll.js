@@ -1,4 +1,4 @@
-var Link = require("../../db/models/link.model");
+var Link = require("../../../db/models/link.model");
 
 const getAll = function(req, callback) {
   var query = Link.find({}, [

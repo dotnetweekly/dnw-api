@@ -1,6 +1,6 @@
 const jwt = require("jsonwebtoken");
-const config = require("../../config");
-const User = require("../../db/models/user.model");
+const config = require("../../../config");
+const User = require("../../../db/models/user.model");
 
 const validate = function(req, callback) {
   var token =

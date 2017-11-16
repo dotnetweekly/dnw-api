@@ -1,4 +1,4 @@
-const BaseAutoBindedClass = require("../../base.autobind");
+const BaseAutoBindedClass = require("../../../helpers/base.autobind");
 const profile = require("./profile");
 
 class UserHandler extends BaseAutoBindedClass {

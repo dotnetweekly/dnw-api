@@ -1,4 +1,4 @@
-const BaseAutoBindedClass = require("../../base.autobind");
+const BaseAutoBindedClass = require("../../../helpers/base.autobind");
 const getAll = require("./getAll");
 
 class LinkHandler extends BaseAutoBindedClass {

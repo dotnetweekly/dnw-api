@@ -1,8 +1,8 @@
-const BaseAutoBindedClass = require("../base.autobind");
+const BaseAutoBindedClass = require("../../helpers/base.autobind");
 const ResponseManager = require("../handlers/response");
 const AuthHandler = require("../handlers/auth");
-const config = require("../config");
-const UnauthorizedError = require("../error/unauthorized");
+const config = require("../../config");
+const UnauthorizedError = require("../../error/unauthorized");
 
 class BaseController extends BaseAutoBindedClass {
   constructor() {

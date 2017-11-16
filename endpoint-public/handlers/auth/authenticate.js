@@ -1,9 +1,9 @@
 const jwt = require("jsonwebtoken");
-const config = require("../../config");
-const User = require("../../db/models/user.model");
+const config = require("../../../config");
+const User = require("../../../db/models/user.model");
 
-const NotFoundError = require("../../error/not-found");
-const UnauthorizedError = require("../../error/unauthorized");
+const NotFoundError = require("../../../error/not-found");
+const UnauthorizedError = require("../../../error/unauthorized");
 
 const authenticate = function(req, callback) {
   const username = req.body.username;

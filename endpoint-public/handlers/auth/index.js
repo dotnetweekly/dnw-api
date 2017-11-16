@@ -1,4 +1,4 @@
-const BaseAutoBindedClass = require("../../base.autobind");
+const BaseAutoBindedClass = require("../../../helpers/base.autobind");
 const authenticate = require("./authenticate");
 const register = require("./register");
 const validate = require("./validate");
