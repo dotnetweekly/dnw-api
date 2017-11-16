@@ -3,11 +3,12 @@ var Link = require("../../../db/models/link.model");
 const getAll = function(req, callback) {
   var query = Link.find({}, [
     "title",
-    "content",
     "tags",
     "url",
     "user",
-    "category"
+    "category",
+    "createdOn",
+    "isActive"
   ]);
 
   query

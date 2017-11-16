@@ -13,6 +13,7 @@ var tagSchema = new Schema({
     required: true,
     validate: stringValidate.requiredStringValidator
   },
+  isActive: { type: Boolean, default: true },
   createdOn: { type: Date, default: Date.now }
 });
 

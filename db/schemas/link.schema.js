@@ -34,6 +34,7 @@ var linkSchema = new Schema({
     required: true,
     default: 0
   },
+  isActive: { type: Boolean, default: true },
   category: { type: Schema.ObjectId, ref: "Category" },
   tags: [tagSchema],
   user: { type: Schema.ObjectId, ref: "User" },

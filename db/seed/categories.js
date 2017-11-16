@@ -6,27 +6,32 @@ categories.push(
   new Category({
     _id: new mongoose.Types.ObjectId(),
     name: "Articles",
-    slug: "articles"
+    slug: "articles",
+    isActive: true
   }),
   new Category({
     _id: new mongoose.Types.ObjectId(),
     name: "Books",
-    slug: "books"
+    slug: "books",
+    isActive: true
   }),
   new Category({
     _id: new mongoose.Types.ObjectId(),
     name: "Events-Seminars",
-    slug: "	events-seminars"
+    slug: "	events-seminars",
+    isActive: true
   }),
   new Category({
     _id: new mongoose.Types.ObjectId(),
     name: "Libraries-Tools",
-    slug: "libraries-tools"
+    slug: "libraries-tools",
+    isActive: true
   }),
   new Category({
     _id: new mongoose.Types.ObjectId(),
     name: "Videos",
-    slug: "videos"
+    slug: "videos",
+    isActive: true
   })
 );
 

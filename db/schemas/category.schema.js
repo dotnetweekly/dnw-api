@@ -14,6 +14,7 @@ var categorySchema = new Schema({
     unique: true,
     validate: stringValidate.requiredStringValidator
   },
+  isActive: { type: Boolean, default: true },
   createdOn: { type: Date, default: Date.now }
 });
 
