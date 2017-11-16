@@ -1,5 +1,6 @@
 const HttpStatus = require("http-status-codes");
 const AuthHandler = require("./auth");
+const UnauthorizedError = require("../../error/unauthorized");
 
 const BasicResponse = {
   success: false,
@@ -20,7 +21,7 @@ class ResponseManager {
     const unauthorizedError = new UnauthorizedError();
 
     if (!payload) {
-      res.status(unauthorizedError.status);
+      res.sendStatus(unauthorizedError.status);
       return;
     }
 
@@ -28,7 +29,7 @@ class ResponseManager {
   }
 
   static getResponseHandler(req, res, noAuth) {
-    if (!noAuth && !authenticate(req, res)) {
+    if (!noAuth && !ResponseManager.authenticate(req, res)) {
       return null;
     }
 

@@ -9,7 +9,9 @@ class LinkController extends AdminBaseController {
 
   getAll(req, res, next) {
     const response = this._adminResponseManager.getResponseHandler(req, res);
-    this._linkHandler.getAll(req, response);
+    if (response) {
+      this._linkHandler.getAll(req, response);
+    }
   }
 }
 

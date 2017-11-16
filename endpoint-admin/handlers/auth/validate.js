@@ -3,14 +3,14 @@ const config = require("../../../config");
 const User = require("../../../db/models/user.model");
 
 const validate = function(req) {
-  var token =
-    req.body.token || req.query.token || req.headers["x-access-token"];
+  let token = req.headers.authorization;
 
   if (!token) {
     return null;
   }
 
-  var token = jwt.verify(token, config.auth.secret, {
+  token = token.replace("Bearer ", "");
+  token = jwt.verify(token, config.auth.secret, {
     ignoreExpiration: false
   });
 
