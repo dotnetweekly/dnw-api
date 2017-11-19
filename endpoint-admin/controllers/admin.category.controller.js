@@ -1,17 +1,10 @@
 const AdminBaseController = require("./admin.base.controller");
-const CategoryHandler = require("../handlers/categories");
+const CategoryHandler = require("../handlers/category");
 
-class CategoriesController extends AdminBaseController {
+class CategoryController extends AdminBaseController {
   constructor() {
     super();
     this._handler = new CategoryHandler();
-  }
-
-  search(req, res, next) {
-    const response = this._adminResponseManager.getResponseHandler(req, res);
-    if (response) {
-      this._handler.search(req, response);
-    }
   }
 
   update(req, res, next) {
@@ -21,12 +14,12 @@ class CategoriesController extends AdminBaseController {
     }
   }
 
-  deleteCategories(req, res, next) {
+  get(req, res, next) {
     const response = this._adminResponseManager.getResponseHandler(req, res);
     if (response) {
-      this._handler.deleteCategories(req, response);
+      this._handler.get(req, response);
     }
   }
 }
 
-module.exports = CategoriesController;
+module.exports = CategoryController;

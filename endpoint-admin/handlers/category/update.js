@@ -5,9 +5,14 @@ const Category = require("../../../db/models/category.model");
 const updateStatus = function(req, callback) {
   const updatedCategory = req.body;
 
+  if (!updatedCategory._id) {
+    updatedCategory._id = mongoose.Types.ObjectId();
+  }
+
   const updatePromise = new Promise((resolve, reject) => {
-    Category.findOneAndUpdate(
-      { _id: id },
+    const idOptions = { _id: updatedCategory._id };
+    Category.update(
+      idOptions,
       { $set: updatedCategory },
       { upsert: true },
       function(err) {
@@ -17,7 +22,7 @@ const updateStatus = function(req, callback) {
     );
   });
 
-  updatePromise()
+  updatePromise
     .then(function() {
       callback.onSuccess();
     })
