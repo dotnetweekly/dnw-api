@@ -1,10 +1,10 @@
 const express = require("express");
 const router = express.Router();
 
-const CategoryController = require("../controllers/admin.category.controller");
+const CategoryController = require("../controllers/admin.categories.controller");
 const categoryController = new CategoryController();
 
-router.get("/", categoryController.getAll);
-router.post("/status", categoryController.updateStatus);
+router.get("/", categoryController.search);
+router.post("/:key", categoryController.update);
 
 module.exports = router;

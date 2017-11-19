@@ -1,6 +1,6 @@
 var Category = require("../../../db/models/category.model");
 
-const getAll = function(req, callback) {
+const search = function(req, callback) {
   var query = Category.find({});
 
   query.exec(function(err, data) {
@@ -13,4 +13,4 @@ const getAll = function(req, callback) {
   });
 };
 
-module.exports = getAll;
+module.exports = search;

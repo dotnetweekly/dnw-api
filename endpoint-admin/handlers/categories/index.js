@@ -1,12 +1,12 @@
 const BaseAutoBindedClass = require("../../../helpers/base.autobind");
-const getAll = require("./getAll");
-const updateStatus = require("./updateStatus");
+const search = require("./search");
+const update = require("./update");
 
 class CategoryHandler extends BaseAutoBindedClass {
   constructor() {
     super();
-    this.getAll = (req, callback) => getAll(req, callback);
-    this.updateStatus = (req, callback) => updateStatus(req, callback);
+    this.search = (req, callback) => search(req, callback);
+    this.update = (req, callback) => update(req, callback);
   }
 }
 

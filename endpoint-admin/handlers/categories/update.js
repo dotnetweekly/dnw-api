@@ -2,9 +2,10 @@ const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 const Category = require("../../../db/models/category.model");
 
-const updateStatus = function(req, callback) {
+const update = function(req, callback) {
+  const key = req.params.key;
   const ids = req.body.ids;
-  const status = req.body.status;
+  const value = req.body.value;
 
   if (!Array.isArray(ids) || ids.length === 0) {
     callback.onError();
@@ -15,8 +16,7 @@ const updateStatus = function(req, callback) {
     const updatePromise = new Promise((resolve, reject) => {
       Category.findOneAndUpdate(
         { _id: id },
-        { $set: { isActive: status } },
-        { upsert: true },
+        { $set: { [key]: value } },
         function(err) {
           if (err) reject(err);
           resolve();
@@ -36,4 +36,4 @@ const updateStatus = function(req, callback) {
     });
 };
 
-module.exports = updateStatus;
+module.exports = update;
