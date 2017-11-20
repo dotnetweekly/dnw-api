@@ -8,6 +8,9 @@ router.use("/category", require("./category"));
 router.use("/tags", require("./tags"));
 router.use("/tag", require("./tag"));
 
+router.use("/users", require("./users"));
+router.use("/user", require("./user"));
+
 router.use("/auth", require("./auth"));
 
 module.exports = router;
