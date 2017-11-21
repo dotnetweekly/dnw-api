@@ -4,9 +4,8 @@ const getAll = function(req, callback) {
   var query = Link.find({});
 
   query
-    .populate("category")
     .populate("user")
-    .sort({ title: "desc" })
+    .sort({ createdOn: "desc" })
     .limit(12);
 
   query.exec(function(err, data) {
