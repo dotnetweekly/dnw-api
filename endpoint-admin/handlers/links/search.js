@@ -1,15 +1,7 @@
 var Link = require("../../../db/models/link.model");
 
 const getAll = function(req, callback) {
-  var query = Link.find({}, [
-    "title",
-    "tags",
-    "url",
-    "user",
-    "category",
-    "createdOn",
-    "isActive"
-  ]);
+  var query = Link.find({});
 
   query
     .populate("category")

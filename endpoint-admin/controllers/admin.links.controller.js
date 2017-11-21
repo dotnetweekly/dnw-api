@@ -1,18 +1,32 @@
 const AdminBaseController = require("./admin.base.controller");
-const LinkHandler = require("../handlers/links");
+const Handler = require("../handlers/links");
 
-class LinkController extends AdminBaseController {
+class LinksController extends AdminBaseController {
   constructor() {
     super();
-    this._linkHandler = new LinkHandler();
+    this._handler = new Handler();
   }
 
-  getAll(req, res, next) {
+  search(req, res, next) {
     const response = this._adminResponseManager.getResponseHandler(req, res);
     if (response) {
-      this._linkHandler.getAll(req, response);
+      this._handler.search(req, response);
+    }
+  }
+
+  updateItems(req, res, next) {
+    const response = this._adminResponseManager.getResponseHandler(req, res);
+    if (response) {
+      this._handler.updateItems(req, response);
+    }
+  }
+
+  deleteItems(req, res, next) {
+    const response = this._adminResponseManager.getResponseHandler(req, res);
+    if (response) {
+      this._handler.deleteItems(req, response);
     }
   }
 }
 
-module.exports = LinkController;
+module.exports = LinksController;

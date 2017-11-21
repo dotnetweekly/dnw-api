@@ -1,10 +1,14 @@
 const BaseAutoBindedClass = require("../../../helpers/base.autobind");
-const getAll = require("./getAll");
+const search = require("./search");
+const updateItems = require("./updateItems");
+const deleteItems = require("./deleteItems");
 
 class LinkHandler extends BaseAutoBindedClass {
   constructor() {
     super();
-    this.getAll = (req, callback) => getAll(req, callback);
+    this.search = (req, callback) => search(req, callback);
+    this.updateItems = (req, callback) => updateItems(req, callback);
+    this.deleteItems = (req, callback) => deleteItems(req, callback);
   }
 }
 
