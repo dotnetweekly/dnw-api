@@ -9,7 +9,10 @@ var adminUser = new User({
   lastName: "Stavroulakis",
   subscribed: true,
   isAdmin: true,
-  password: "dotnetweekly"
+  password: "dotnetweekly",
+  username: "bstavroulakis",
+  twitter: "",
+  github: ""
 });
 
 users.push(adminUser);

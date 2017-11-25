@@ -1,11 +1,12 @@
 var Link = require("../../../db/models/link.model");
 
 const getAll = function(req, callback) {
-  var query = Link.find({}, ["title", "content"]);
+  var query = Link.find({}, ["title", "url", "createdOn", "slug", "upvotes"]);
 
   query
-    .populate("category")
-    .populate("user")
+    .populate("category", "slug")
+    .populate("tags")
+    .populate("user", "username")
     .sort({ title: "desc" })
     .limit(12);
 
@@ -14,7 +15,11 @@ const getAll = function(req, callback) {
       callback.onError([]);
       return;
     } else {
-      callback.onSuccess(data);
+      const returnData = {
+        totalPages: 2,
+        links: data
+      };
+      callback.onSuccess(returnData);
     }
   });
 };
