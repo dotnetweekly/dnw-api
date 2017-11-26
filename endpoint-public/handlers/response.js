@@ -1,5 +1,6 @@
 const HttpStatus = require("http-status-codes");
 const AuthHandler = require("./auth");
+const UserHelper = require("../../helpers/user.helper");
 const UnauthorizedError = require("../../error/unauthorized");
 
 const BasicResponse = {
@@ -21,15 +22,21 @@ class ResponseManager {
     const unauthorizedError = new UnauthorizedError();
 
     if (!payload) {
-      res.sendStatus(unauthorizedError.status);
+      // res.sendStatus(unauthorizedError.status);
       return;
     }
 
     return payload.data;
   }
 
-  static getDefaultResponseHandler(res) {
+  static getResponseHandler(req, res, noAuth = false) {
+    const user = ResponseManager.authenticate(req, res);
+    if (!noAuth && !user) {
+      return null;
+    }
+
     return {
+      user: user,
       onSuccess: function(data, message, code) {
         ResponseManager.respondWithSuccess(
           res,
@@ -37,21 +44,6 @@ class ResponseManager {
           data,
           message
         );
-      },
-      onError: function(error) {
-        ResponseManager.respondWithError(
-          res,
-          error.status || 500,
-          error.message || "Unknown error"
-        );
-      }
-    };
-  }
-
-  static getDefaultResponseHandlerError(res, successCallback) {
-    return {
-      onSuccess: function(data, message, code) {
-        successCallback(data, message, code);
       },
       onError: function(error) {
         ResponseManager.respondWithError(

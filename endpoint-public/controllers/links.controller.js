@@ -7,9 +7,12 @@ class LinkController extends BaseController {
     this._linkHandler = new LinkHandler();
   }
 
-  getAll(req, res, next) {
-    const response = this._responseManager.getDefaultResponseHandler(res);
-    this._linkHandler.getAll(req, response);
+  search(req, res, next) {
+    const response = this._responseManager.getResponseHandler(req, res, true);
+
+    if (response) {
+      this._linkHandler.search(req, response);
+    }
   }
 }
 

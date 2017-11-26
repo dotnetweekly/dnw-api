@@ -1,6 +1,6 @@
 var Link = require("../../../db/models/link.model");
 
-const getAll = function(req, callback) {
+const search = function(req, callback) {
   var query = Link.find({}, ["title", "url", "createdOn", "slug", "upvotes"]);
 
   query
@@ -24,4 +24,4 @@ const getAll = function(req, callback) {
   });
 };
 
-module.exports = getAll;
+module.exports = search;

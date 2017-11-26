@@ -8,11 +8,11 @@ class UserController extends BaseController {
   }
 
   profile(req, res, next) {
-    const response = this._responseManager.getDefaultResponseHandler(res);
+    const response = this._responseManager.getResponseHandler(req, res);
 
-    this.authenticate(req, res, user => {
-      this._userHandler.profile(user, response);
-    });
+    if (response) {
+      this._userHandler.profile(response);
+    }
   }
 }
 

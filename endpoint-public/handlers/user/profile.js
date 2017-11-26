@@ -1,8 +1,8 @@
 const User = require("../../../db/models/user.model");
 const NotFoundError = require("../../../error/not-found");
 
-const profile = function(user, callback) {
-  var query = User.findOne({ _id: user.id }, [
+const profile = function(callback) {
+  var query = User.findOne({ _id: callback.user.id }, [
     "email",
     "firstName",
     "lastName",

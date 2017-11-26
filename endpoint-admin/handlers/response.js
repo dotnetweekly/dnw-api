@@ -52,25 +52,6 @@ class ResponseManager {
     };
   }
 
-  static getResponseHandlerError(req, res, successCallback) {
-    if (authenticate(req, res)) {
-      return null;
-    }
-
-    return {
-      onSuccess: function(data, message, code) {
-        successCallback(data, message, code);
-      },
-      onError: function(error) {
-        ResponseManager.respondWithError(
-          res,
-          error.status || 500,
-          error.message || "Unknown error"
-        );
-      }
-    };
-  }
-
   static respondWithSuccess(res, code, data, message = "", links = []) {
     let response = Object.assign({}, BasicResponse);
     response.success = true;

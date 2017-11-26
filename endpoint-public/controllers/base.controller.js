@@ -23,19 +23,6 @@ class BaseController extends BaseAutoBindedClass {
   update(req, res) {}
 
   remove(req, res) {}
-
-  authenticate(req, res, callback) {
-    const authHandler = new AuthHandler();
-    const response = this._responseManager.getDefaultResponseHandler(res);
-
-    authHandler.validate(req, function(err, payload) {
-      if (err) {
-        response.onError(new UnauthorizedError());
-        return;
-      }
-      callback(payload.data);
-    });
-  }
 }
 
 module.exports = BaseController;

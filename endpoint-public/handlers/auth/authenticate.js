@@ -30,8 +30,6 @@ const authenticate = function(req, callback) {
       {
         data: {
           id: user._id,
-          username: user.username,
-          email: user.email,
           isAdmin: user.isAdmin
         }
       },

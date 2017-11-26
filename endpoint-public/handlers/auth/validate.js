@@ -2,25 +2,23 @@ const jwt = require("jsonwebtoken");
 const config = require("../../../config");
 const User = require("../../../db/models/user.model");
 
-const validate = function(req, callback) {
-  var token =
-    req.body.token || req.query.token || req.headers["x-access-token"];
+const validate = function(req) {
+  let token = req.headers.authorization;
 
   if (!token) {
-    callback(err, null);
-    return;
+    return null;
   }
 
-  jwt.verify(token, config.auth.secret, { ignoreExpiration: false }, function(
-    err,
-    user
-  ) {
-    if (err) {
-      callback(err, null);
-      return;
-    }
-    callback(null, user);
+  token = token.replace("Bearer ", "");
+  token = jwt.verify(token, config.auth.secret, {
+    ignoreExpiration: false
   });
+
+  if (!token || !token.data || !token.data.isAdmin) {
+    return null;
+  }
+
+  return token;
 };
 
 module.exports = validate;

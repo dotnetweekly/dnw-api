@@ -8,12 +8,12 @@ class AuthController extends BaseController {
   }
 
   login(req, res, next) {
-    const response = this._responseManager.getDefaultResponseHandler(res);
+    const response = this._responseManager.getResponseHandler(req, res, true);
     this._handler.authenticate(req, response);
   }
 
   register(req, res, next) {
-    const response = this._responseManager.getDefaultResponseHandler(res);
+    const response = this._responseManager.getResponseHandler(req, res, true);
     this._handler.register(req, response);
   }
 }
