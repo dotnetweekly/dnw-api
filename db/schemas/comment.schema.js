@@ -14,4 +14,9 @@ var commentSchema = new Schema({
   createdOn: { type: Date, default: Date.now }
 });
 
-module.exports = commentSchema;
+var treeCommentSchema = new Schema({
+  commentSchema,
+  children: [commentSchema],
+})
+
+module.exports = treeCommentSchema;

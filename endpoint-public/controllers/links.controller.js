@@ -14,6 +14,22 @@ class LinkController extends BaseController {
       this._linkHandler.search(req, response);
     }
   }
+
+  getSingle(req, res, next) {
+    const response = this._responseManager.getResponseHandler(req, res, true);
+
+    if (response) {
+      this._linkHandler.getSingle(req, response);
+    }
+  }
+
+  getLinkComments(req, res, next) {
+    const response = this._responseManager.getResponseHandler(req, res, true);
+
+    if (response) {
+      this._linkHandler.getLinkComments(req, response);
+    }
+  }
 }
 
 module.exports = LinkController;
