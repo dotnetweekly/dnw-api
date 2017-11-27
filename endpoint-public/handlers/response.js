@@ -10,7 +10,7 @@ const BasicResponse = {
 };
 
 class ResponseManager {
-  constructor() {}
+  constructor() { }
 
   static get HTTP_STATUS() {
     return HttpStatus;
@@ -21,8 +21,11 @@ class ResponseManager {
     const payload = authHandler.validate(req);
     const unauthorizedError = new UnauthorizedError();
 
-    if (!payload) {
-      // res.sendStatus(unauthorizedError.status);
+    if (payload === null) {
+      ResponseManager.respondWithError(
+        res,
+        unauthorizedError.status
+      );
       return;
     }
 
@@ -30,14 +33,18 @@ class ResponseManager {
   }
 
   static getResponseHandler(req, res, noAuth = false) {
-    const user = ResponseManager.authenticate(req, res);
-    if (!noAuth && !user) {
-      return null;
+    let user = null;
+
+    if (!noAuth) {
+      user = ResponseManager.authenticate(req, res);
+      if (!user) {
+        return null;
+      }
     }
 
     return {
       user: user,
-      onSuccess: function(data, message, code) {
+      onSuccess: function (data, message, code) {
         ResponseManager.respondWithSuccess(
           res,
           code || ResponseManager.HTTP_STATUS.OK,
@@ -45,7 +52,7 @@ class ResponseManager {
           message
         );
       },
-      onError: function(error) {
+      onError: function (error) {
         ResponseManager.respondWithError(
           res,
           error.status || 500,
