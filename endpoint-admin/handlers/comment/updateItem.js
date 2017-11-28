@@ -1,35 +1,52 @@
 const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
-const LinkComment = require("../../../db/models/comment.model");
+const Link = require("../../../db/models/link.model");
 
-const updateItem = function(req, callback) {
+const getLink = function (link) {
+  return new Promise((resolve, reject) => {
+    var query = Link.findOne({ _id: link });
+
+    query.exec(function (err, data) {
+      if (err) {
+        reject();
+        return;
+      } else {
+        resolve(data);
+      }
+    });
+  });
+}
+
+const updateItem = function (req, callback) {
   const itemToUpdate = req.body;
+  const id = req.params.id;
 
   if (!itemToUpdate._id) {
     itemToUpdate._id = mongoose.Types.ObjectId();
   }
 
-  const updatePromise = new Promise((resolve, reject) => {
-    const idOptions = { _id: itemToUpdate._id };
-    LinkComment.update(
-      idOptions,
-      { $set: itemToUpdate },
-      { upsert: true },
-      function(err) {
-        if (err) reject(err);
-        resolve();
-      }
-    );
-  });
+  getLink(req.params.link)
+    .then(link => {
 
-  updatePromise
-    .then(function() {
-      callback.onSuccess();
-    })
-    .catch(function(err) {
-      callback.onError(err);
-      return;
-    });
+      const comments = link.comments
+        .filter(comment => { return comment._id == id });
+
+      if (comments.length > 0) {
+        for (var prop in itemToUpdate) {
+          comments[0][prop] = itemToUpdate[prop];
+        }
+      } else {
+        link.comments.push(itemToUpdate);
+      }
+
+      link.save(function (err) {
+        if (err) {
+          callback.onError(err);
+          return;
+        }
+        callback.onSuccess();
+      });
+    }).catch(() => { callback.onError() });
 };
 
 module.exports = updateItem;

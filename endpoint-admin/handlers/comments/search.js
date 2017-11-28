@@ -1,16 +1,15 @@
-var LinkComment = require("../../../db/models/comment.model");
+var Link = require("../../../db/models/link.model");
 
-const search = function(req, callback) {
-  var query = LinkComment.find({});
+const search = function (req, callback) {
+  const link = req.params.link;
+  var query = Link.findOne({ _id: link });
 
-  query.populate("user").populate("link");
-
-  query.exec(function(err, data) {
+  query.exec(function (err, data) {
     if (err) {
       callback.onError([]);
       return;
     } else {
-      callback.onSuccess(data);
+      callback.onSuccess(data.comments);
     }
   });
 };

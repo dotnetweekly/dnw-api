@@ -3,6 +3,7 @@ var Schema = mongoose.Schema;
 var stringValidate = require("../validations/strings.validate");
 
 var tagSchema = require("./tag.schema");
+var commentSchema = require("./comment.schema");
 
 var linkSchema = new Schema({
   title: {
@@ -37,6 +38,7 @@ var linkSchema = new Schema({
   isActive: { type: Boolean, default: true },
   category: { type: Schema.ObjectId, ref: "Category" },
   tags: [tagSchema],
+  comments: [commentSchema],
   user: { type: Schema.ObjectId, ref: "User" },
   createdOn: { type: Date, default: Date.now }
 });

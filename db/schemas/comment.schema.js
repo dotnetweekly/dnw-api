@@ -9,14 +9,8 @@ var commentSchema = new Schema({
     validate: stringValidate.requiredStringValidator
   },
   isActive: { type: Boolean, default: true },
-  link: { type: Schema.ObjectId, ref: "Link" },
   user: { type: Schema.ObjectId, ref: "User" },
   createdOn: { type: Date, default: Date.now }
 });
 
-var treeCommentSchema = new Schema({
-  commentSchema,
-  children: [commentSchema],
-})
-
-module.exports = treeCommentSchema;
+module.exports = commentSchema;

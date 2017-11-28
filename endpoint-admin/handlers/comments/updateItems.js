@@ -1,9 +1,26 @@
 const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
-const LinkComment = require("../../../db/models/comment.model");
+const Link = require("../../../db/models/link.model");
 
-const updateItems = function(req, callback) {
+const getLink = function (link) {
+  return new Promise((resolve, reject) => {
+    var query = Link.findOne({ _id: link });
+
+    query.exec(function (err, data) {
+      if (err) {
+        reject(err);
+        return;
+      } else {
+        resolve(data);
+      }
+    });
+  });
+}
+
+const updateItems = function (req, callback) {
   const key = req.params.key;
+  const linkId = req.params.link;
+
   const ids = req.body.ids;
   const value = req.body.value;
 
@@ -11,29 +28,23 @@ const updateItems = function(req, callback) {
     callback.onError();
   }
 
-  var updates = [];
-  ids.forEach(function(id) {
-    const updatePromise = new Promise((resolve, reject) => {
-      LinkComment.findOneAndUpdate(
-        { _id: id },
-        { $set: { [key]: value } },
-        function(err) {
-          if (err) reject(err);
-          resolve();
-        }
-      );
+  getLink(linkId).then(link => {
+    for (var i in ids) {
+      const comment = link.comments.id(ids[i]);
+      comment[key] = value;
+    }
+
+    link.save(function (err) {
+      if (err) {
+        callback.onError(err);
+        return;
+      }
+      callback.onSuccess();
     });
-    updates.push(updatePromise);
+  }).catch(err => {
+    callback.onError(err);
   });
 
-  Promise.all(updates)
-    .then(function() {
-      callback.onSuccess();
-    })
-    .catch(function(err) {
-      callback.onError(err);
-      return;
-    });
-};
+}
 
 module.exports = updateItems;

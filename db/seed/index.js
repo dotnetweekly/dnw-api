@@ -10,10 +10,10 @@ var categories = require("./categories");
 var tags = require("./tags");
 var users = require("./users");
 
-UserModel.collection.insert(users, function(error) {
+UserModel.collection.insert(users, function (error) {
   console.log(error);
 });
-CategoryModel.collection.insert(categories, function(error) {
+CategoryModel.collection.insert(categories, function (error) {
   console.log(error);
 });
 
@@ -27,9 +27,10 @@ var link = new LinkModel({
   upvotes: 1,
   category: categories[0],
   tags: [tags[0], tags[1]],
-  user: users[0]
+  user: users[0],
+  comments: []
 });
 
-link.save().catch(function(error) {
+link.save().catch(function (error) {
   console.log(error);
 });

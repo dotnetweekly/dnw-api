@@ -15,6 +15,7 @@ const getSingle = function (req, callback) {
     query
         .populate("category", "slug")
         .populate("tags")
+        .populate("comments")
         .populate("user", "username");
 
     query.exec(function (err, data) {
