@@ -14,6 +14,7 @@ var tagSchema = new Schema({
     validate: stringValidate.requiredStringValidator
   },
   isActive: { type: Boolean, default: true },
+  user: { type: Schema.ObjectId, ref: "User" },
   createdOn: { type: Date, default: Date.now }
 });
 

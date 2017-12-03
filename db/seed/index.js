@@ -1,36 +1,141 @@
-var mongoose = require("mongoose");
-var path = require("path");
+var Promise = require('es6-promise').Promise;
+const mongoose = require("mongoose");
+const path = require("path");
+const db = require("../connect");
 
-var db = require("../connect");
-var LinkModel = require("../models/link.model");
-var UserModel = require("../models/user.model");
-var CategoryModel = require("../models/category.model");
+const LinkModel = require("../models/link.model");
+const UserModel = require("../models/user.model");
+const CategoryModel = require("../models/category.model");
+const TagModel = require("../models/tag.model");
 
-var categories = require("./categories");
-var tags = require("./tags");
-var users = require("./users");
+const links = require("../../../ext-data/links");
+const newUserData = require("../../../ext-data/user");
 
-UserModel.collection.insert(users, function (error) {
-  console.log(error);
-});
-CategoryModel.collection.insert(categories, function (error) {
-  console.log(error);
-});
+async function getUser(user) {
+  try {
+    const userLinkQuery = UserModel.findOne({ email: user.email });
+    return await userLinkQuery.exec();
+  } catch (err) {
+    console.log(err);
+  }
+}
 
-var link = new LinkModel({
-  title: "C# scripting in Excel",
-  content:
-    "Being a modern language with access to a rich ecosystem of libraries, C# can be immensely helpful both for automation and data processing in Excel. The goal of QueryStorm in this regard is to make C# easily available in Excel in order to help developers, db professionals and data scientists make better use of Excel. The C# scripting engine in QueryStorm is powered by the Roslyn compiler.",
-  slug: "csharp-scripting-excel",
-  url: "http://querystorm.com/documentation.html",
-  image: "",
-  upvotes: 1,
-  category: categories[0],
-  tags: [tags[0], tags[1]],
-  user: users[0],
-  comments: []
-});
+async function getLink(oldLink) {
+  const currentLinkQuery = LinkModel.findOne({ slug: oldLink.slug });
+  return await currentLinkQuery.exec();
+}
 
-link.save().catch(function (error) {
-  console.log(error);
-});
+async function getTag(item) {
+  const currentQuery = TagModel.findOne({ slug: item.slug });
+  return await currentQuery.exec();
+}
+
+async function getCategory(item) {
+  const currentQuery = CategoryModel.findOne({ slug: item.slug });
+  return await currentQuery.exec();
+}
+
+async function getNewUser() {
+  newUserData._id = new mongoose.Types.ObjectId();
+  var newModel = new UserModel(newUserData);
+  return await newModel.save();
+}
+
+async function addTag(item) {
+  item._id = new mongoose.Types.ObjectId();
+  var newModel = new TagModel(item);
+  return await newModel.save();
+}
+
+async function addCategory(item) {
+  item._id = new mongoose.Types.ObjectId();
+  var newModel = new CategoryModel(item);
+  return await newModel.save();
+}
+
+async function addLink(item) {
+  item._id = new mongoose.Types.ObjectId();
+  var newModel = new LinkModel(item);
+  return await newModel.save();
+}
+
+async function addData() {
+
+  let currentUser = await getUser(newUserData);
+
+  if (!currentUser) {
+    currentUser = await getNewUser();
+  }
+
+  for (var i in links) {
+
+    const oldLink = links[i];
+    let currentLink = await getLink(oldLink);
+    if (currentLink) {
+      continue;
+    }
+
+    const newLink = {};
+
+    newLink._id = new mongoose.Types.ObjectId();
+    newLink.title = oldLink.title;
+    newLink.content = oldLink.content;
+    newLink.slug = oldLink.slug;
+    newLink.url = oldLink.url;
+    newLink.createdOn = oldLink.createdOn;
+    newLink.comments = [];
+    newLink.tags = [];
+    newLink.upvotes = [];
+    newLink.user = currentUser;
+
+    for (tagKey in oldLink.tags) {
+      const oldTag = oldLink.tags[tagKey];
+      let currentTag = await getTag(oldTag);
+
+      if (!currentTag) {
+        currentTag = {
+          _id: new mongoose.Types.ObjectId(),
+          name: oldTag.name,
+          slug: oldTag.slug,
+          isActive: true,
+          user: currentUser
+        }
+
+        currentTag = await addTag(currentTag);
+        newLink.tags.push(currentTag);
+      } else {
+        newLink.tags.push(currentTag);
+      }
+    }
+
+    const oldCategory = oldLink.category;
+
+    if (oldCategory) {
+      if (oldCategory && oldCategory.slug == "events-seminars") {
+        oldCategory.slug = "events-training";
+        oldCategory.name = "Events-Training";
+      }
+
+      let currentCategory = await getCategory(oldCategory);
+
+      if (!currentCategory) {
+        currentCategory = {
+          _id: new mongoose.Types.ObjectId(),
+          name: oldCategory.name,
+          slug: oldCategory.slug,
+          isActive: true,
+          user: currentUser
+        }
+
+        currentCategory = await addCategory(currentCategory);
+        newLink.category = currentCategory;
+      } else {
+        newLink.category = currentCategory;
+      }
+    }
+
+    await addLink(newLink);
+  }
+}
+
+addData();

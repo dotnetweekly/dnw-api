@@ -1,27 +1,46 @@
-var Link = require("../../../db/models/link.model");
+var Link = require('../../../db/models/link.model');
+var Category = require('../../../db/models/category.model');
+var CalendarHelper = require('../../../helpers/calendar.helper');
 
 const search = function(req, callback) {
-  var query = Link.find({}, ["title", "url", "createdOn", "slug", "upvotes"]);
+	let week = req.query.week;
+	let year = req.query.year;
+	const category = req.query.category;
+	const now = new Date(Date.now());
 
-  query
-    .populate("category", "slug")
-    .populate("tags")
-    .populate("user", "username")
-    .sort({ title: "desc" })
-    .limit(12);
+	if (!week || !year) {
+		week = CalendarHelper.getWeek(now);
+		year = now.getFullYear();
+	}
 
-  query.exec(function(err, data) {
-    if (err) {
-      callback.onError([]);
-      return;
-    } else {
-      const returnData = {
-        totalPages: 2,
-        links: data
-      };
-      callback.onSuccess(returnData);
-    }
-  });
+	console.log(week, year);
+	var searchParams = {};
+
+	const dateRange = CalendarHelper.getDateRangeOfWeek(week, year);
+	searchParams.createdOn = { $gte: dateRange.from, $lte: dateRange.to };
+
+	var query = Link.find(searchParams, [ 'title', 'url', 'createdOn', 'slug', 'upvotes' ]);
+	query.populate('category', 'slug').populate('tags').populate('user', 'username').sort({ title: 'desc' });
+
+	query.exec(function(err, data) {
+		if (err) {
+			callback.onError([]);
+			return;
+		} else {
+			if (category) {
+				data = data.filter((link) => {
+					if (!category || (link.category && link.category.slug === category)) {
+						return link;
+					}
+				});
+			}
+
+			const returnData = {
+				links: data
+			};
+			callback.onSuccess(returnData);
+		}
+	});
 };
 
 module.exports = search;

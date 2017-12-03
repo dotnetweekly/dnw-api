@@ -15,7 +15,8 @@ const getSingle = function (req, callback) {
     query
         .populate("category", "slug")
         .populate("tags")
-        .populate("comments")
+        .populate({ path: 'comments.user', select: 'username' })
+        .populate({ path: 'comments', select: 'content' })
         .populate("user", "username");
 
     query.exec(function (err, data) {

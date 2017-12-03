@@ -4,6 +4,7 @@ var stringValidate = require("../validations/strings.validate");
 
 var tagSchema = require("./tag.schema");
 var commentSchema = require("./comment.schema");
+var userSchema = require("./user.schema");
 
 var linkSchema = new Schema({
   title: {
@@ -19,22 +20,15 @@ var linkSchema = new Schema({
   slug: {
     type: String,
     require: true,
-    unique: true
+    unique: true,
+    validate: stringValidate.requiredStringValidator
   },
   url: {
     type: String,
     required: true,
     validate: stringValidate.requiredStringValidator
   },
-  image: {
-    type: String,
-    required: false
-  },
-  upvotes: {
-    type: Number,
-    required: true,
-    default: 0
-  },
+  upvotes: [String],
   isActive: { type: Boolean, default: true },
   category: { type: Schema.ObjectId, ref: "Category" },
   tags: [tagSchema],
