@@ -1,32 +1,32 @@
-var Link = require("../../../db/models/link.model");
+var Link = require('../../../db/models/link.model');
 
-const getSingle = function (req, callback) {
-    var query = Link.findOne({ slug: req.params.id }, [
-        "_id",
-        "title",
-        "url",
-        "content",
-        "createdOn",
-        "slug",
-        "upvotes",
-        "createdOn"
-    ]);
+const getSingle = function(req, callback) {
+	var query = Link.findOne({ slug: req.params.id }, [
+		'_id',
+		'title',
+		'url',
+		'content',
+		'createdOn',
+		'slug',
+		'upvotes',
+		'createdOn'
+	]);
 
-    query
-        .populate("category", "slug")
-        .populate("tags")
-        .populate({ path: 'comments.user', select: 'username' })
-        .populate({ path: 'comments', select: 'content' })
-        .populate("user", "username");
+	query
+		.populate('category', [ 'slug', 'name' ])
+		.populate('tags')
+		.populate({ path: 'comments.user', select: 'username' })
+		.populate({ path: 'comments', select: 'content' })
+		.populate('user', 'username');
 
-    query.exec(function (err, data) {
-        if (err) {
-            callback.onError();
-            return;
-        } else {
-            callback.onSuccess(data);
-        }
-    });
+	query.exec(function(err, data) {
+		if (err) {
+			callback.onError();
+			return;
+		} else {
+			callback.onSuccess(data);
+		}
+	});
 };
 
 module.exports = getSingle;

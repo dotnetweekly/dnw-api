@@ -13,14 +13,18 @@ const search = function(req, callback) {
 		year = now.getFullYear();
 	}
 
-	console.log(week, year);
 	var searchParams = {};
 
 	const dateRange = CalendarHelper.getDateRangeOfWeek(week, year);
 	searchParams.createdOn = { $gte: dateRange.from, $lte: dateRange.to };
+	console.log(week, year, dateRange.from, dateRange.to);
 
 	var query = Link.find(searchParams, [ 'title', 'url', 'createdOn', 'slug', 'upvotes' ]);
-	query.populate('category', 'slug').populate('tags').populate('user', 'username').sort({ title: 'desc' });
+	query
+		.populate('category', [ 'name', 'slug' ])
+		.populate('tags')
+		.populate('user', 'username')
+		.sort({ title: 'desc' });
 
 	query.exec(function(err, data) {
 		if (err) {

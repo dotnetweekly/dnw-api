@@ -21,8 +21,8 @@ const getDateRangeOfWeek = function(week, year) {
 	var date = new Date(year, 0, 1);
 	date.setDate(date.getDate() + week * 7);
 	return {
-		from: new Date(date),
-		to: new Date(date.setDate(date.getDate() + 7))
+		from: new Date(date.setDate(date.getDate() - 6)),
+		to: new Date(date.setDate(date.getDate() + 6))
 	};
 };
 
