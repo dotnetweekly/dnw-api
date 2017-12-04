@@ -2,7 +2,14 @@ const User = require('../../../db/models/user.model');
 const NotFoundError = require('../../../error/not-found');
 
 const profile = function(callback) {
-	var query = User.findOne({ _id: callback.user.id }, [ 'firstName', 'lastName', 'username', 'subscribed' ]);
+	var query = User.findOne({ _id: callback.user.id }, [
+		'firstName',
+		'lastName',
+		'username',
+		'subscribed',
+		'twitter',
+		'github'
+	]);
 	query
 		.populate('category', [ 'name', 'slug' ])
 		.populate('tags')
