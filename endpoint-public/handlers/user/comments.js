@@ -2,13 +2,24 @@ const User = require('../../../db/models/user.model');
 const Link = require('../../../db/models/link.model');
 const NotFoundError = require('../../../error/not-found');
 
-const profile = function(req, callback) {
+async function getUserName(username) {
+	try {
+		const userLinkQuery = User.findOne({ username: username });
+		return await userLinkQuery.exec();
+	} catch (err) {
+		console.log(err);
+	}
+}
+
+const profile = async function(req, callback) {
 	const page = req.query ? req.query.page || 1 : 1;
+	const username = req.params.username;
 	const pageChunk = 12;
 
+	const userObj = await getUserName(username);
 	var query = Link.find(
 		{
-			'comments.user': callback.user.id
+			'comments.user': userObj._id
 		},
 		[]
 	)

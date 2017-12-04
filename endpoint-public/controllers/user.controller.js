@@ -16,7 +16,7 @@ class UserController extends BaseController {
 	}
 
 	submitted(req, res, next) {
-		const response = this._responseManager.getResponseHandler(req, res);
+		const response = this._responseManager.getResponseHandler(req, res, true);
 
 		if (response) {
 			this._userHandler.submitted(req, response);
@@ -24,7 +24,7 @@ class UserController extends BaseController {
 	}
 
 	upvotes(req, res, next) {
-		const response = this._responseManager.getResponseHandler(req, res);
+		const response = this._responseManager.getResponseHandler(req, res, true);
 
 		if (response) {
 			this._userHandler.upvotes(req, response);
@@ -32,7 +32,7 @@ class UserController extends BaseController {
 	}
 
 	comments(req, res, next) {
-		const response = this._responseManager.getResponseHandler(req, res);
+		const response = this._responseManager.getResponseHandler(req, res, true);
 
 		if (response) {
 			this._userHandler.comments(req, response);
