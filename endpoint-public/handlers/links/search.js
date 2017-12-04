@@ -17,7 +17,6 @@ const search = function(req, callback) {
 
 	const dateRange = CalendarHelper.getDateRangeOfWeek(week, year);
 	searchParams.createdOn = { $gte: dateRange.from, $lte: dateRange.to };
-	console.log(week, year, dateRange.from, dateRange.to);
 
 	var query = Link.find(searchParams, [ 'title', 'url', 'createdOn', 'slug', 'upvotes' ]);
 	query
