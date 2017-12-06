@@ -19,7 +19,8 @@ const profile = async function(req, callback) {
 	const userObj = await getUserName(username);
 	var query = Link.find(
 		{
-			'comments.user': userObj._id
+			'comments.user': userObj._id,
+			isActive: true
 		},
 		[]
 	)

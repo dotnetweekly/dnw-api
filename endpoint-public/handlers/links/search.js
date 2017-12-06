@@ -13,7 +13,7 @@ const search = function(req, callback) {
 		year = now.getFullYear();
 	}
 
-	var searchParams = {};
+	var searchParams = { isActive: true };
 
 	const dateRange = CalendarHelper.getDateRangeOfWeek(week, year);
 	searchParams.createdOn = { $gte: dateRange.from, $lte: dateRange.to };

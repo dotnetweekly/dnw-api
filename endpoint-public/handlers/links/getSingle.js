@@ -1,7 +1,7 @@
 var Link = require('../../../db/models/link.model');
 
 const getSingle = function(req, callback) {
-	var query = Link.findOne({ slug: req.params.id }, [
+	var query = Link.findOne({ isActive: true, slug: req.params.id }, [
 		'_id',
 		'title',
 		'url',

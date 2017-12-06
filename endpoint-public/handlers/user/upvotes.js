@@ -20,7 +20,8 @@ const profile = async function(req, callback) {
 
 	var query = Link.find(
 		{
-			upvotes: userObj._id
+			upvotes: userObj._id,
+			isActive: true
 		},
 		[]
 	)
