@@ -13,6 +13,13 @@ class EmailsController extends AdminBaseController {
 			this._handler.currentNewsletter(req, response);
 		}
 	}
+	
+	activateUser(req, res, next) {
+		const response = this._adminResponseManager.getResponseHandler(req, res);
+		if (response) {
+			this._handler.activateUser(req, response);
+		}
+	}
 }
 
 module.exports = EmailsController;
