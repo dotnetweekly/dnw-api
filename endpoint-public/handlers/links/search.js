@@ -7,6 +7,7 @@ const search = function(req, callback) {
 	let year = req.query.year;
 	const category = req.query.category;
 	const now = new Date(Date.now());
+	const userId = callback.user ? callback.user.id : null;
 
 	if (!week || !year) {
 		week = CalendarHelper.getWeek(now);
@@ -30,6 +31,17 @@ const search = function(req, callback) {
 			callback.onError([]);
 			return;
 		} else {
+
+			data = data.filter((link) => {
+				let newLink = link._doc;
+				newLink.upvoteCount = newLink.upvotes.length;
+				newLink.hasUpvoted = newLink.upvotes.some(upvote => {
+					return !userId ? false : upvote.trim() == userId.trim() 
+				});
+				newLink.upvotes = [];
+				return newLink;
+			});
+
 			if (category) {
 				data = data.filter((link) => {
 					if (!category || (link.category && link.category.slug === category)) {
@@ -41,6 +53,7 @@ const search = function(req, callback) {
 			const returnData = {
 				links: data
 			};
+
 			callback.onSuccess(returnData);
 		}
 	});

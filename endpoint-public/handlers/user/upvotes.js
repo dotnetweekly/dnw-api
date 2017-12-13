@@ -34,10 +34,12 @@ const profile = async function(req, callback) {
 	query.exec(function(err, data) {
 		if (err) {
 			callback.onError({});
+
 			return;
 		} else {
 			let count = 0;
 			const pages = Math.ceil(parseFloat(data.length) / pageChunk);
+
 			data = data.filter((item) => {
 				count++;
 				if (count >= (page - 1) * pageChunk && count < (page - 1) * pageChunk + pageChunk) {
@@ -51,9 +53,12 @@ const profile = async function(req, callback) {
 					pages: pages,
 					page: page
 				});
+
 				return;
 			}
 			callback.onError(new NotFoundError());
+
+			return;
 		}
 	});
 };

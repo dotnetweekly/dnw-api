@@ -21,22 +21,15 @@ class ResponseManager {
 		const payload = authHandler.validate(req);
 		const unauthorizedError = new UnauthorizedError();
 
-		if (payload === null) {
-			ResponseManager.respondWithError(res, unauthorizedError.status);
-			return;
-		}
-
-		return payload.data;
+		return payload ? payload.data : null;
 	}
 
 	static getResponseHandler(req, res, noAuth = false) {
-		let user = null;
+		let user = ResponseManager.authenticate(req, res);
 
-		if (!noAuth) {
-			user = ResponseManager.authenticate(req, res);
-			if (!user) {
-				return null;
-			}
+		if (!noAuth && !user) {
+			ResponseManager.respondWithError(res, unauthorizedError.status);
+			return;
 		}
 
 		return {

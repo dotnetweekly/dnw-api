@@ -33,6 +33,7 @@ const profile = async function(req, callback) {
 	query.exec(function(err, data) {
 		if (err) {
 			callback.onError({});
+			
 			return;
 		} else {
 			let count = 0;
@@ -50,9 +51,12 @@ const profile = async function(req, callback) {
 					pages: pages,
 					page: page
 				});
+
 				return;
 			}
 			callback.onError(new NotFoundError());
+
+			return;
 		}
 	});
 };
