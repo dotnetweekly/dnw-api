@@ -14,6 +14,14 @@ class UserController extends BaseController {
 			this._userHandler.profile(response);
 		}
 	}
+	
+	saveProfile(req, res, next) {
+		const response = this._responseManager.getResponseHandler(req, res);
+
+		if (response) {
+			this._userHandler.saveProfile(req, response);
+		}
+	}
 
 	submitted(req, res, next) {
 		const response = this._responseManager.getResponseHandler(req, res, true);

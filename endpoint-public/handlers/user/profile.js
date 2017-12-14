@@ -10,6 +10,7 @@ const profile = function(callback) {
 		'twitter',
 		'github'
 	]);
+	
 	query
 		.populate('category', [ 'name', 'slug' ])
 		.populate('tags')
@@ -19,13 +20,17 @@ const profile = function(callback) {
 	query.exec(function(err, data) {
 		if (err) {
 			callback.onError({});
+
 			return;
 		} else {
 			if (data) {
 				callback.onSuccess(data);
+
 				return;
 			}
 			callback.onError(new NotFoundError());
+				
+			return;
 		}
 	});
 };

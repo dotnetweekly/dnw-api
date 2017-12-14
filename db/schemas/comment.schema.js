@@ -6,7 +6,12 @@ var commentSchema = new Schema({
   content: {
     type: String,
     required: true,
-    validate: stringValidate.requiredStringValidator
+		validate: {
+			validator: function(v) {
+				return v && v.length < 1000
+			},
+			message: '{VALUE} max size is 1000 characters'
+		}
   },
   isActive: { type: Boolean, default: true },
   user: { type: Schema.ObjectId, ref: "User" },

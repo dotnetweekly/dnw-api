@@ -6,13 +6,23 @@ var categorySchema = new Schema({
   name: {
     type: String,
     required: true,
-    validate: stringValidate.requiredStringValidator
+		validate: {
+			validator: function(v) {
+				return v && v.length < 50
+			},
+			message: '{VALUE} max size is 50 characters'
+		}
   },
   slug: {
     type: String,
     required: true,
     unique: true,
-    validate: stringValidate.requiredStringValidator
+		validate: {
+			validator: function(v) {
+				return v && v.length < 300
+			},
+			message: '{VALUE} max size is 300 characters'
+		}
   },
   isActive: { type: Boolean, default: true },
   createdOn: { type: Date, default: Date.now }

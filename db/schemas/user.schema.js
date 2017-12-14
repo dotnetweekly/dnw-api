@@ -7,19 +7,61 @@ const userSchema = new Schema({
 	username: {
 		type: String,
 		required: true,
-		unique: true
+		unique: true,
+		validate: {
+			validator: function(v) {
+				return !v || v.length > 5
+			},
+			message: '{VALUE} has to be at least 5 characters'
+		}
 	},
 	email: {
 		type: String,
 		required: true,
 		unique: true,
-		validate: stringValidate.requiredStringValidator
+		validate: stringValidate.requiredStringValidator,
+		validate: {
+			validator: function(v) {
+				return !v || v.length < 150
+			},
+			message: '{VALUE} max size is 150 characters'
+		}
 	},
 	firstName: {
-		type: String
+		type: String,
+		validate: {
+			validator: function(v) {
+				return !v || v.length < 70
+			},
+			message: '{VALUE} max size is 70 characters'
+		}
 	},
 	lastName: {
-		type: String
+		type: String,
+		validate: {
+			validator: function(v) {
+				return !v || v.length < 70
+			},
+			message: '{VALUE} max size is 70 characters'
+		}
+	},
+	twitter: {
+		type: String,
+		validate: {
+			validator: function(v) {
+				return !v || v.length < 70
+			},
+			message: '{VALUE} max size is 70 characters'
+		}
+	},
+	github: {
+		type: String,
+		validate: {
+			validator: function(v) {
+				return !v || v.length < 200
+			},
+			message: '{VALUE} max size is 200 characters'
+		}
 	},
 	subscribed: {
 		type: Boolean,
@@ -58,6 +100,8 @@ const userSchema = new Schema({
 userSchema
 	.virtual('password')
 	.set(function(password) {
+		var user = this;
+		if (user.password && !user.isModified('password')) return;
 		this.salt = crypto.randomBytes(32).toString('base64');
 		this.hashedPassword = this.encryptPassword(password, this.salt);
 	})

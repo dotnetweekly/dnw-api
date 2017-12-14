@@ -26,10 +26,10 @@ const getSingle = function(req, callback) {
           return;
         }
 
-        if (commentData.length > 240) {
+        if (commentData.length > 1000) {
           errors.push({
             field: 'comment',
-            error: 'Comment has to be shorter than 240 characters'
+            error: 'Comment has to be shorter than 1000 characters'
           });
           
           callback.onSuccess({ errors });

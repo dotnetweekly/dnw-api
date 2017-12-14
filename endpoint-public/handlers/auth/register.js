@@ -7,6 +7,7 @@ const User = require('../../../db/models/user.model');
 const NotFoundError = require('../../../error/not-found');
 const UnauthorizedError = require('../../../error/unauthorized');
 const EmailModal = require("../../../email");
+const ErrorHelper = require("../../../helpers/errors.helper");
 
 const emailSender = new EmailModal();
 
@@ -31,7 +32,15 @@ const createAccount = function(user, callback) {
 			resetEmail: Guid.create(),
 			resetPassword: Guid.create()
 		});
+
 		pendingUser.save(function(err) {
+			
+			if(err){
+				callback.onSuccess({ errors: ErrorHelper.formatErrors(err) });
+				
+				return;
+			}
+
 			sendEmail(pendingUser.email, pendingUser.guid, callback);
 		});
 	});
@@ -91,15 +100,18 @@ const register = function(req, callback) {
 			const usernameExists = users.find((user) => {
 				return user.username === newUser.username;
 			});
+
 			const emailExists = users.find((user) => {
 				return user.email === newUser.email;
 			});
+
 			if (usernameExists) {
 				errors.push({
 					field: 'username',
 					error: 'username already exists'
 				});
 			}
+
 			if (emailExists) {
 				errors.push({
 					field: 'email',
@@ -107,23 +119,10 @@ const register = function(req, callback) {
 				});
 			}
 		}
-		
-		if (newUser.username.length < 5) {
-			errors.push({
-				field: 'username',
-				error: 'username has to be at least 5 characters'
-			});
-		}
-
-		if (newUser.password.length < 8) {
-			errors.push({
-				field: 'password',
-				error: 'password has to be at least 8 characters'
-			});
-		}
 
 		if (errors.length > 0) {
 			returnError(req, callback, errors);
+
 			return;
 		}
 

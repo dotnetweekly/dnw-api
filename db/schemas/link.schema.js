@@ -10,28 +10,56 @@ var linkSchema = new Schema({
   title: {
     type: String,
     required: true,
-    validate: stringValidate.requiredStringValidator
+		validate: {
+			validator: function(v) {
+				return v && v.length < 100
+			},
+			message: '{VALUE} max size is 100 characters'
+		}
   },
   content: {
     type: String,
     required: true,
-    validate: stringValidate.requiredStringValidator
+		validate: {
+			validator: function(v) {
+				return v && v.length < 2000
+			},
+			message: '{VALUE} max size is 2000 characters'
+		}
   },
   slug: {
     type: String,
     require: true,
     unique: true,
-    validate: stringValidate.requiredStringValidator
+		validate: {
+			validator: function(v) {
+				return v && v.length < 100
+			},
+			message: '{VALUE} max size is 100 characters'
+		}
   },
   url: {
     type: String,
     required: true,
-    validate: stringValidate.requiredStringValidator
+		validate: {
+			validator: function(v) {
+				return v && v.length < 500
+			},
+			message: '{VALUE} max size is 500 characters'
+		}
   },
   upvotes: [String],
   isActive: { type: Boolean, default: true },
-  category: { type: Schema.ObjectId, ref: "Category" },
-  tags: [tagSchema],
+  category: { 
+    type: Schema.ObjectId,
+    ref: "Category",
+    validate: {
+      validator: function(category) {
+        return category
+      },
+      message: 'at least 1 {VALUE}'
+    } 
+  },
   comments: [commentSchema],
   user: { type: Schema.ObjectId, ref: "User" },
   createdOn: { type: Date, default: Date.now }

@@ -6,12 +6,22 @@ var tagSchema = new Schema({
   name: {
     type: String,
     required: true,
-    validate: stringValidate.requiredStringValidator
+		validate: {
+			validator: function(v) {
+				return v && v.length < 20
+			},
+			message: '{VALUE} max size is 20 characters'
+		}
   },
   slug: {
     type: String,
     required: true,
-    validate: stringValidate.requiredStringValidator
+		validate: {
+			validator: function(v) {
+				return v && v.length < 300
+			},
+			message: '{VALUE} max size is 300 characters'
+		}
   },
   isActive: { type: Boolean, default: true },
   user: { type: Schema.ObjectId, ref: "User" },
