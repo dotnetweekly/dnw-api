@@ -14,7 +14,7 @@ var linkSchema = new Schema({
 			validator: function(v) {
 				return v && v.length < 100
 			},
-			message: '{VALUE} max size is 100 characters'
+			message: '{VALUE} is required and max size is 100 characters'
 		}
   },
   content: {
@@ -24,7 +24,7 @@ var linkSchema = new Schema({
 			validator: function(v) {
 				return v && v.length < 2000
 			},
-			message: '{VALUE} max size is 2000 characters'
+			message: '{VALUE} is required and max size is 2000 characters'
 		}
   },
   slug: {
@@ -35,7 +35,7 @@ var linkSchema = new Schema({
 			validator: function(v) {
 				return v && v.length < 100
 			},
-			message: '{VALUE} max size is 100 characters'
+			message: '{VALUE} is required and max size is 100 characters'
 		}
   },
   url: {
@@ -45,7 +45,7 @@ var linkSchema = new Schema({
 			validator: function(v) {
 				return v && v.length < 500
 			},
-			message: '{VALUE} max size is 500 characters'
+			message: '{VALUE} is required and max size is 500 characters'
 		}
   },
   upvotes: [String],

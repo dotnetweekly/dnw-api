@@ -10,7 +10,7 @@ var tagSchema = new Schema({
 			validator: function(v) {
 				return v && v.length < 20
 			},
-			message: '{VALUE} max size is 20 characters'
+			message: '{VALUE} is required and max size is 20 characters'
 		}
   },
   slug: {
@@ -20,7 +20,7 @@ var tagSchema = new Schema({
 			validator: function(v) {
 				return v && v.length < 300
 			},
-			message: '{VALUE} max size is 300 characters'
+			message: '{VALUE} is required and max size is 300 characters'
 		}
   },
   isActive: { type: Boolean, default: true },

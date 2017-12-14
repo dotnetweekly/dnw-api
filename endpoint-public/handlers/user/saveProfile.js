@@ -11,8 +11,8 @@ const updateUser = function(data, updatedUser, callback) {
   data.github = updatedUser.github;
   data.subscribed = updatedUser.subscribed;
   
-  if (!updatedUser.password) {
-    data.password = updatedUser.password;
+  if (updatedUser.newPassword) {
+    data.password = updatedUser.newPassword;
   }
 
   data.save(function(err){
@@ -31,17 +31,23 @@ const updateUser = function(data, updatedUser, callback) {
 const checkPassword = function(data, updatedUser, callback){
   return new Promise((resolve, reject) => {
     let errors = [];
-    if (!updatedUser.password) {
+    if (!updatedUser.newPassword) {
       resolve();
     } else {
-      if(updatedUser.password.length < 8) {
+      if(updatedUser.newPassword.length < 8) {
         errors.push({
-          field: 'password',
+          field: 'newPassword',
           error: 'password has to be at least 8 characters'
         });
         callback.onSuccess({ errors });
     
         reject();
+
+        return;
+      } else {
+        resolve();
+
+        return;
       }
     }
   });

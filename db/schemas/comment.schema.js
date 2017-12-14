@@ -10,7 +10,7 @@ var commentSchema = new Schema({
 			validator: function(v) {
 				return v && v.length < 1000
 			},
-			message: '{VALUE} max size is 1000 characters'
+			message: '{VALUE} is required and max size is 1000 characters'
 		}
   },
   isActive: { type: Boolean, default: true },

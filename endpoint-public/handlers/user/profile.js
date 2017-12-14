@@ -8,7 +8,8 @@ const profile = function(callback) {
 		'username',
 		'subscribed',
 		'twitter',
-		'github'
+		'github',
+		'email'
 	]);
 	
 	query

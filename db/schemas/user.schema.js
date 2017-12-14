@@ -10,9 +10,9 @@ const userSchema = new Schema({
 		unique: true,
 		validate: {
 			validator: function(v) {
-				return !v || v.length > 5
+				return v && v.length > 5
 			},
-			message: '{VALUE} has to be at least 5 characters'
+			message: '{VALUE} is required and has to be at least 5 characters'
 		}
 	},
 	email: {
@@ -22,18 +22,18 @@ const userSchema = new Schema({
 		validate: stringValidate.requiredStringValidator,
 		validate: {
 			validator: function(v) {
-				return !v || v.length < 150
+				return v && v.length < 150
 			},
-			message: '{VALUE} max size is 150 characters'
+			message: '{VALUE} is required and max size is 150 characters'
 		}
 	},
 	firstName: {
 		type: String,
 		validate: {
 			validator: function(v) {
-				return !v || v.length < 70
+				return v && v.length < 70
 			},
-			message: '{VALUE} max size is 70 characters'
+			message: '{VALUE} is required and max size is 70 characters'
 		}
 	},
 	lastName: {
@@ -101,7 +101,7 @@ userSchema
 	.virtual('password')
 	.set(function(password) {
 		var user = this;
-		if (user.password && !user.isModified('password')) return;
+		if (user.password && user.password === userSchema.methods.encryptPassword(password, user.salt)) return;
 		this.salt = crypto.randomBytes(32).toString('base64');
 		this.hashedPassword = this.encryptPassword(password, this.salt);
 	})
