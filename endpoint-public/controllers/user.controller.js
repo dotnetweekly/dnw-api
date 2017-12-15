@@ -46,6 +46,22 @@ class UserController extends BaseController {
 			this._userHandler.comments(req, response);
 		}
 	}
+	
+	updateEmail(req, res, next) {
+		const response = this._responseManager.getResponseHandler(req, res, true);
+
+		if (response) {
+			this._userHandler.updateEmail(req, response);
+		}
+	}
+	
+	forgotPassword(req, res, next) {
+		const response = this._responseManager.getResponseHandler(req, res, true);
+
+		if (response) {
+			this._userHandler.forgotPassword(req, response);
+		}
+	}
 }
 
 module.exports = UserController;

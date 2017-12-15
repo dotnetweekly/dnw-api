@@ -4,6 +4,7 @@ const submitted = require('./submitted');
 const upvotes = require('./upvotes');
 const comments = require('./comments');
 const saveProfile = require('./saveProfile');
+const updateEmail = require('./updateEmail');
 
 class UserHandler extends BaseAutoBindedClass {
 	constructor() {
@@ -13,6 +14,7 @@ class UserHandler extends BaseAutoBindedClass {
 		this.upvotes = (req, callback) => upvotes(req, callback);
 		this.comments = (req, callback) => comments(req, callback);
 		this.saveProfile = (req, callback) => saveProfile(req, callback);
+		this.updateEmail = (req, callback) => updateEmail(req, callback);
 	}
 }
 

@@ -94,6 +94,10 @@ const userSchema = new Schema({
 	resetPassword: {
 		type: String,
 		required: true
+	},
+	resetPasswordData: {
+		type: String,
+		required: true
 	}
 });
 

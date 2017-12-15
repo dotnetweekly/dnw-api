@@ -1,6 +1,14 @@
+
+const jwt = require('jsonwebtoken');
+const axios = require("axios");
+
+const config = require('../../../config');
 const User = require('../../../db/models/user.model');
 const NotFoundError = require('../../../error/not-found');
+const EmailModal = require("../../../email");
 const ErrorHelper = require("../../../helpers/errors.helper");
+
+const emailSender = new EmailModal();
 
 const updateUser = function(data, updatedUser, callback) {
   
@@ -15,9 +23,37 @@ const updateUser = function(data, updatedUser, callback) {
     data.password = updatedUser.newPassword;
   }
 
+  if(updatedUser.email !== data.email) {
+		const token = jwt.sign(
+			{
+				email: updatedUser.email
+			},
+			config.auth.secret
+		);
+    data.resetEmail = token;
+    sendUpdateEmail(updatedUser.email, token)
+    .then(() => {
+      updateUserAction(data, updatedUser, callback, `Please visit ${updatedUser.email} to update your email.`);
+    })
+    .catch(error => {
+      callback.onSuccess({
+        errors: [{
+          field: "",
+          error: error
+        }]
+      });
+    })
+  } else {
+    updateUserAction(data, updatedUser, callback);
+  }
+}
+
+const updateUserAction = function(data, updatedUser, callback, successMessage) {
   data.save(function(err){
     if(!err){
-      callback.onSuccess({});
+      callback.onSuccess({
+        successMessage
+      });
 
       return;
     } else {
@@ -26,6 +62,24 @@ const updateUser = function(data, updatedUser, callback) {
       return;
     }
   })
+}
+
+const sendUpdateEmail = function(email, token) {
+	return new Promise((resolve, reject) => {
+		axios
+		.get(`${config.newsletterDomain}api/v1/user/updateEmail?token=${token}`)
+		.then((response) => {
+			emailSender.send([email], "[Call to action] Update your email", response.data.data)
+			.then(() => {
+				resolve();
+			}).catch(error => {
+				reject(error);
+			});
+		})
+		.catch((error) => {
+			reject(error);
+		});
+	})
 }
 
 const checkPassword = function(data, updatedUser, callback){

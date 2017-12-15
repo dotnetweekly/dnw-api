@@ -29,6 +29,7 @@ const profile = function(callback) {
 
 				return;
 			}
+			
 			callback.onError(new NotFoundError());
 				
 			return;
