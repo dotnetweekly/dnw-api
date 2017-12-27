@@ -1,64 +1,67 @@
-const User = require('../../../db/models/user.model');
-const Link = require('../../../db/models/link.model');
-const NotFoundError = require('../../../error/not-found');
+const User = require("../../../db/models/user.model");
+const Link = require("../../../db/models/link.model");
+const NotFoundError = require("../../../error/not-found");
 
 async function getUserName(username) {
-	try {
-		const userLinkQuery = User.findOne({ username: username });
-		return await userLinkQuery.exec();
-	} catch (err) {
-		console.log(err);
-	}
+  try {
+    const userLinkQuery = User.findOne({ username: username });
+    return await userLinkQuery.exec();
+  } catch (err) {
+    console.log(err);
+  }
 }
 
 const profile = async function(req, callback) {
-	const page = req.query ? req.query.page || 1 : 1;
-	const username = req.params.username;
-	const pageChunk = 12;
+  const page = req.query ? req.query.page || 1 : 1;
+  const username = req.params.username;
+  const pageChunk = 12;
 
-	const userObj = await getUserName(username);
-	var query = Link.find(
-		{
-			'comments.user': userObj._id,
-			isActive: true
-		},
-		[]
-	)
-		.select([ 'title', 'slug', 'createdOn' ])
-		.populate('category', [ 'name', 'slug' ])
-		.populate('tags')
-		.populate('user', 'username')
-		.sort({ createdOn: -1 });
+  const userObj = await getUserName(username);
+  var query = Link.find(
+    {
+      "comments.user": userObj._id,
+      isActive: true
+    },
+    []
+  )
+    .select(["title", "slug", "createdOn"])
+    .populate("category", ["name", "slug"])
+    .populate("tags")
+    .populate("user", "username")
+    .sort({ createdOn: -1 });
 
-	query.exec(function(err, data) {
-		if (err) {
-			callback.onError({});
-			
-			return;
-		} else {
-			let count = 0;
-			const pages = Math.ceil(parseFloat(data.length) / pageChunk);
-			data = data.filter((item) => {
-				count++;
-				if (count >= (page - 1) * pageChunk && count < (page - 1) * pageChunk + pageChunk) {
-					return item;
-				}
-			});
+  query.exec(function(err, data) {
+    if (err) {
+      callback.onError({});
 
-			if (data) {
-				callback.onSuccess({
-					links: data,
-					pages: pages,
-					page: page
-				});
+      return;
+    } else {
+      let count = 0;
+      const pages = Math.ceil(parseFloat(data.length) / pageChunk);
+      data = data.filter(item => {
+        count++;
+        if (
+          count >= (page - 1) * pageChunk &&
+          count < (page - 1) * pageChunk + pageChunk
+        ) {
+          return item;
+        }
+      });
 
-				return;
-			}
-			callback.onError(new NotFoundError());
+      if (data) {
+        callback.onSuccess({
+          links: data,
+          pages: pages,
+          page: page
+        });
 
-			return;
-		}
-	});
+        return;
+      }
+      callback.onError(new NotFoundError());
+
+      return;
+    }
+  });
 };
 
 module.exports = profile;

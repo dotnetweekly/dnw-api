@@ -30,7 +30,7 @@ class LinkController extends BaseController {
       this._linkHandler.getLinkComments(req, response);
     }
   }
-  
+
   upvote(req, res, next) {
     const response = this._responseManager.getResponseHandler(req, res);
 
@@ -38,7 +38,7 @@ class LinkController extends BaseController {
       this._linkHandler.upvote(req, response);
     }
   }
-  
+
   downvote(req, res, next) {
     const response = this._responseManager.getResponseHandler(req, res);
 
@@ -46,12 +46,20 @@ class LinkController extends BaseController {
       this._linkHandler.downvote(req, response);
     }
   }
-  
+
   comment(req, res, next) {
     const response = this._responseManager.getResponseHandler(req, res);
 
     if (response) {
       this._linkHandler.comment(req, response);
+    }
+  }
+
+  add(req, res, next) {
+    const response = this._responseManager.getResponseHandler(req, res);
+
+    if (response) {
+      this._linkHandler.add(req, response);
     }
   }
 }

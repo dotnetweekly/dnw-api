@@ -10,56 +10,58 @@ var linkSchema = new Schema({
   title: {
     type: String,
     required: true,
-		validate: {
-			validator: function(v) {
-				return v && v.length < 100
-			},
-			message: '{VALUE} is required and max size is 100 characters'
-		}
+    validate: {
+      validator: function(v) {
+        return v && v.length < 100;
+      },
+      message: "{VALUE} is required and max size is 100 characters"
+    }
   },
   content: {
     type: String,
     required: true,
-		validate: {
-			validator: function(v) {
-				return v && v.length < 2000
-			},
-			message: '{VALUE} is required and max size is 2000 characters'
-		}
+    validate: {
+      validator: function(v) {
+        return v && v.length < 10000;
+      },
+      message: "{VALUE} is required and max size is 10000 characters"
+    }
   },
   slug: {
     type: String,
     require: true,
     unique: true,
-		validate: {
-			validator: function(v) {
-				return v && v.length < 100
-			},
-			message: '{VALUE} is required and max size is 100 characters'
-		}
+    validate: {
+      validator: function(v) {
+        return v && v.length < 100;
+      },
+      message: "{VALUE} is required and max size is 100 characters"
+    }
   },
   url: {
     type: String,
     required: true,
-		validate: {
-			validator: function(v) {
-				return v && v.length < 500
-			},
-			message: '{VALUE} is required and max size is 500 characters'
-		}
+    unique: true,
+    validate: {
+      validator: function(v) {
+        return v && v.length < 400;
+      },
+      message: "{VALUE} is required and max size is 400 characters"
+    }
   },
   upvotes: [String],
   isActive: { type: Boolean, default: true },
-  category: { 
+  category: {
     type: Schema.ObjectId,
     ref: "Category",
     validate: {
       validator: function(category) {
-        return category
+        return category;
       },
-      message: 'at least 1 {VALUE}'
-    } 
+      message: "at least 1 {VALUE}"
+    }
   },
+  tags: [tagSchema],
   comments: [commentSchema],
   user: { type: Schema.ObjectId, ref: "User" },
   createdOn: { type: Date, default: Date.now }

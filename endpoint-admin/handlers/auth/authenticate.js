@@ -4,6 +4,7 @@ const User = require("../../../db/models/user.model");
 
 const NotFoundError = require("../../../error/not-found");
 const UnauthorizedError = require("../../../error/unauthorized");
+const tokenHelper = require("../../../helpers/token.helper");
 
 const authenticate = function(req, callback) {
   if (!req.body || (!req.body.username && !req.body.email)) {
@@ -34,24 +35,7 @@ const authenticate = function(req, callback) {
       return;
     }
 
-    const timeToLive = 60 * 60 * 24 * 365;
-
-    const token = jwt.sign(
-      {
-        data: {
-          id: user._id,
-          username: user.username,
-          email: user.email,
-          isAdmin: user.isAdmin
-        }
-      },
-      config.auth.secret,
-      { expiresIn: timeToLive }
-    );
-
-    var expirationDate = Math.floor(Date.now() / 1000) + timeToLive;
-
-    callback.onSuccess({ token: token, expiration: expirationDate });
+    callback.onSuccess(tokenHelper.generateAuthToken(user._id, user.isAdmin));
   });
 };
 
