@@ -46,6 +46,10 @@ const currentNewsletter = function(req, callback) {
         });
       }
 
+      data = data.sort(function(a, b) {
+        return b.upvotes.length - a.upvotes.length;
+      });
+
       axios.defaults.headers.common["Authorization"] =
         req.headers.authorization;
 
