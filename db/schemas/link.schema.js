@@ -12,9 +12,9 @@ var linkSchema = new Schema({
     required: true,
     validate: {
       validator: function(v) {
-        return v && v.length < 100;
+        return v && v.length < 500;
       },
-      message: "{VALUE} is required and max size is 100 characters"
+      message: "{VALUE} is required and max size is 500 characters"
     }
   },
   content: {
@@ -33,9 +33,9 @@ var linkSchema = new Schema({
     unique: true,
     validate: {
       validator: function(v) {
-        return v && v.length < 100;
+        return v && v.length < 1000;
       },
-      message: "{VALUE} is required and max size is 100 characters"
+      message: "{VALUE} is required and max size is 1000 characters"
     }
   },
   url: {
@@ -44,9 +44,9 @@ var linkSchema = new Schema({
     unique: true,
     validate: {
       validator: function(v) {
-        return v && v.length < 400;
+        return v && v.length < 2000;
       },
-      message: "{VALUE} is required and max size is 400 characters"
+      message: "{VALUE} is required and max size is 2000 characters"
     }
   },
   upvotes: [String],

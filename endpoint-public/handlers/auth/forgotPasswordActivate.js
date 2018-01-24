@@ -5,7 +5,6 @@ const Guid = require("guid");
 
 const forgotPasswordActivate = function(req, callback) {
   const key = req.params.key;
-  console.log(key);
   const password = req.body.password;
 
   UserModel.findOne({ resetPassword: key, isActive: true }, function(

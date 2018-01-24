@@ -11,7 +11,7 @@ const currentNewsletter = function(req, callback) {
   const now = new Date(Date.now());
 
   if (!week || !year) {
-    week = CalendarHelper.getWeek(now) - 3;
+    week = CalendarHelper.getWeek(now);
     year = now.getFullYear();
   }
 

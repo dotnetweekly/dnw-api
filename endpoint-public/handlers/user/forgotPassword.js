@@ -16,10 +16,6 @@ const sendForgotPasswordEmail = function(email, token, callback) {
         `${config.newsletterDomain}api/v1/user/forgotPassword?token=${token}`
       )
       .then(response => {
-        callback.onSuccess({});
-        resolve();
-        return;
-
         emailSender
           .send([email], "Reset password request", response.data.data)
           .then(() => {
@@ -30,6 +26,7 @@ const sendForgotPasswordEmail = function(email, token, callback) {
           });
       })
       .catch(error => {
+        console.log(error);
         reject(error);
       });
   });

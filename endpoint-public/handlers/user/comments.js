@@ -6,8 +6,8 @@ async function getUserName(username) {
   try {
     const userLinkQuery = User.findOne({ username: username });
     return await userLinkQuery.exec();
-  } catch (err) {
-    console.log(err);
+  } catch (error) {
+    console.log(error);
   }
 }
 

@@ -8,7 +8,17 @@ const getCategories = function(req, callback) {
       callback.onError([]);
       return;
     } else {
-      callback.onSuccess(data);
+      callback.onSuccess(data.filter(tag => {
+        return (
+          [
+            "articles",
+            "books",
+            "events-training",
+            "libraries-tools",
+            "videos"
+          ].indexOf(tag.slug) > -1
+        );
+      }));
     }
   });
 };

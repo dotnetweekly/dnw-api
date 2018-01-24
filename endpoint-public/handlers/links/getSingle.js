@@ -37,7 +37,6 @@ const getSingle = function(req, callback) {
 				});
 				link.upvotes = [];
 
-				console.log(link);
 				callback.onSuccess(link);
 
 				return;

@@ -22,36 +22,36 @@ const userSchema = new Schema({
     validate: stringValidate.requiredStringValidator,
     validate: {
       validator: function(v) {
-        return v && v.length < 150;
+        return v && v.length < 500;
       },
-      message: "{VALUE} is required and max size is 150 characters"
+      message: "{VALUE} is required and max size is 500 characters"
     }
   },
   firstName: {
     type: String,
     validate: {
       validator: function(v) {
-        return v && v.length < 70;
+        return v && v.length < 150;
       },
-      message: "{VALUE} is required and max size is 70 characters"
+      message: "{VALUE} is required and max size is 150 characters"
     }
   },
   lastName: {
     type: String,
     validate: {
       validator: function(v) {
-        return !v || v.length < 70;
+        return !v || v.length < 300;
       },
-      message: "{VALUE} max size is 70 characters"
+      message: "{VALUE} max size is 300 characters"
     }
   },
   twitter: {
     type: String,
     validate: {
       validator: function(v) {
-        return !v || v.length < 70;
+        return !v || v.length < 300;
       },
-      message: "{VALUE} max size is 70 characters"
+      message: "{VALUE} max size is 300 characters"
     }
   },
   github: {

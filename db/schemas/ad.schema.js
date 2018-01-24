@@ -8,9 +8,9 @@ var adSchema = new Schema({
     required: true,
 		validate: {
 			validator: function(v) {
-				return v && v.length < 50
+				return v && v.length < 500
 			},
-			message: '{VALUE} is required and max size is 50 characters'
+			message: '{VALUE} is required and max size is 500 characters'
 		}
   },
   slug: {
@@ -19,9 +19,9 @@ var adSchema = new Schema({
     unique: true,
 		validate: {
 			validator: function(v) {
-				return v && v.length < 300
+				return v && v.length < 1000
 			},
-			message: '{VALUE} is required and max size is 300 characters'
+			message: '{VALUE} is required and max size is 1000 characters'
 		}
   },
   isActive: { type: Boolean, default: true },

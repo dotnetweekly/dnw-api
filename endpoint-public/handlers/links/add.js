@@ -87,6 +87,10 @@ const addLink = function(req, callback) {
           error: `Tags not found`
         });
       }
+      if (errors.length > 0) {
+        callback.success({ errors });
+        return;
+      }
       saveLink(newLink, callback.user, errors, callback);
     });
   });
