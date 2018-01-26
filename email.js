@@ -1,6 +1,13 @@
 const SparkPost = require("sparkpost");
-const environment = require("../ext-data/environment.json");
-const client = new SparkPost(environment.sparkPost);
+
+const sparkPostKey = process.env.SPARKPOST;
+
+if (!sparkPostKey) {
+  const environment = require("../ext-data/environment.json");
+  sparkPostKey = envirnoment.sparkPost;
+}
+
+const client = new SparkPost(sparkPostKey);
 
 class Email {
   send(recipients, subject, html) {
