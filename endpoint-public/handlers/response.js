@@ -1,6 +1,5 @@
 const HttpStatus = require('http-status-codes');
 const AuthHandler = require('./auth');
-const UserHelper = require('../../helpers/user.helper');
 const UnauthorizedError = require('../../error/unauthorized');
 
 const BasicResponse = {
