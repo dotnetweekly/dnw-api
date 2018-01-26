@@ -1,9 +1,9 @@
 const SparkPost = require("sparkpost");
 
-const sparkPostKey = process.env.SPARKPOST;
+let sparkPostKey = process.env.SPARKPOST;
 
 if (!sparkPostKey) {
-  const environment = require("../ext-data/environment.json");
+  const envirnoment = require("../ext-data/environment.json");
   sparkPostKey = envirnoment.sparkPost;
 }
 

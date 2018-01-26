@@ -20,7 +20,8 @@
     "sparkpost": "^2.1.2"
   },
   "scripts": {
-    "start": "nodemon ./bin/www",
+    "start": "node server.js",
+    "startdev": "nodemon server.js",
     "seed": "node ./db/seed/"
   },
   "devDependencies": {
