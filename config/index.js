@@ -1,5 +1,3 @@
-const newsletterDomain = process.env.NEWSLETTER_DOMAIN || 'http://localhost:6100/';
-
 module.exports = {
 	auth: {
 		secret: process.env.SECRET || 'secret'
@@ -7,5 +5,5 @@ module.exports = {
 	database: {
 		local: process.env.DB_CONNECTION || 'mongodb://127.0.0.1:27017/dnwdb'
 	},
-	newsletterDomain: newsletterDomain
+	newsletterDomain: 'http://localhost:6100/'
 };
