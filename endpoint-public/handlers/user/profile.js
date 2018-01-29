@@ -11,12 +11,6 @@ const profile = function(callback) {
 		'github',
 		'email'
 	]);
-	
-	query
-		.populate('category', [ 'name', 'slug' ])
-		.populate('tags')
-		.populate('user', 'username')
-		.sort({ title: 'desc' });
 
 	query.exec(function(err, data) {
 		if (err) {

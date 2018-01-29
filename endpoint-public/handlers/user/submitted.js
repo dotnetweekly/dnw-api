@@ -18,48 +18,51 @@ const profile = async function(req, callback) {
 	const username = req.params.username;
 	const userObj = await getUserName(username);
 
-	var query = Link.find(
-		{
-			user: userObj._id,
-			isActive: true
-		},
-		[]
-	)
-		.select([ 'title', 'slug', 'createdOn' ])
-		.populate('category', [ 'name', 'slug' ])
-		.populate('tags')
-		.populate('user', 'username')
-		.sort({ createdOn: -1 });
+	Link.count({
+		user: userObj._id,
+		isActive: true
+	}, function( err, totalItems){
 
-	query.exec(function(err, data) {
-		if (err) {
-			callback.onError({});
+		const pages = Math.ceil(parseFloat(totalItems) / pageChunk);
+		const skipItems = (page - 1) * pageChunk;
 
-			return;
-		} else {
-			let count = 0;
-			const pages = Math.ceil(parseFloat(data.length) / pageChunk);
-			data = data.filter((item) => {
-				count++;
-				if (count >= (page - 1) * pageChunk && count < (page - 1) * pageChunk + pageChunk) {
-					return item;
+		var query = Link.find(
+			{
+				user: userObj._id,
+				isActive: true
+			},
+			[]
+		)
+			.select([ 'title', 'slug', 'createdOn' ])
+			.populate('category', [ 'name', 'slug' ])
+			.populate('tags')
+			.populate('user', 'username')
+			.limit(pageChunk)
+			.skip(skipItems)
+			.sort({ createdOn: -1 });
+	
+		query.exec(function(err, data) {
+			if (err) {
+				console.log(err);
+				callback.onError({});
+	
+				return;
+			} else {
+				if (data) {
+					callback.onSuccess({
+						links: data,
+						pages: pages,
+						page: page
+					});
+	
+					return;
 				}
-			});
-
-			if (data) {
-				callback.onSuccess({
-					links: data,
-					pages: pages,
-					page: page
-				});
-
+				callback.onError(new NotFoundError());
+	
 				return;
 			}
-			callback.onError(new NotFoundError());
-
-			return;
-		}
-	});
+		});
+	})
 };
 
 module.exports = profile;
