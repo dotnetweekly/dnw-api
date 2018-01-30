@@ -1,9 +1,10 @@
 const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 const AdModel = require("../../../db/models/ad.model");
+const sanitize = require('mongo-sanitize');
 
 const update = function(req, callback) {
-  const ids = req.body.ids;
+  const ids = sanitize(req.body.ids);
 
   if (!Array.isArray(ids) || ids.length === 0) {
     callback.onError();

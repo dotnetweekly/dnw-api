@@ -1,6 +1,7 @@
 const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 const Link = require("../../../db/models/link.model");
+const sanitize = require('mongo-sanitize');
 
 const getLink = function (link) {
   return new Promise((resolve, reject) => {
@@ -18,13 +19,13 @@ const getLink = function (link) {
 }
 
 const deleteItems = function (req, callback) {
-  const ids = req.body.ids;
+  const ids = sanitize(req.body.ids);
 
   if (!Array.isArray(ids) || ids.length === 0) {
     callback.onError();
   }
 
-  getLink(req.params.link)
+  getLink(sanitize(req.params.link))
     .then(link => {
       for (var i in ids) {
         link.comments.id(ids[i]).remove();

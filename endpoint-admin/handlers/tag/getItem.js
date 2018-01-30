@@ -1,7 +1,8 @@
+const sanitize = require('mongo-sanitize');
 var Tag = require("../../../db/models/tag.model");
 
 const search = function(req, callback) {
-  const id = req.params.id;
+  const id = sanitize(req.params.id);
   if (!id) {
     callback.onError("Not Found");
     return;

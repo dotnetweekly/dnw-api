@@ -1,3 +1,4 @@
+const sanitize = require('mongo-sanitize');
 const User = require("../../../db/models/user.model");
 const Link = require("../../../db/models/link.model");
 const NotFoundError = require("../../../error/not-found");
@@ -12,8 +13,8 @@ async function getUserName(username) {
 }
 
 const profile = async function(req, callback) {
-  const page = req.query ? req.query.page || 1 : 1;
-  const username = req.params.username;
+  const page = sanitize(req.query) ? sanitize(req.query.page) || 1 : 1;
+  const username = sanitize(req.params.username);
   const pageChunk = 12;
 
   const userObj = await getUserName(username);

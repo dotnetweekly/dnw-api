@@ -1,6 +1,7 @@
 const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 const Link = require("../../../db/models/link.model");
+const sanitize = require('mongo-sanitize');
 
 const getLink = function (link) {
   return new Promise((resolve, reject) => {
@@ -21,13 +22,13 @@ const getLink = function (link) {
 }
 
 const search = function (req, callback) {
-  const id = req.params.id;
+  const id = sanitize(req.params.id);
   if (!id) {
     callback.onError("Not Found");
     return;
   }
 
-  getLink(req.params.link)
+  getLink(sanitize(req.params.link))
     .then(link => {
 
       const comments = link.comments

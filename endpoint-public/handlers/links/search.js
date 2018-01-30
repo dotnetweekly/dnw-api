@@ -1,11 +1,12 @@
+const sanitize = require('mongo-sanitize');
 var Link = require("../../../db/models/link.model");
 var Category = require("../../../db/models/category.model");
 var CalendarHelper = require("../../../helpers/calendar.helper");
 
 const search = function(req, callback, olderLinks = false) {
-  let week = req.query.week;
-  let year = req.query.year;
-  const category = req.query.category;
+  let week = sanitize(req.query.week);
+  let year = sanitize(req.query.year);
+  const category = sanitize(req.query.category);
   const now = new Date(Date.now());
   const userId = callback.user ? callback.user.id : null;
 

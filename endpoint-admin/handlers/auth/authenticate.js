@@ -5,19 +5,20 @@ const User = require("../../../db/models/user.model");
 const NotFoundError = require("../../../error/not-found");
 const UnauthorizedError = require("../../../error/unauthorized");
 const tokenHelper = require("../../../helpers/token.helper");
+const sanitize = require('mongo-sanitize');
 
 const authenticate = function(req, callback) {
-  if (!req.body || (!req.body.username && !req.body.email)) {
+  if (!sanitize(req.body) || (!sanitize(req.body.username) && !sanitize(req.body.email))) {
     callback.onError(new NotFoundError());
     return;
   }
 
-  const username = req.body.username;
-  const password = req.body.password;
+  const username = sanitize(req.body.username);
+  const password = sanitize(req.body.password);
 
   const credentialName = username
-    ? { username: req.body.username }
-    : { email: req.body.email };
+    ? { username: sanitize(req.body.username) }
+    : { email: sanitize(req.body.email) };
 
   User.findOne(credentialName, function(error, user) {
     if (error || !user) {

@@ -1,9 +1,10 @@
+const sanitize = require('mongo-sanitize');
 var Link = require('../../../db/models/link.model');
 
 const getSingle = function(req, callback) {
 	const userId = callback.user ? callback.user.id : null;
 
-	var query = Link.findOne({ isActive: true, slug: req.params.id }, [
+	var query = Link.findOne({ isActive: true, slug: sanitize(req.params.id) }, [
 		'_id',
 		'title',
 		'url',
@@ -35,6 +36,9 @@ const getSingle = function(req, callback) {
 				link.hasUpvoted = link.upvotes.some(upvote => {
 					return !userId ? false : upvote.trim() == userId.trim() 
 				});
+				link.comments = link.comments.filter(link => {
+					return link.isActive;
+				})
 				link.upvotes = [];
 
 				callback.onSuccess(link);

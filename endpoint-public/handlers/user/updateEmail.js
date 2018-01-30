@@ -1,4 +1,5 @@
 const jwt = require('jsonwebtoken');
+const sanitize = require('mongo-sanitize');
 const config = require('../../../config');
 const UserModel = require('../../../db/models/user.model');
 
@@ -28,7 +29,7 @@ const updateEmailAction = function(currentToken, user, callback){
 }
 
 const activate = function(req, callback) {
-	const key = req.body.key;
+	const key = sanitize(req.body.key);
 	UserModel.findOne({ resetEmail: key, isActive: true }, function(error, user) {
 		if (error || !user) {
 			callback.onSuccess({ error: noKeyStr });

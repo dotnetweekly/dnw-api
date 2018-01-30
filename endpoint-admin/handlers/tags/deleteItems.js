@@ -1,9 +1,10 @@
 const mongoose = require("mongoose");
+const sanitize = require('mongo-sanitize');
 const Schema = mongoose.Schema;
 const Tag = require("../../../db/models/tag.model");
 
 const deleteItems = function(req, callback) {
-  const ids = req.body.ids;
+  const ids = sanitize(req.body.ids);
 
   if (!Array.isArray(ids) || ids.length === 0) {
     callback.onError();

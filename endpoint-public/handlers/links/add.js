@@ -1,3 +1,4 @@
+const sanitize = require('mongo-sanitize');
 const LinkModel = require("../../../db/models/link.model");
 const CategoryModel = require("../../../db/models/category.model");
 const TagsModel = require("../../../db/models/tag.model");
@@ -72,7 +73,7 @@ function saveLink(newLink, user, errors, callback) {
 
 const addLink = function(req, callback) {
   const errors = [];
-  const newLink = req.body;
+  const newLink = sanitize(req.body);
   categoryExists(newLink.category).then(categoryExist => {
     if (!categoryExist) {
       errors.push({

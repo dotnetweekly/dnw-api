@@ -1,6 +1,7 @@
 const jwt = require('jsonwebtoken');
 const Guid = require('guid');
 const axios = require("axios");
+const sanitize = require('mongo-sanitize');
 
 const config = require('../../../config');
 const User = require('../../../db/models/user.model');
@@ -71,7 +72,7 @@ const register = function(req, callback) {
 	const requiredFields = [ 'firstName', 'username', 'email', 'password' ];
 	const errors = [];
 
-	const newUser = req.body.user;
+	const newUser = sanitize(req.body.user);
 
 	for (var i = 0; i < requiredFields.length; i++) {
 		const requiredField = requiredFields[i];

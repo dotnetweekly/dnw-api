@@ -1,6 +1,7 @@
 
 const jwt = require('jsonwebtoken');
 const axios = require("axios");
+const sanitize = require('mongo-sanitize');
 
 const config = require('../../../config');
 const User = require('../../../db/models/user.model');
@@ -142,7 +143,7 @@ const checkUsername = function(data, updatedUser, callback){
 
 const saveProfile = function(req, callback) {
 	var query = User.findOne({ _id: callback.user.id, isActive: true });
-  const updatedUser = req.body;
+  const updatedUser = sanitize(req.body);
 	query.exec(function(err, data) {
 		if (err || !data) {
       callback.onError({});

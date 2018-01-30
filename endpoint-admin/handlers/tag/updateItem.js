@@ -1,9 +1,10 @@
 const mongoose = require("mongoose");
+const sanitize = require('mongo-sanitize');
 const Schema = mongoose.Schema;
 const Tag = require("../../../db/models/tag.model");
 
 const updateItem = function(req, callback) {
-  const itemToUpdate = req.body;
+  const itemToUpdate = sanitize(req.body);
 
   if (!itemToUpdate._id) {
     itemToUpdate._id = mongoose.Types.ObjectId();

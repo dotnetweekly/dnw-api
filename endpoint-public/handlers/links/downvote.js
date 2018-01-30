@@ -1,3 +1,4 @@
+const sanitize = require('mongo-sanitize');
 var Link = require('../../../db/models/link.model');
 
 const downvote = function(req, callback) {
@@ -6,7 +7,7 @@ const downvote = function(req, callback) {
     callback.onError("User not logged in");
 	}
 
-	var query = Link.findOne({ isActive: true, _id: req.params.id });
+	var query = Link.findOne({ isActive: true, _id: sanitize(req.params.id) });
 
 	query.exec(function(err, data) {
 		if (err || !data) {

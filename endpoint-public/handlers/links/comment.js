@@ -1,3 +1,4 @@
+const sanitize = require('mongo-sanitize');
 const Link = require('../../../db/models/link.model');
 const CommentModel = require('../../../db/models/comment.model');
 const UserModel = require("../../../db/models/user.model");
@@ -39,8 +40,8 @@ const saveCommentAction = function(user, data, commentData, callback) {
 const saveComment = function(req, callback) {
 	const userId = callback.user ? callback.user.id : null;
 
-  var query = Link.findOne({ isActive: true, _id: req.params.id });
-  const commentData = req.body.comment;
+  var query = Link.findOne({ isActive: true, _id: sanitize(req.params.id) });
+  const commentData = sanitize(req.body.comment);
 
 	query.exec(function(err, link) {
 		if (err) {

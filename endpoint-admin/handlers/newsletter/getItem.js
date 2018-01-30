@@ -1,7 +1,8 @@
-var Newsletter = require("../../../db/models/newsletter.model");
+const sanitize = require('mongo-sanitize');
+const Newsletter = require("../../../db/models/newsletter.model");
 
 const search = function(req, callback) {
-  const id = req.params.id;
+  const id = sanitize(req.params.id);
   if (!id) {
     callback.onError("Not Found");
     return;

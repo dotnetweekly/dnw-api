@@ -1,11 +1,12 @@
 const mongoose = require("mongoose");
+const sanitize = require('mongo-sanitize');
 const Schema = mongoose.Schema;
 const Tag = require("../../../db/models/tag.model");
 
 const updateItems = function(req, callback) {
-  const key = req.params.key;
-  const ids = req.body.ids;
-  const value = req.body.value;
+  const key = sanitize(req.params.key);
+  const ids = sanitize(req.body.ids);
+  const value = sanitize(req.body.value);
 
   if (!Array.isArray(ids) || ids.length === 0) {
     callback.onError();

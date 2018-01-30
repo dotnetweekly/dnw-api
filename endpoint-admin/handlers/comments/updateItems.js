@@ -1,6 +1,7 @@
 const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 const Link = require("../../../db/models/link.model");
+const sanitize = require('mongo-sanitize');
 
 const getLink = function (link) {
   return new Promise((resolve, reject) => {
@@ -18,11 +19,11 @@ const getLink = function (link) {
 }
 
 const updateItems = function (req, callback) {
-  const key = req.params.key;
-  const linkId = req.params.link;
+  const key = sanitize(req.params.key);
+  const linkId = sanitize(req.params.link);
 
-  const ids = req.body.ids;
-  const value = req.body.value;
+  const ids = sanitize(req.body.ids);
+  const value = sanitize(req.body.value);
 
   if (!Array.isArray(ids) || ids.length === 0) {
     callback.onError();

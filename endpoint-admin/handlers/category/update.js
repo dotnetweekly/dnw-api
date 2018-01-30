@@ -1,9 +1,10 @@
 const mongoose = require("mongoose");
+const sanitize = require('mongo-sanitize');
 const Schema = mongoose.Schema;
 const Category = require("../../../db/models/category.model");
 
 const updateStatus = function(req, callback) {
-  const updatedCategory = req.body;
+  const updatedCategory = sanitize(req.body);
 
   if (!updatedCategory._id) {
     updatedCategory._id = mongoose.Types.ObjectId();

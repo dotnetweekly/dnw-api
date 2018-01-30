@@ -1,3 +1,4 @@
+const sanitize = require('mongo-sanitize');
 const UserModel = require("../../../db/models/user.model");
 const tokenHelper = require("../../../helpers/token.helper");
 
@@ -5,7 +6,7 @@ const NotFoundError = require("../../../error/not-found");
 const UnauthorizedError = require("../../../error/unauthorized");
 
 const activate = function(req, callback) {
-  const key = req.body.key;
+  const key = sanitize(req.body.key);
   UserModel.findOne({ guid: key, isActive: false }, function(error, user) {
     if (error || !user) {
       callback.onSuccess({ error: "User not found or already activated." });

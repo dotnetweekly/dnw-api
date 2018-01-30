@@ -1,6 +1,7 @@
 const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 const Link = require("../../../db/models/link.model");
+const sanitize = require('mongo-sanitize');
 
 const getLink = function (link) {
   return new Promise((resolve, reject) => {
@@ -18,14 +19,14 @@ const getLink = function (link) {
 }
 
 const updateItem = function (req, callback) {
-  const itemToUpdate = req.body;
-  const id = req.params.id;
+  const itemToUpdate = sanitize(req.body);
+  const id = sanitize(req.params.id);
 
   if (!itemToUpdate._id) {
     itemToUpdate._id = mongoose.Types.ObjectId();
   }
 
-  getLink(req.params.link)
+  getLink(sanitize(req.params.link))
     .then(link => {
 
       const comments = link.comments

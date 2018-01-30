@@ -1,7 +1,8 @@
 var Category = require("../../../db/models/category.model");
+const sanitize = require('mongo-sanitize');
 
 const search = function(req, callback) {
-  const id = req.params.id;
+  const id = sanitize(req.params.id);
   if (!id) {
     callback.onError("Not Found");
     return;

@@ -1,6 +1,7 @@
 const jwt = require("jsonwebtoken");
 const Guid = require("guid");
 const axios = require("axios");
+const sanitize = require('mongo-sanitize');
 
 const config = require("../../../config");
 const User = require("../../../db/models/user.model");
@@ -33,7 +34,7 @@ const sendForgotPasswordEmail = function(email, token, callback) {
 };
 
 const forgotPassword = function(req, callback) {
-  const email = req.body.email;
+  const email = sanitize(req.body.email);
   var query = User.findOne({ email: email, isActive: true });
 
   query.exec(function(err, currentUser) {
@@ -49,7 +50,11 @@ const forgotPassword = function(req, callback) {
             currentUser.email,
             currentUser.resetPassword,
             callback
-          );
+          ).then(() => {
+            callback.onSuccess({});
+    
+            return;
+          });
         } else {
           callback.onSuccess({
             errors: [
