@@ -36,6 +36,7 @@ const search = function(req, callback, olderLinks = false) {
   query.exec(function(err, data) {
     if (err) {
       callback.onError([]);
+
       return;
     } else {
       if (!data || data.length === 0) {
@@ -45,6 +46,10 @@ const search = function(req, callback, olderLinks = false) {
 
         return;
       }
+
+      data = data.sort(function(a, b) {
+        return b.upvotes.length - a.upvotes.length;
+      });
 
       data = data.filter(link => {
         let newLink = link._doc;
