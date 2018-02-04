@@ -10,7 +10,7 @@ var connect = require("./db/connect");
 var app = express();
 
 app.use(logger("dev")); /* 'default', 'short', 'tiny', 'dev' */
-app.use(bodyParser.urlencoded({ extended: false }));
+app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
 function allowCrossDomain(req, res, next) {
