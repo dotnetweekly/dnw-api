@@ -8,10 +8,11 @@ const linkController = new LinkController();
 const recaptcha = new Recaptcha(process.env.RECAPTCHA_PUBLIC, process.env.RECAPTCHA_SECRET);
 
 router.get("/", linkController.search);
-router.post("/", recaptcha.middleware.render, linkController.add);
-router.post("/upvote/:id", linkController.upvote);
-router.post("/downvote/:id", linkController.downvote);
-router.post("/comment/:id", linkController.comment);
 router.get("/:id", linkController.getSingle);
+
+router.post("/", recaptcha.middleware.verify, linkController.add);
+router.post("/upvote/:id", recaptcha.middleware.verify, linkController.upvote);
+router.post("/downvote/:id", recaptcha.middleware.verify, linkController.downvote);
+router.post("/comment/:id", recaptcha.middleware.verify, linkController.comment);
 
 module.exports = router;

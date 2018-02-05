@@ -1,5 +1,6 @@
 const BaseController = require('./base.controller');
 const UserHandler = require('../handlers/user');
+const RecaptchaError = require("../../error/recaptcha");
 
 class UserController extends BaseController {
 	constructor() {
@@ -9,7 +10,7 @@ class UserController extends BaseController {
 
 	profile(req, res, next) {
 		const response = this._responseManager.getResponseHandler(req, res);
-
+    
 		if (response) {
 			this._userHandler.profile(response);
 		}
@@ -17,6 +18,15 @@ class UserController extends BaseController {
 	
 	saveProfile(req, res, next) {
 		const response = this._responseManager.getResponseHandler(req, res);
+
+    if (req.recaptcha.error) {
+      const recaptchaError = new RecaptchaError();
+      response.onSuccess({
+        errors: [{field: "recaptcha", error: recaptchaError.message}]
+      });
+
+      return;
+    }
 
 		if (response) {
 			this._userHandler.saveProfile(req, response);
@@ -50,6 +60,15 @@ class UserController extends BaseController {
 	updateEmail(req, res, next) {
 		const response = this._responseManager.getResponseHandler(req, res, true);
 
+    if (req.recaptcha.error) {
+      const recaptchaError = new RecaptchaError();
+      response.onSuccess({
+        errors: [{field: "recaptcha", error: recaptchaError.message}]
+      });
+
+      return;
+    }
+    
 		if (response) {
 			this._userHandler.updateEmail(req, response);
 		}
@@ -58,6 +77,15 @@ class UserController extends BaseController {
 	forgotPassword(req, res, next) {
 		const response = this._responseManager.getResponseHandler(req, res, true);
 
+    if (req.recaptcha.error) {
+      const recaptchaError = new RecaptchaError();
+      response.onSuccess({
+        errors: [{field: "recaptcha", error: recaptchaError.message}]
+      });
+
+      return;
+    }
+    
 		if (response) {
 			this._userHandler.forgotPassword(req, response);
 		}
