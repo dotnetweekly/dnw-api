@@ -33,8 +33,15 @@ class ResponseManager {
 
 		return {
 			user: user,
-			onSuccess: function(data, message, code) {
-				ResponseManager.respondWithSuccess(res, code || ResponseManager.HTTP_STATUS.OK, data, message);
+			onSuccess: function(data, message, code, xml = null) {
+				ResponseManager.respondWithSuccess(
+					res,
+					code || ResponseManager.HTTP_STATUS.OK,
+					data,
+					message,
+					[],
+					xml
+				);
 			},
 			onError: function(error) {
 				ResponseManager.respondWithError(
@@ -47,11 +54,18 @@ class ResponseManager {
 		};
 	}
 
-	static respondWithSuccess(res, code, data, message = '', errors = []) {
+	static respondWithSuccess(res, code, data, message = '', errors = [], xml = null) {
 		let response = Object.assign({}, BasicResponse);
 		response.success = true;
 		response.message = message;
 		response.data = data;
+		if (xml) {
+			res.status(code);
+			res.set('Content-Type', 'application/rss+xml; charset=UTF-8');
+			res.send(xml);
+
+			return;
+		}
 		res.status(code).json(response);
 	}
 

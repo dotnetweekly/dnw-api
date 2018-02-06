@@ -11,7 +11,7 @@ class NewsletterController extends BaseController {
 		const response = this._responseManager.getResponseHandler(req, res, true);
 
 		if (response) {
-			this._linkHandler.search(req, response);
+			this._linkHandler.search(req, response, false, false);
 		}
 	}
 }

@@ -9,10 +9,10 @@ class LinkController extends BaseController {
   }
 
   search(req, res, next) {
-    const response = this._responseManager.getResponseHandler(req, res, true);
+    const callback = this._responseManager.getResponseHandler(req, res, true);
 
-    if (response) {
-      this._linkHandler.search(req, response);
+    if (callback) {
+      this._linkHandler.search(req, callback);
     }
   }
 

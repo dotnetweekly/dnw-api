@@ -1,8 +1,12 @@
 const sanitize = require('mongo-sanitize');
+const Feed = require('feed');
+
 var Link = require('../../../db/models/link.model');
+const config = require("../../../config/");
 
 const getSingle = function(req, callback) {
 	const userId = callback.user ? callback.user.id : null;
+	const rss = req.query.feed;
 
 	var query = Link.findOne({ isActive: true, slug: sanitize(req.params.id) }, [
 		'_id',
@@ -41,6 +45,14 @@ const getSingle = function(req, callback) {
 				})
 				link.upvotes = [];
 
+				if (rss) {
+					callback.onSuccess("", "", "",
+						getFeed(data)
+					);
+	
+					return;
+				}
+
 				callback.onSuccess(link);
 
 				return;
@@ -52,5 +64,16 @@ const getSingle = function(req, callback) {
 		}
 	});
 };
+
+function getFeed(link) {
+  var feed = new Feed({
+		title:  link.title,
+		id: `${config.clientDomain}articles/${link.slug}`,
+		link: `${config.clientDomain}articles/${link.slug}`,
+		date: link.createdOn,
+		content: link.content
+  });
+  return feed.atom1();
+}
 
 module.exports = getSingle;
