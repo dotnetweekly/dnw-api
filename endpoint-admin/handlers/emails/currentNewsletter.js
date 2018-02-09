@@ -6,6 +6,7 @@ var axios = require("axios");
 const sanitize = require('mongo-sanitize');
 
 const currentNewsletter = function(req, callback) {
+  const save = sanitize(req.body.save);
   let week = sanitize(req.query.week);
   let year = sanitize(req.query.year);
   const category = sanitize(req.query.category);
@@ -56,7 +57,8 @@ const currentNewsletter = function(req, callback) {
 
       axios
         .post(`${config.newsletterDomain}api/v1/newsletters/current`, {
-          links: data
+          links: data,
+          save
         })
         .then(response => {
           callback.onSuccess(response.data.data);

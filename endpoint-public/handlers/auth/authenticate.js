@@ -20,7 +20,17 @@ const authenticate = function(req, callback) {
     }
 
     if (!user.checkPassword(password)) {
-      callback.onError(new UnauthorizedError());
+      const errors = [
+        {
+          field: 'email',
+          error: 'Invalid Credentials'
+        },
+        {
+          field: 'password',
+          error: 'Invalid Credentials'
+        }
+      ]
+      callback.onError(new UnauthorizedError("", errors));
       return;
     }
 

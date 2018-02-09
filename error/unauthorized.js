@@ -1,9 +1,9 @@
 const BaseError = require("./base");
 
 class UnauthorizedError extends BaseError {
-  constructor(message) {
+  constructor(message, errors) {
     message = message || "Invalid credentials";
-    super(message, 401);
+    super(message, 401, errors);
   }
 }
 
