@@ -13,8 +13,8 @@ router.use("/tag", require("./tag"));
 router.use("/users", require("./users"));
 router.use("/user", require("./user"));
 
-router.use("/newsletters", require("./newsletters"));
-router.use("/newsletter", require("./newsletter"));
+// router.use("/newsletters", require("./newsletters"));
+// router.use("/newsletter", require("./newsletter"));
 
 router.use("/comments", require("./comments"));
 router.use("/comment", require("./comment"));

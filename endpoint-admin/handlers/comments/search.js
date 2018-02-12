@@ -11,7 +11,7 @@ const search = function (req, callback) {
     }
   }
 
-  let query = Link.findOne(searchParams)
+  let query = Link.find(searchParams)
   .populate("user");
 
   query.exec(function (err, data) {
@@ -19,7 +19,16 @@ const search = function (req, callback) {
       callback.onError([]);
       return;
     } else {
-      callback.onSuccess(data.comments);
+      const comments = [];
+      for (var i = 0; i < data.length; i++) {
+
+        if (!link) {
+          comments.push(...data[i].comments.filter(c => !c.isActive));
+        } else {
+          comments.push(...data[i].comments);
+        }
+      }
+      callback.onSuccess(comments);
     }
   });
 };

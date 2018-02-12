@@ -3,24 +3,32 @@ const Schema = mongoose.Schema;
 const Link = require("../../../db/models/link.model");
 const sanitize = require('mongo-sanitize');
 
-const getLink = function (link) {
+const getComments = function (ids) {
   return new Promise((resolve, reject) => {
-    var query = Link.findOne({ _id: link });
+    const links = [];
+    let count = 0;
 
-    query.exec(function (err, data) {
-      if (err) {
-        reject(err);
-        return;
-      } else {
-        resolve(data);
+    for (var i = 0; i < ids.length; i++) {
+      const id = ids[i];
+      searchParams = {
+        "comments._id": id
       }
-    });
+      let query = Link.findOne(searchParams);
+      (function(i, id, query){ 
+        query.exec(function (err, data) {
+        count++;
+        links.push(data);
+        if (count === ids.length) {
+          resolve(links);
+        }
+        })
+      })(i, id, query);
+    }
   });
 }
 
 const updateItems = function (req, callback) {
   const key = sanitize(req.params.key);
-  const linkId = sanitize(req.params.link);
 
   const ids = sanitize(req.body.ids);
   const value = sanitize(req.body.value);
@@ -29,19 +37,28 @@ const updateItems = function (req, callback) {
     callback.onError();
   }
 
-  getLink(linkId).then(link => {
-    for (var i in ids) {
-      const comment = link.comments.id(ids[i]);
-      comment[key] = value;
-    }
+  getComments(ids).then(links => {
+    const errors = [];
+    let count = 0;
 
-    link.save(function (err) {
-      if (err) {
-        callback.onError(err);
-        return;
-      }
-      callback.onSuccess();
-    });
+    for (var i = 0; i < links.length; i++) {
+      const link = links[i];
+      (function (link, ids) {
+        const updateComments = link.comments.filter(c => {
+          return ids.includes(c._id.toString())
+        });
+        updateComments.forEach(updateComment => {
+          updateComment[key] = value;
+        });
+        console.log(updateComments);
+        link.save(function (err) {
+          count++;
+          if (count === links.length) {
+            callback.onSuccess();
+          }
+        })
+      })(link, ids);
+    }
   }).catch(err => {
     callback.onError(err);
   });
