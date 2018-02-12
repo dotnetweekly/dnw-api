@@ -3,7 +3,16 @@ const sanitize = require('mongo-sanitize');
 
 const search = function (req, callback) {
   const link = sanitize(req.params.link);
-  var query = Link.findOne({ _id: link });
+  let searchParams = { _id: link };
+
+  if (!link) {
+    searchParams = {
+      "comments.isActive": false
+    }
+  }
+
+  let query = Link.findOne(searchParams)
+  .populate("user");
 
   query.exec(function (err, data) {
     if (err) {

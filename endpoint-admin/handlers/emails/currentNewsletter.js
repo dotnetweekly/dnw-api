@@ -1,9 +1,11 @@
-var Link = require("../../../db/models/link.model");
-var Category = require("../../../db/models/category.model");
-var CalendarHelper = require("../../../helpers/calendar.helper");
-var config = require("../../../config");
-var axios = require("axios");
+const config = require("../../../config");
+const axios = require("axios");
 const sanitize = require('mongo-sanitize');
+
+const Link = require("../../../db/models/link.model");
+const Category = require("../../../db/models/category.model");
+const CalendarHelper = require("../../../helpers/calendar.helper");
+const Newsletter = require("../../../db/models/newsletter.model");
 
 const currentNewsletter = function(req, callback) {
   const save = sanitize(req.body.save);
@@ -61,7 +63,23 @@ const currentNewsletter = function(req, callback) {
           save
         })
         .then(response => {
-          callback.onSuccess(response.data.data);
+          if (save) {
+            Newsletter.update({
+            }, { $set: {
+                week,
+                year,
+                isActive: true
+              } 
+            }, { upsert: true }, function (
+              err
+            ) {
+              if (err) reject(err);
+              resolve();
+              callback.onSuccess(response.data.data);
+            });
+          } else {
+            callback.onSuccess(response.data.data);
+          }
         })
         .catch(error => {
           callback.onError(error);

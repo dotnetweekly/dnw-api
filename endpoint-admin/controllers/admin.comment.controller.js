@@ -20,6 +20,13 @@ class CommentController extends AdminBaseController {
       this._handler.getItem(req, response);
     }
   }
+
+  getSingleComment(req, res, next) {
+    const response = this._adminResponseManager.getResponseHandler(req, res);
+    if (response) {
+      this._handler.getSingleComment(req, response);
+    }
+  }
 }
 
 module.exports = CommentController;

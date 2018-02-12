@@ -3,12 +3,11 @@ const Schema = mongoose.Schema;
 const Link = require("../../../db/models/link.model");
 const sanitize = require('mongo-sanitize');
 
-const getLink = function (link) {
+const getLink = function (id) {
   return new Promise((resolve, reject) => {
-    var query = Link.findOne({ _id: link })
-      .populate("category", "slug")
-      .populate("tags")
-      .populate("user", "username");
+    var query = Link.findOne({ "comments._id": id })
+      .populate("comments")
+      .populate("comments.user");
 
     query.exec(function (err, data) {
       if (err) {
@@ -28,13 +27,15 @@ const search = function (req, callback) {
     return;
   }
 
-  getLink(sanitize(req.params.link))
+  getLink(sanitize(req.params.id))
     .then(link => {
 
       const comments = link.comments
         .filter(comment => { return comment._id == id });
 
-      callback.onSuccess(comments[0]);
+      callback.onSuccess({comment: comments[0], linkId: link._id});
+    }).catch(error => {
+      console.log(error);
     });
 };
 
