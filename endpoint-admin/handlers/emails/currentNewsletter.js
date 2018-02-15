@@ -3,7 +3,6 @@ const axios = require("axios");
 const sanitize = require('mongo-sanitize');
 
 const Link = require("../../../db/models/link.model");
-const Category = require("../../../db/models/category.model");
 const CalendarHelper = require("../../../helpers/calendar.helper");
 const Newsletter = require("../../../db/models/newsletter.model");
 
@@ -29,11 +28,11 @@ const currentNewsletter = function(req, callback) {
     "url",
     "createdOn",
     "slug",
-    "upvotes"
+    "upvotes",
+    "tags",
+    "category"
   ]);
   query
-    .populate("category", ["name", "slug"])
-    .populate("tags")
     .populate("user", "username")
     .sort({ title: "desc" });
 

@@ -1,5 +1,4 @@
 var Link = require('../../../db/models/link.model');
-var Category = require('../../../db/models/category.model');
 var CalendarHelper = require('../../../helpers/calendar.helper');
 var config = require('../../../config');
 var axios = require('axios');

@@ -1,2 +1,2 @@
-require('./newsletters');
+// require('./newsletters');
 require('./links');

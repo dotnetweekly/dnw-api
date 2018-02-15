@@ -15,7 +15,7 @@ var commentSchema = new Schema({
   },
   isActive: { type: Boolean, default: true },
   user: { type: Schema.ObjectId, ref: "User" },
-  createdOn: { type: Date, default: Date.now }
+  createdOn: { type: Date, default: Date.now() }
 });
 
 module.exports = commentSchema;

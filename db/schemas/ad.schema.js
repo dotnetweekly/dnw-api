@@ -25,7 +25,7 @@ var adSchema = new Schema({
 		}
   },
   isActive: { type: Boolean, default: true },
-  createdOn: { type: Date, default: Date.now }
+  createdOn: { type: Date, default: Date.now() }
 });
 
 module.exports = adSchema;

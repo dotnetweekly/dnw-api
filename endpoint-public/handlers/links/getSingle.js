@@ -15,13 +15,13 @@ const getSingle = function(req, callback) {
 		'content',
 		'createdOn',
 		'slug',
+		'category',
+		'tags',
 		'upvotes',
 		'createdOn'
 	]);
 
 	query
-		.populate('category', [ 'slug', 'name' ])
-		.populate('tags')
 		.populate({ path: 'comments.user', select: 'username' })
 		.populate({ path: 'comments', select: 'content' })
 		.populate('user', 'username');

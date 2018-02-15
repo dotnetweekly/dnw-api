@@ -6,8 +6,6 @@ const sanitize = require('mongo-sanitize');
 const getLink = function (link) {
   return new Promise((resolve, reject) => {
     var query = Link.findOne({ _id: link })
-      .populate("category", "slug")
-      .populate("tags")
       .populate("user", "username");
 
     query.exec(function (err, data) {

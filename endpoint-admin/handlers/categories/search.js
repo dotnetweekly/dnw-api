@@ -1,16 +1,9 @@
-var Category = require("../../../db/models/category.model");
+const categories = require("../../../data/categories");
 
 const search = function(req, callback) {
-  var query = Category.find({});
+  callback.onSuccess(categories);
 
-  query.exec(function(err, data) {
-    if (err) {
-      callback.onError([]);
-      return;
-    } else {
-      callback.onSuccess(data);
-    }
-  });
+  return;
 };
 
 module.exports = search;

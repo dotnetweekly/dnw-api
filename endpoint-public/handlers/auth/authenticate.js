@@ -6,12 +6,13 @@ const UnauthorizedError = require("../../../error/unauthorized");
 const tokenHelper = require("../../../helpers/token.helper");
 
 const authenticate = function(req, callback) {
-  const username = sanitize(req.body.username);
-  const password = sanitize(req.body.password);
+  const username = sanitize(req.body.username) || sanitize(req.query.username);
+  const password = sanitize(req.body.password) || sanitize(req.query.password);
+  const email = sanitize(req.body.email) || sanitize(req.query.email);
 
   const credentialName = username
-    ? { username: sanitize(req.body.username), isActive: true }
-    : { email: sanitize(req.body.email), isActive: true };
+    ? { username: username, isActive: true }
+    : { email: email, isActive: true };
 
   User.findOne(credentialName, function(error, user) {
     if (error || !user) {

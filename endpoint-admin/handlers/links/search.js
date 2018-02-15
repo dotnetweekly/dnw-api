@@ -28,8 +28,6 @@ const getAll = function(req, callback) {
 
   query
     .populate("user")
-    .populate("category")
-    .populate("tags")
     .sort({ createdOn: "desc" })
 
   query.exec(function(err, data) {
@@ -40,7 +38,7 @@ const getAll = function(req, callback) {
     } else {
       if (category) {
         data = data.filter(link => {
-          if (!category || (link.category && link.category.slug === category)) {
+          if (!category || (link.category && link.category === category)) {
             return link;
           }
         });

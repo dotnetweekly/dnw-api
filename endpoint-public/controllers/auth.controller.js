@@ -11,7 +11,7 @@ class AuthController extends BaseController {
   login(req, res, next) {
     const response = this._responseManager.getResponseHandler(req, res, true);
 
-    if (req.recaptcha.error) {
+    if (req.recaptcha && req.recaptcha.error) {
       response.onError(new UnauthorizedError());
 
       return;

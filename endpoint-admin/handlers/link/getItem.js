@@ -9,9 +9,7 @@ const search = function (req, callback) {
   }
 
   var query = Link.findOne({ _id: id })
-    .populate("category")
-    .populate("tags")
-    .populate("user");;
+    .populate("user");
 
   query.exec(function (err, data) {
     if (err) {

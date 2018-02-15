@@ -14,19 +14,19 @@ class TasksController extends AdminBaseController {
     }
   }
 
-  updateItems(req, res, next) {
-    const response = this._adminResponseManager.getResponseHandler(req, res);
-    if (response) {
-      this._handler.updateItems(req, response);
-    }
-  }
+  // updateItems(req, res, next) {
+  //   const response = this._adminResponseManager.getResponseHandler(req, res);
+  //   if (response) {
+  //     this._handler.updateItems(req, response);
+  //   }
+  // }
 
-  deleteItems(req, res, next) {
-    const response = this._adminResponseManager.getResponseHandler(req, res);
-    if (response) {
-      this._handler.deleteItems(req, response);
-    }
-  }
+  // deleteItems(req, res, next) {
+  //   const response = this._adminResponseManager.getResponseHandler(req, res);
+  //   if (response) {
+  //     this._handler.deleteItems(req, response);
+  //   }
+  // }
 }
 
 module.exports = TasksController;

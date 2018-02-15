@@ -7,8 +7,6 @@ class TagsHandler extends BaseAutoBindedClass {
   constructor() {
     super();
     this.search = (req, callback) => search(req, callback);
-    this.updateItems = (req, callback) => updateItems(req, callback);
-    this.deleteItems = (req, callback) => deleteItems(req, callback);
   }
 }
 

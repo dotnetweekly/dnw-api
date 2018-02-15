@@ -1,40 +1,23 @@
 const sanitize = require('mongo-sanitize');
 const LinkModel = require("../../../db/models/link.model");
-const CategoryModel = require("../../../db/models/category.model");
-const TagsModel = require("../../../db/models/tag.model");
 const UserModel = require("../../../db/models/user.model");
 const ErrorHelper = require("../../../helpers/errors.helper");
 const stringHelper = require("../../../helpers/string.helper");
 
-async function categoryExists(category) {
-  if (!category) {
-    return false;
-  }
+const dbcategories = require("../../../data/categories");
+const dbtags = require("../../../data/tags");
 
+function tagsExistSearch(tags) {
   try {
-    const query = CategoryModel.findOne({ name: category.name });
-    const existingCategory = await query.exec();
-
-    return !!existingCategory;
+    if (!tags || tags.length < 2 || tags.length > 5) {
+      return false;
+    }
+    const tagNames = tags.filter(tag => {
+      return dbtags.includes(tag);
+    });
+    return tags.length === tagNames.length;
   } catch (error) {
-    return false;
-  }
-}
-
-async function tagsExist(tags) {
-  if (!tags || tags.length === 0) {
-    return false;
-  }
-  const tagNames = tags.map(tag => {
-    return tag.name;
-  });
-
-  try {
-    const query = TagsModel.find({ name: { $in: tagNames } });
-    const existingTags = await query.exec();
-
-    return existingTags.length === tagNames.length;
-  } catch (error) {
+    console.log(error);
     return false;
   }
 }
@@ -53,7 +36,6 @@ function saveLink(newLink, user, errors, callback) {
       upvotes: [],
       comments: []
     });
-
     link.save(function(err) {
       if (err || errors.length > 0) {
         callback.onSuccess({
@@ -74,27 +56,33 @@ function saveLink(newLink, user, errors, callback) {
 const addLink = function(req, callback) {
   const errors = [];
   const newLink = sanitize(req.body);
-  categoryExists(newLink.category).then(categoryExist => {
-    if (!categoryExist) {
-      errors.push({
-        field: "category",
-        error: `Category not found`
-      });
-    }
-    tagsExist(newLink.tags).then(tagsExist => {
-      if (!tagsExist) {
-        errors.push({
-          field: "tags",
-          error: `Tags not found`
-        });
-      }
-      if (errors.length > 0) {
-        callback.success({ errors });
-        return;
-      }
-      saveLink(newLink, callback.user, errors, callback);
-    });
+  const category = dbcategories.filter(c => {
+    return newLink.category.slug === c.slug
   });
+  const tagsExist = tagsExistSearch(newLink.tags);
+  
+  if(category.length === 0){
+    errors.push({
+      field: "category",
+      error: `Category not found`
+    });
+  } else {
+    console.log(category);
+    newLink.category = category[0].slug;
+  }
+
+  if (!tagsExist) {
+    errors.push({
+      field: "tags",
+      error: `Between 2 and 5 tags`
+    });
+  }
+  
+  if (errors.length > 0) {
+    callback.success({ errors });
+    return;
+  }
+  saveLink(newLink, callback.user, errors, callback);
 };
 
 module.exports = addLink;

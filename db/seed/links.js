@@ -5,11 +5,13 @@ const db = require("../connect");
 
 const LinkModel = require("../models/link.model");
 const UserModel = require("../models/user.model");
-const CategoryModel = require("../models/category.model");
-const TagModel = require("../models/tag.model");
 
 const links = require("../../../ext-data/links");
 const newUserData = require("../../../ext-data/user");
+
+const categories = require("../../data/categories");
+const tags = require("../../data/tags");
+const tagObj = {};
 
 async function getUser(user) {
   try {
@@ -29,48 +31,10 @@ async function getLink(oldLink) {
   }
 }
 
-async function getTag(item) {
-  try {
-    const currentQuery = TagModel.findOne({ slug: item.slug });
-    return await currentQuery.exec();
-  } catch (error) {
-    return;
-  }
-}
-
-async function getCategory(item) {
-  try {
-    const currentQuery = CategoryModel.findOne({ slug: item.slug });
-    return await currentQuery.exec();
-  } catch (error) {
-    return;
-  }
-}
-
 async function getNewUser() {
   try {
     newUserData._id = new mongoose.Types.ObjectId();
     var newModel = new UserModel(newUserData);
-    return await newModel.save();
-  } catch (error) {
-    return;
-  }
-}
-
-async function addTag(item) {
-  try {
-    item._id = new mongoose.Types.ObjectId();
-    var newModel = new TagModel(item);
-    return await newModel.save();
-  } catch (error) {
-    return;
-  }
-}
-
-async function addCategory(item) {
-  try {
-    item._id = new mongoose.Types.ObjectId();
-    var newModel = new CategoryModel(item);
     return await newModel.save();
   } catch (error) {
     return;
@@ -144,22 +108,9 @@ async function addData() {
 
     for (tagKey in oldLink.tags) {
       const oldTag = oldLink.tags[tagKey];
-      let currentTag = await getTag(oldTag);
-
-      if (!currentTag) {
-        currentTag = {
-          _id: new mongoose.Types.ObjectId(),
-          name: oldTag.name,
-          slug: oldTag.slug,
-          isActive: true,
-          user: currentUser
-        };
-
-        currentTag = await addTag(currentTag);
-        newLink.tags.push(currentTag);
-      } else {
-        newLink.tags.push(currentTag);
-      }
+      const newTag = oldTag.name.split(' ').join('-').replace(/\'/, "");
+      newLink.tags.push(newTag);
+      tagObj[newTag] = "";
     }
 
     const oldCategory = oldLink.category;
@@ -170,21 +121,14 @@ async function addData() {
         oldCategory.name = "Events-Training";
       }
 
-      let currentCategory = await getCategory(oldCategory);
+      let currentCategory = categories.filter(category => {
+        return category.slug == oldCategory.slug
+      })
 
-      if (!currentCategory) {
-        currentCategory = {
-          _id: new mongoose.Types.ObjectId(),
-          name: oldCategory.name,
-          slug: oldCategory.slug,
-          isActive: true,
-          user: currentUser
-        };
-
-        currentCategory = await addCategory(currentCategory);
-        newLink.category = currentCategory;
+      if (currentCategory.length === 0) {
+        newLink.category = categories[0].slug;
       } else {
-        newLink.category = currentCategory;
+        newLink.category = currentCategory[0].slug;
       }
     }
 

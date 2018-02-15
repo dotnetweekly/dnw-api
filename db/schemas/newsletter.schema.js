@@ -12,7 +12,7 @@ var tagSchema = new Schema({
 		required: true
 	},
 	isActive: { type: Boolean, default: true },
-	createdOn: { type: Date, default: Date.now }
+	createdOn: { type: Date, default: Date.now() }
 });
 
 module.exports = tagSchema;

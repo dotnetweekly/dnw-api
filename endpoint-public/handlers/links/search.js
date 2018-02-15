@@ -2,7 +2,7 @@ const sanitize = require('mongo-sanitize');
 const Feed = require('feed');
 
 var Link = require("../../../db/models/link.model");
-var Category = require("../../../db/models/category.model");
+var categories = require("../../../data/categories");
 var CalendarHelper = require("../../../helpers/calendar.helper");
 const config = require("../../../config/");
 
@@ -29,12 +29,12 @@ const search = function(req, callback, olderLinks = false) {
     "url",
     "createdOn",
     "slug",
-    "upvotes"
+    "upvotes",
+    "category",
+    "tags"
   ]);
   
   query
-    .populate("category", ["name", "slug"])
-    .populate("tags")
     .populate("user", "username")
     .sort({ title: "desc" });
 
@@ -68,7 +68,7 @@ const search = function(req, callback, olderLinks = false) {
 
       if (category) {
         data = data.filter(link => {
-          if (!category || (link.category && link.category.slug === category)) {
+          if (!category || (link.category === category)) {
             return link;
           }
         });
@@ -99,7 +99,7 @@ function getFeed(data, week, year) {
     link: `${config.clientDomain}feed/week/${week}/year/${year}`,
     updated: new Date()
   });
-  const categories = [];
+  const feedCategories = [];
   for (var i = 0; i < data.length; i++) {
     const link = data[i];
     feed.addItem({
@@ -108,9 +108,13 @@ function getFeed(data, week, year) {
       link: `${config.clientDomain}articles/${link.slug}`,
       date: link.createdOn
     });
-    if (!categories.includes(link.category.name)){
-      feed.addCategory(link.category.name);
-      categories.push(link.category.name);
+    let feedCategory = categories.filter(category => {
+      return category.slug == link.category;
+    })
+    if (feedCategory.length > 0) {
+      feedCategory = feedCategory[0];
+      feed.addCategory(feedCategory.name);
+      feedCategories.push(feedCategory.name);
     }
   }
   return feed.atom1();

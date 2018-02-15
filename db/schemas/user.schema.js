@@ -74,7 +74,7 @@ const userSchema = new Schema({
     default: false
   },
   isActive: { type: Boolean, default: true },
-  createdOn: { type: Date, default: Date.now },
+  createdOn: { type: Date, default: Date.now() },
   hashedPassword: {
     type: String,
     required: true

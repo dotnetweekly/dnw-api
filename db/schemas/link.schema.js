@@ -52,19 +52,31 @@ var linkSchema = new Schema({
   upvotes: [String],
   isActive: { type: Boolean, default: true },
   category: {
-    type: Schema.ObjectId,
-    ref: "Category",
+    type: String,
+    required: true
+  },
+  // category: {
+  //   type: Schema.ObjectId,
+  //   ref: "Category",
+  //   validate: {
+  //     validator: function(category) {
+  //       return category;
+  //     },
+  //     message: "at least 1 {VALUE}"
+  //   }
+  // },
+  tags: {
+    type: [String],
     validate: {
-      validator: function(category) {
-        return category;
+      validator: function(tags) {
+        return tags;
       },
-      message: "at least 1 {VALUE}"
+      message: "at least 3 {VALUE}"
     }
   },
-  tags: [tagSchema],
   comments: [commentSchema],
   user: { type: Schema.ObjectId, ref: "User" },
-  createdOn: { type: Date, default: Date.now }
+  createdOn: { type: Date, default: Date.now() }
 });
 
 module.exports = linkSchema;

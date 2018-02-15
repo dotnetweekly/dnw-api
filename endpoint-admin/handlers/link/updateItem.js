@@ -8,6 +8,7 @@ const updateItem = function (req, callback) {
 
   if (!itemToUpdate._id) {
     itemToUpdate._id = mongoose.Types.ObjectId();
+    itemToUpdate.createdOn = new Date(Date.now());
   }
 
   const updatePromise = new Promise((resolve, reject) => {
@@ -15,13 +16,20 @@ const updateItem = function (req, callback) {
 
     const updatedProperties = {}
     for (var prop in itemToUpdate) {
-      updatedProperties[prop] = itemToUpdate[prop];
+      if(prop === "category") {
+        updatedProperties[prop] = itemToUpdate[prop].slug;
+      } else {
+        updatedProperties[prop] = itemToUpdate[prop];
+      }
     }
 
     Link.update(idOptions, { $set: updatedProperties }, { upsert: true }, function (
       err
     ) {
-      if (err) reject(err);
+      if (err){
+        console.log(err);
+        reject(err);
+      }
       resolve();
     });
   });

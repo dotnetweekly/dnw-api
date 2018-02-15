@@ -5,10 +5,10 @@ router.use("/links", require("./links"));
 router.use("/link", require("./link"));
 
 router.use("/categories", require("./categories"));
-router.use("/category", require("./category"));
+// router.use("/category", require("./category"));
 
 router.use("/tags", require("./tags"));
-router.use("/tag", require("./tag"));
+// router.use("/tag", require("./tag"));
 
 router.use("/users", require("./users"));
 router.use("/user", require("./user"));

@@ -34,9 +34,7 @@ const profile = async function(req, callback) {
 			},
 			[]
 		)
-			.select([ 'title', 'slug', 'createdOn' ])
-			.populate('category', [ 'name', 'slug' ])
-			.populate('tags')
+			.select([ 'title', 'slug', 'createdOn', 'category', 'tags' ])
 			.populate('user', 'username')
 			.limit(pageChunk)
 			.skip(skipItems)
