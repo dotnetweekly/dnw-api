@@ -9,7 +9,7 @@ const dbtags = require("../../../data/tags");
 
 function tagsExistSearch(tags) {
   try {
-    if (!tags || tags.length < 2 || tags.length > 5) {
+    if (!tags || tags.length < 1 || tags.length > 5) {
       return false;
     }
     const tagNames = tags.filter(tag => {
@@ -56,8 +56,9 @@ function saveLink(newLink, user, errors, callback) {
 const addLink = function(req, callback) {
   const errors = [];
   const newLink = sanitize(req.body);
+  const newLinkCategory = newLink.category.slug || newLink.category;
   const category = dbcategories.filter(c => {
-    return newLink.category.slug === c.slug
+    return newLinkCategory === c.slug
   });
   const tagsExist = tagsExistSearch(newLink.tags);
   
@@ -67,14 +68,13 @@ const addLink = function(req, callback) {
       error: `Category not found`
     });
   } else {
-    console.log(category);
     newLink.category = category[0].slug;
   }
 
   if (!tagsExist) {
     errors.push({
       field: "tags",
-      error: `Between 2 and 5 tags`
+      error: `Between 1 and 5 tags`
     });
   }
   

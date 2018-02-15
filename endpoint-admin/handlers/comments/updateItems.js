@@ -50,7 +50,6 @@ const updateItems = function (req, callback) {
         updateComments.forEach(updateComment => {
           updateComment[key] = value;
         });
-        console.log(updateComments);
         link.save(function (err) {
           count++;
           if (count === links.length) {

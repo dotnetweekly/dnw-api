@@ -4,7 +4,6 @@ const sanitize = require('mongo-sanitize');
 
 const Link = require("../../../db/models/link.model");
 const CalendarHelper = require("../../../helpers/calendar.helper");
-const Newsletter = require("../../../db/models/newsletter.model");
 
 const currentNewsletter = function(req, callback) {
   const save = sanitize(req.body.save);
@@ -62,23 +61,7 @@ const currentNewsletter = function(req, callback) {
           save
         })
         .then(response => {
-          if (save) {
-            Newsletter.update({
-            }, { $set: {
-                week,
-                year,
-                isActive: true
-              } 
-            }, { upsert: true }, function (
-              err
-            ) {
-              if (err) reject(err);
-              resolve();
-              callback.onSuccess(response.data.data);
-            });
-          } else {
-            callback.onSuccess(response.data.data);
-          }
+          callback.onSuccess(response.data.data);
         })
         .catch(error => {
           callback.onError(error);

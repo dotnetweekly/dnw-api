@@ -13,20 +13,6 @@ class CategoriesController extends AdminBaseController {
       this._handler.search(req, response);
     }
   }
-
-  // update(req, res, next) {
-  //   const response = this._adminResponseManager.getResponseHandler(req, res);
-  //   if (response) {
-  //     this._handler.update(req, response);
-  //   }
-  // }
-
-  // deleteCategories(req, res, next) {
-  //   const response = this._adminResponseManager.getResponseHandler(req, res);
-  //   if (response) {
-  //     this._handler.deleteCategories(req, response);
-  //   }
-  // }
 }
 
 module.exports = CategoriesController;
