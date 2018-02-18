@@ -1,8 +1,8 @@
 const sanitize = require('mongo-sanitize');
+const Guid = require("guid");
 const UserModel = require("../../../db/models/user.model");
 const NotFoundError = require("../../../error/not-found");
 const UnauthorizedError = require("../../../error/unauthorized");
-const Guid = require("guid");
 
 const forgotPasswordActivate = function(req, callback) {
   const key = sanitize(req.params.key);

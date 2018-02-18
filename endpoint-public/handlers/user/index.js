@@ -6,6 +6,8 @@ const comments = require("./comments");
 const saveProfile = require("./saveProfile");
 const updateEmail = require("./updateEmail");
 const forgotPassword = require("./forgotPassword");
+const unsubscribe = require("./unsubscribe");
+const userCount = require("./userCount");
 
 class UserHandler extends BaseAutoBindedClass {
   constructor() {
@@ -17,6 +19,8 @@ class UserHandler extends BaseAutoBindedClass {
     this.saveProfile = (req, callback) => saveProfile(req, callback);
     this.updateEmail = (req, callback) => updateEmail(req, callback);
     this.forgotPassword = (req, callback) => forgotPassword(req, callback);
+    this.unsubscribe = (req, callback) => unsubscribe(req, callback);
+    this.userCount = (req, callback) => userCount(req, callback);
   }
 }
 

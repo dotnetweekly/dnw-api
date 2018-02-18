@@ -35,11 +35,11 @@ class LinkController extends BaseController {
   upvote(req, res, next) {
     const response = this._responseManager.getResponseHandler(req, res);
 
-    if (req.recaptcha.error) {
-      response.onError(recaptchaError.message);
+    // if (!req.recaptcha || (req.recaptcha && req.recaptcha.error)) {
+    //   response.onError(recaptchaError.message);
 
-      return;
-    }
+    //   return;
+    // }
 
     if (response) {
       this._linkHandler.upvote(req, response);
@@ -49,11 +49,11 @@ class LinkController extends BaseController {
   downvote(req, res, next) {
     const response = this._responseManager.getResponseHandler(req, res);
 
-    if (req.recaptcha.error) {
-      response.onError(recaptchaError.message);
+    // if (!req.recaptcha || (req.recaptcha && req.recaptcha.error)) {
+    //   response.onError(recaptchaError.message);
 
-      return;
-    }
+    //   return;
+    // }
     
     if (response) {
       this._linkHandler.downvote(req, response);
@@ -63,7 +63,7 @@ class LinkController extends BaseController {
   comment(req, res, next) {
     const response = this._responseManager.getResponseHandler(req, res);
 
-    if (req.recaptcha.error) {
+    if (!req.recaptcha || (req.recaptcha && req.recaptcha.error)) {
       const recaptchaError = new RecaptchaError();
       response.onSuccess({
         errors: [{field: "recaptcha", error: recaptchaError.message}]
@@ -80,7 +80,7 @@ class LinkController extends BaseController {
   add(req, res, next) {
     const response = this._responseManager.getResponseHandler(req, res);
 
-    if (req.recaptcha.error) {
+    if (!req.recaptcha || (req.recaptcha && req.recaptcha.error)) {
       const recaptchaError = new RecaptchaError();
       response.onSuccess({
         errors: [{field: "recaptcha", error: recaptchaError.message}]

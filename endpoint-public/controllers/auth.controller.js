@@ -11,7 +11,7 @@ class AuthController extends BaseController {
   login(req, res, next) {
     const response = this._responseManager.getResponseHandler(req, res, true);
 
-    if (req.recaptcha && req.recaptcha.error) {
+    if (!req.recaptcha || (req.recaptcha && req.recaptcha.error)) {
       response.onError(new UnauthorizedError());
 
       return;
@@ -23,7 +23,7 @@ class AuthController extends BaseController {
   register(req, res, next) {
     const response = this._responseManager.getResponseHandler(req, res, true);
 
-    if (req.recaptcha.error) {
+    if (!req.recaptcha || (req.recaptcha && req.recaptcha.error)) {
       const recaptchaError = new RecaptchaError();
       response.onSuccess({
         errors: [{field: "recaptcha", error: recaptchaError.message}]
@@ -38,7 +38,7 @@ class AuthController extends BaseController {
   activate(req, res, next) {
     const response = this._responseManager.getResponseHandler(req, res, true);
 
-    if (req.recaptcha.error) {
+    if (!req.recaptcha || (req.recaptcha && req.recaptcha.error)) {
       const recaptchaError = new RecaptchaError();
       response.onSuccess({
         errors: [{field: "recaptcha", error: recaptchaError.message}]
@@ -53,7 +53,7 @@ class AuthController extends BaseController {
   forgotPasswordActivate(req, res, next) {
     const response = this._responseManager.getResponseHandler(req, res, true);
 
-    if (req.recaptcha.error) {
+    if (!req.recaptcha || (req.recaptcha && req.recaptcha.error)) {
       const recaptchaError = new RecaptchaError();
       response.onSuccess({
         errors: [{field: "recaptcha", error: recaptchaError.message}]

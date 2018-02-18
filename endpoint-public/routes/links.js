@@ -11,8 +11,8 @@ router.get("/", linkController.search);
 router.get("/:id", linkController.getSingle);
 
 router.post("/", recaptcha.middleware.verify, linkController.add);
-router.post("/upvote/:id", recaptcha.middleware.verify, linkController.upvote);
-router.post("/downvote/:id", recaptcha.middleware.verify, linkController.downvote);
+router.post("/upvote/:id", linkController.upvote);
+router.post("/downvote/:id", linkController.downvote);
 router.post("/comment/:id", recaptcha.middleware.verify, linkController.comment);
 
 module.exports = router;

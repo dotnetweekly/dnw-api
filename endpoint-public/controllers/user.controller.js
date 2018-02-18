@@ -19,7 +19,7 @@ class UserController extends BaseController {
 	saveProfile(req, res, next) {
 		const response = this._responseManager.getResponseHandler(req, res);
 
-    if (req.recaptcha.error) {
+    if (!req.recaptcha || (req.recaptcha && req.recaptcha.error)) {
       const recaptchaError = new RecaptchaError();
       response.onSuccess({
         errors: [{field: "recaptcha", error: recaptchaError.message}]
@@ -56,11 +56,19 @@ class UserController extends BaseController {
 			this._userHandler.comments(req, response);
 		}
 	}
+
+	userCount(req, res, next) {
+		const response = this._responseManager.getResponseHandler(req, res, true);
+
+		if (response) {
+			this._userHandler.userCount(req, response);
+		}
+	}
 	
 	updateEmail(req, res, next) {
 		const response = this._responseManager.getResponseHandler(req, res, true);
 
-    if (req.recaptcha.error) {
+    if (!req.recaptcha || (req.recaptcha && req.recaptcha.error)) {
       const recaptchaError = new RecaptchaError();
       response.onSuccess({
         errors: [{field: "recaptcha", error: recaptchaError.message}]
@@ -77,7 +85,7 @@ class UserController extends BaseController {
 	forgotPassword(req, res, next) {
 		const response = this._responseManager.getResponseHandler(req, res, true);
 
-    if (req.recaptcha.error) {
+    if (!req.recaptcha || (req.recaptcha && req.recaptcha.error)) {
       const recaptchaError = new RecaptchaError();
       response.onSuccess({
         errors: [{field: "recaptcha", error: recaptchaError.message}]
@@ -88,6 +96,23 @@ class UserController extends BaseController {
     
 		if (response) {
 			this._userHandler.forgotPassword(req, response);
+		}
+	}
+	
+	unsubscribe(req, res, next) {
+		const response = this._responseManager.getResponseHandler(req, res, true);
+
+    if (!req.recaptcha || (req.recaptcha && req.recaptcha.error)) {
+      const recaptchaError = new RecaptchaError();
+      response.onSuccess({
+        errors: [{field: "recaptcha", error: recaptchaError.message}]
+      });
+
+      return;
+    }
+    
+		if (response) {
+			this._userHandler.unsubscribe(req, response);
 		}
 	}
 }

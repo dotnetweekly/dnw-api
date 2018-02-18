@@ -6,5 +6,6 @@ const emailsController = new EmailsController();
 
 router.post('/newsletter/current', emailsController.currentNewsletter);
 router.get('/user/activate', emailsController.activateUser);
+router.post('/custom', emailsController.sendCustom);
 
 module.exports = router;
