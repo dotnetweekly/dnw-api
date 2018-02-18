@@ -7,15 +7,14 @@ const UnauthorizedError = require("../../../error/unauthorized");
 
 const unsubscribe = function(req, callback) {
   const key = sanitize(req.body.key);
-  console.log(key);
-  UserModel.findOne({ guid: key, isActive: true }, function(error, user) {
+  UserModel.findOne({ keyUnsubscribe: key, isActive: true }, function(error, user) {
     if (error || !user) {
       callback.onSuccess({ error: "User not found or not activated yet." });
       return;
     }
 
     user.subscribed = false;
-    user.guid = Guid.create();
+    user.keyUnsubscribe = Guid.create();
 
     user.save(function(err) {
       callback.onSuccess({});

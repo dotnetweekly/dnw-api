@@ -1,4 +1,5 @@
 const sanitize = require('mongo-sanitize');
+const Guid = require("guid");
 const UserModel = require("../../../db/models/user.model");
 const tokenHelper = require("../../../helpers/token.helper");
 
@@ -13,7 +14,8 @@ const unsubscribe = function(req, callback) {
       return;
     }
 
-    user.subscribed = false;
+    user.subscribed = true;
+    user.isActive = true;
     user.guid = Guid.create();
     
     user.save(function(err) {

@@ -2,6 +2,7 @@ const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 const stringValidate = require("../validations/strings.validate");
 const crypto = require("crypto");
+const Guid = require("guid");
 
 const userSchema = new Schema({
   username: {
@@ -94,6 +95,11 @@ const userSchema = new Schema({
   resetPassword: {
     type: String,
     required: true
+  },
+  keyUnsubscribe: {
+    type: String,
+    required: true,
+    default: Guid.create()
   }
 });
 

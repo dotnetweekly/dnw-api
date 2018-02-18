@@ -5,7 +5,7 @@ const emailHelper = {
     
     let newHtml = html;
 
-    newHtml = newHtml.replace(/(\${USER_UNSUBSCRIBE})/gim, `${config.clientDomain}unsubscribe/${user.guid}`);
+    newHtml = newHtml.replace(/(\${USER_UNSUBSCRIBE})/gim, `${config.clientDomain}unsubscribe/${user.keyUnsubscribe}`);
     newHtml = newHtml.replace(/(\${USER_USERNAME})/gim, user.username);
     newHtml = newHtml.replace(/(\${USER_RESET})/gim, `${config.clientDomain}resetPassword/${user.resetPassword}`);
     newHtml = newHtml.replace(/(\${USER_FISTNAME})/gim, user.firstName);

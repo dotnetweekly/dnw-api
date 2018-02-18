@@ -1,10 +1,3 @@
-const isISO = function(dateValue) {
-	const date = new Date(dateValue);
-	let checkDate = date.setDate(date.getDate() - date.getDay());
-	checkDate = new Date(checkDate);
-	return checkDate.getDay();
-};
-
 const getWeek = function(dateValue) {
 	const target = new Date(dateValue);
 	const dayNr = (target.getDay() + 6) % 7;
