@@ -7,6 +7,13 @@ class EmailsController extends AdminBaseController {
 		this._handler = new EmailHandler();
 	}
 
+  sendNewsletter(req, res, next) {
+    const response = this._adminResponseManager.getResponseHandler(req, res);
+    if (response) {
+      this._handler.sendNewsletter(req, response);
+    }
+  }
+
 	currentNewsletter(req, res, next) {
 		const response = this._adminResponseManager.getResponseHandler(req, res);
 		if (response) {

@@ -1,5 +1,6 @@
 
 const axios = require('axios');
+const sanitize = require('mongo-sanitize');
 
 const Link = require('../../../db/models/link.model');
 const CalendarHelper = require('../../../helpers/calendar.helper');
@@ -12,7 +13,7 @@ const EmailHelper = require("../../../helpers/email.helper");
 
 const emailSender = new EmailModal();
 
-const sendEmailToUsers = function(html, params, callback){
+const sendEmailToUsers = function(html, params, callback, {week, year}){
   var query = User.find({});
   var promises = [];
   query.exec(function(err, users) {
@@ -23,7 +24,7 @@ const sendEmailToUsers = function(html, params, callback){
       for (var i = 0; i < users.length; i++) {
         const user = users[i];
         const userHtml = EmailHelper.replaceVars(html, user);
-        emailSender.send(user.email, params.subject, userHtml);
+        emailSender.send(user.email, params.subject, userHtml, `DNW-${year}-${week}`);
       }
       callback.onSuccess({});
       return;
@@ -31,11 +32,22 @@ const sendEmailToUsers = function(html, params, callback){
   });
 }
 
-const sendCustom = function(req, callback) {
-  axios.get(`${config.newsletterDomain}api/v1/email/template`, { params: req.body } )
+const sendNewsletter = function(req, callback) {
+  const now = new Date(Date.now());
+  let week = sanitize(req.query.week);
+  let year = sanitize(req.query.year);
+
+  if (!week || !year) {
+    week = CalendarHelper.getWeek(now);
+    year = now.getFullYear();
+  }
+
+  axios.get(`${config.newsletterDomain}issues/${year}/${week}/`)
   .then((response) => {
-    sendEmailToUsers(response.data.data, req.body, callback);
+    if(response && response.data){
+      sendEmailToUsers(response.data, req.body, callback, {week, year});
+    }
   })
 };
 
-module.exports = sendCustom;
+module.exports = sendNewsletter;

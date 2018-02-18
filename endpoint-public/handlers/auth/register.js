@@ -52,14 +52,9 @@ const sendEmail = function(email, token, callback) {
 		axios
 		.get(`${config.newsletterDomain}api/v1/user/activate?token=${token}`)
 		.then((response) => {
-			emailSender.send([email], "[Call to action] Activate your account", response.data.data)
-			.then(() => {
-				callback.onSuccess({});
-				resolve();
-			}).catch(error => {
-				callback.onError(error);
-				reject();
-			});
+			emailSender.send(email, "[Call to action] Activate your account", response.data.data);
+			callback.onSuccess({});
+			resolve();
 		})
 		.catch((error) => {
 			callback.onError(error);

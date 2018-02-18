@@ -70,12 +70,9 @@ const sendUpdateEmail = function(email, token) {
 		axios
 		.get(`${config.newsletterDomain}api/v1/user/updateEmail?token=${token}`)
 		.then((response) => {
-			emailSender.send([email], "[Call to action] Update your email", response.data.data)
-			.then(() => {
-				resolve();
-			}).catch(error => {
-				reject(error);
-			});
+      emailSender.send(email, "[Call to action] Update your email", response.data.data);
+      callback.onSuccess({});
+			resolve();
 		})
 		.catch((error) => {
 			reject(error);

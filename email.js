@@ -1,34 +1,29 @@
 const SparkPost = require("sparkpost");
-
-let sparkPostKey = process.env.SPARKPOST;
-
+const sparkPostKey = process.env.SPARKPOST;
 const client = new SparkPost(sparkPostKey);
 
 class Email {
-  send(recipients, subject, html) {
-    const addresses = recipients.map(recipient => {
-      return { address: recipient };
-    });
-
-    return new Promise((resolve, reject) => {
-      client.transmissions
-        .send({
-          options: {
-            sandbox: false
-          },
-          content: {
-            from: "info@dotnetweekly.com",
-            subject: subject,
-            html: html
-          },
-          recipients: addresses
-        })
-        .then(data => {
-          resolve(data);
-        })
-        .catch(err => {
-          reject(err);
-        });
+  send(email, subject, html, campaign_id = "") {
+    client.transmissions
+    .send({
+      options: {
+        sandbox: false
+      },
+      content: {
+        from: "info@dotnetweekly.com",
+        subject: subject,
+        html: html
+      },
+      recipients: [
+        { address: email }
+      ],
+      campaign_id: campaign_id
+    })
+    .then(data => {
+      // console.log(data);
+    })
+    .catch(err => {
+      console.log(err);
     });
   }
 }
