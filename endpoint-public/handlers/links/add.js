@@ -48,8 +48,9 @@ function saveLink(newLink, user, errors, callback) {
 
       return;
     });
-  } catch (ex) {
-    console.log(ex);
+  } catch (error) {
+    console.log(error);
+		callback.onError(error);
   }
 }
 

@@ -43,22 +43,27 @@ const saveComment = function(req, callback) {
   var query = Link.findOne({ isActive: true, _id: sanitize(req.params.id) });
   const commentData = sanitize(req.body.comment);
 
-	query.exec(function(err, link) {
-		if (err) {
-			callback.onError();
+  try {
+    query.exec(function(err, link) {
+      if (err) {
+        callback.onError();
 
-			return;
-		} else {
-      UserModel.findOne({ _id: userId }, function(error, user) {
-        if (error || !user) {
-          callback.onSuccess({ error: "User not found." });
-          return;
-        }
+        return;
+      } else {
+        UserModel.findOne({ _id: userId }, function(error, user) {
+          if (error || !user) {
+            callback.onSuccess({ error: "User not found." });
+            return;
+          }
 
-        saveCommentAction(user, link, commentData, callback);
-      });
-		}
-	});
+          saveCommentAction(user, link, commentData, callback);
+        });
+      }
+    });
+  } catch (error) {
+    console.log(error);
+    callback.onError(error);
+  }
 };
 
 module.exports = saveComment;
