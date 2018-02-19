@@ -1,3 +1,3 @@
-eval cp -TR ./ ../wwwroot/
-eval cd ../wwwroot/
-eval npm install --only=production
+cp -TR "./" "../wwwroot/"
+cd "../wwwroot/"
+npm install --only=production
