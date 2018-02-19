@@ -1,2 +1,3 @@
 // require('./newsletters');
-require('./links');
+// require('./links');
+require('./users');

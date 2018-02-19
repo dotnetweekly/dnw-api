@@ -8,7 +8,7 @@ var commentSchema = new Schema({
     required: true,
 		validate: {
 			validator: function(v) {
-				return v && v.length < 2000
+				return v && v.length <= 2000
 			},
 			message: '{VALUE} is required and max size is 2000 characters'
 		}

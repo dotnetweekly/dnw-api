@@ -8,7 +8,7 @@ var categorySchema = new Schema({
     required: true,
 		validate: {
 			validator: function(v) {
-				return v && v.length < 50
+				return v && v.length <= 50
 			},
 			message: '{VALUE} is required and max size is 50 characters'
 		}
@@ -19,7 +19,7 @@ var categorySchema = new Schema({
     unique: true,
 		validate: {
 			validator: function(v) {
-				return v && v.length < 300
+				return v && v.length <= 300
 			},
 			message: '{VALUE} is required and max size is 300 characters'
 		}

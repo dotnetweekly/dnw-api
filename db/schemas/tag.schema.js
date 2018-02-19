@@ -8,7 +8,7 @@ var tagSchema = new Schema({
     required: true,
 		validate: {
 			validator: function(v) {
-				return v && v.length < 20
+				return v && v.length <= 20
 			},
 			message: '{VALUE} is required and max size is 20 characters'
 		}
@@ -18,7 +18,7 @@ var tagSchema = new Schema({
     required: true,
 		validate: {
 			validator: function(v) {
-				return v && v.length < 300
+				return v && v.length <= 300
 			},
 			message: '{VALUE} is required and max size is 300 characters'
 		}

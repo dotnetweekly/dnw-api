@@ -11,7 +11,7 @@ const userSchema = new Schema({
     unique: true,
     validate: {
       validator: function(v) {
-        return v && v.length > 5;
+        return v && v.length > 4;
       },
       message: "{VALUE} is required and has to be at least 5 characters"
     }
@@ -23,7 +23,7 @@ const userSchema = new Schema({
     validate: stringValidate.requiredStringValidator,
     validate: {
       validator: function(v) {
-        return v && v.length < 500;
+        return v && v.length <= 500;
       },
       message: "{VALUE} is required and max size is 500 characters"
     }
@@ -32,7 +32,7 @@ const userSchema = new Schema({
     type: String,
     validate: {
       validator: function(v) {
-        return v && v.length < 150;
+        return v && v.length <= 150;
       },
       message: "{VALUE} is required and max size is 150 characters"
     }
@@ -41,7 +41,7 @@ const userSchema = new Schema({
     type: String,
     validate: {
       validator: function(v) {
-        return !v || v.length < 300;
+        return !v || v.length <= 300;
       },
       message: "{VALUE} max size is 300 characters"
     }
@@ -50,7 +50,7 @@ const userSchema = new Schema({
     type: String,
     validate: {
       validator: function(v) {
-        return !v || v.length < 300;
+        return !v || v.length <= 300;
       },
       message: "{VALUE} max size is 300 characters"
     }
@@ -59,7 +59,7 @@ const userSchema = new Schema({
     type: String,
     validate: {
       validator: function(v) {
-        return !v || v.length < 200;
+        return !v || v.length <= 200;
       },
       message: "{VALUE} max size is 200 characters"
     }

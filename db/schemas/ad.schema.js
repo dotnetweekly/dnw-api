@@ -8,7 +8,7 @@ var adSchema = new Schema({
     required: true,
 		validate: {
 			validator: function(v) {
-				return v && v.length < 500
+				return v && v.length <= 500
 			},
 			message: '{VALUE} is required and max size is 500 characters'
 		}
@@ -19,7 +19,7 @@ var adSchema = new Schema({
     unique: true,
 		validate: {
 			validator: function(v) {
-				return v && v.length < 1000
+				return v && v.length <= 1000
 			},
 			message: '{VALUE} is required and max size is 1000 characters'
 		}
