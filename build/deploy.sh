@@ -1,3 +1,5 @@
-cp -R "$DEPLOYMENT_SOURCE/*" "$DEPLOYMENT_TARGET/"
-cd "$DEPLOYMENT_TARGET"
+#!/bin/bash
+
+cp -TR "./" "../wwwroot/"
+cd "../wwwroot"
 npm install --only=production
