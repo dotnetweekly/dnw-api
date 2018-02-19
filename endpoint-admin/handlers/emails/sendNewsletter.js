@@ -13,8 +13,11 @@ const EmailHelper = require("../../../helpers/email.helper");
 
 const emailSender = new EmailModal();
 
-const sendEmailToUsers = function(html, params, callback, {week, year}){
+const sendEmailToUsers = function(html, params, callback, {week, year}, onlyAdmin){
   var query = User.find({});
+  if (onlyAdmin) {
+    query = User.find({ isAdmin: true });
+  }
   var promises = [];
   query.exec(function(err, users) {
     if (err) {
@@ -26,13 +29,14 @@ const sendEmailToUsers = function(html, params, callback, {week, year}){
         const userHtml = EmailHelper.replaceVars(html, user);
         emailSender.send(user.email, params.subject, userHtml, `DNW-${year}-${week}`);
       }
-      callback.onSuccess({});
+      callback.onSuccess({usersCount: users.length});
       return;
     }
   });
 }
 
 const sendNewsletter = function(req, callback) {
+  const onlyAdmin = req.query.onlyAdmin ? sanitize(req.query.onlyAdmin) : false;
   const now = new Date(Date.now());
   let week = sanitize(req.query.week);
   let year = sanitize(req.query.year);
@@ -45,7 +49,7 @@ const sendNewsletter = function(req, callback) {
   axios.get(`${config.newsletterDomain}issues/${year}/${week}/`)
   .then((response) => {
     if(response && response.data){
-      sendEmailToUsers(response.data, req.body, callback, {week, year});
+      sendEmailToUsers(response.data, req.body, callback, {week, year}, onlyAdmin);
     }
   })
 };
