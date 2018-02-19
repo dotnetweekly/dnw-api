@@ -1,6 +1,3 @@
-rm -rf ../wwwroot/*
-
-cp -R ./* ../wwwroot/
-
+cp -TR ./ ../wwwroot
 cd ../wwwroot
 npm install --only=production
