@@ -44,10 +44,14 @@ const updateItems = function (req, callback) {
     for (var i = 0; i < links.length; i++) {
       const link = links[i];
       (function (link, ids) {
-        for (var i in ids) {
-          link.comments.id(ids[i]).remove();
+        for (var j in ids) {
+          console.log(link.comments)
+          link.comments.id(ids[j]).remove();
         }
         link.save(function (err) {
+          if(err) {
+            console.log(err);
+          }
           count++;
           if (count === links.length) {
             callback.onSuccess();

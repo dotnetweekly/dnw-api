@@ -15,7 +15,7 @@ const getAll = function(req, callback) {
     year = now.getFullYear();
   }
   const dateRange = CalendarHelper.getDateRangeOfWeek(parseInt(week), parseInt(year));
-
+  console.log(now);
   var searchParams = {};
   searchParams.createdOn = { $gte: dateRange.from, $lte: dateRange.to };
 
