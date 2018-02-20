@@ -11,12 +11,21 @@ const getWeek = function(dateValue) {
 };
 
 const getDateRangeOfWeek = function(week, year) {
-	var date = new Date(year, 0, 1);
-	date.setDate(date.getDate() + week * 7);
-	return {
-		from: new Date(date.setDate(date.getDate() - 7)),
-		to: new Date(date.setDate(date.getDate() + 6))
-	};
+	let date = new Date(year, 0, 1);
+  date.setHours(0,0,0,0);
+  date.setDate(date.getDate() +(week * 7));
+
+  let fromDate = new Date(date.setDate(date.getDate() - 7));
+  fromDate.setHours(0,0,0,0);
+
+  let toDate = new Date(date.setDate(date.getDate() + 6));
+  toDate.setHours(0,0,0,0);
+
+	const dateRange = {
+		from: fromDate,
+		to: toDate
+  };
+  return dateRange;
 };
 
 module.exports = { getWeek, getDateRangeOfWeek };
