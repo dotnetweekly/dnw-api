@@ -31,7 +31,7 @@ function saveLink(newLink, user, errors, callback) {
       category: newLink.category,
       slug: stringHelper.slugify(newLink.title).slice(0, 99),
       tags: newLink.tags,
-      isActive: false,
+      isActive: user.isAdmin,
       user: user.id,
       upvotes: [],
       comments: []
