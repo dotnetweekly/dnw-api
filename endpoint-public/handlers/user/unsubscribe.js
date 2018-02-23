@@ -14,7 +14,7 @@ const unsubscribe = function(req, callback) {
     }
 
     user.subscribed = false;
-    user.keyUnsubscribe = Guid.create();
+    user.keyUnsubscribe = Guid.raw();
 
     user.save(function(err) {
       callback.onSuccess({});

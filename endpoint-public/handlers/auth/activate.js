@@ -16,7 +16,7 @@ const unsubscribe = function(req, callback) {
 
     user.subscribed = true;
     user.isActive = true;
-    user.guid = Guid.create();
+    user.guid = Guid.raw();
     
     user.save(function(err) {
       callback.onSuccess(tokenHelper.generateAuthToken(user._id, user.isAdmin));

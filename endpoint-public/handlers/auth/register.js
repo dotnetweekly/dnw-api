@@ -2,6 +2,7 @@ const jwt = require('jsonwebtoken');
 const Guid = require('guid');
 const axios = require("axios");
 const sanitize = require('mongo-sanitize');
+const shortid = require('shortid');
 
 const config = require('../../../config');
 const User = require('../../../db/models/user.model');
@@ -16,7 +17,7 @@ const returnError = function(req, callback, errors) {
 	callback.onSuccess({ errors });
 };
 
-const createAccount = function(user, callback) {
+const createAccount = function(user, callback, quick) {
 	const credentialName = {
 		$and: [ { $or: [ { username: user.username }, { email: user.email } ] }, { $or: [ { isActive: false } ] } ]
 	};
@@ -29,9 +30,9 @@ const createAccount = function(user, callback) {
 			password: user.password,
 			email: user.email,
 			isActive: false,
-			guid: Guid.create(),
-			resetEmail: Guid.create(),
-			resetPassword: Guid.create()
+			guid: Guid.raw(),
+			resetEmail: Guid.raw(),
+			resetPassword: Guid.raw()
 		});
 
 		pendingUser.save(function(err) {
@@ -42,15 +43,15 @@ const createAccount = function(user, callback) {
 				return;
 			}
 
-			sendEmail(pendingUser.email, pendingUser.guid, callback);
+			sendEmail(pendingUser.email, pendingUser.guid, callback, quick ? user.password : "");
 		});
 	});
 };
 
-const sendEmail = function(email, token, callback) {
+const sendEmail = function(email, token, callback, password) {
 	return new Promise((resolve, reject) => {
 		axios
-		.get(`${config.newsletterDomain}api/v1/user/activate?token=${token}`)
+		.get(`${config.newsletterDomain}api/v1/user/activate?token=${token}&password=${password}`)
 		.then((response) => {
 			emailSender.send(email, "[Call to action] Activate your account", response.data.data);
 			callback.onSuccess({});
@@ -63,11 +64,16 @@ const sendEmail = function(email, token, callback) {
 	})
 }
 
-const register = function(req, callback) {
-	const requiredFields = [ 'firstName', 'username', 'email', 'password' ];
+const register = async function(req, callback) {
+	let requiredFields = [ 'firstName', 'username', 'email', 'password' ];
 	const errors = [];
 
-	const newUser = sanitize(req.body.user);
+	let newUser = sanitize(req.body.user);
+	const quick = sanitize(req.query.quick);
+
+	if (quick) {
+		requiredFields = ["email"];
+	}
 
 	for (var i = 0; i < requiredFields.length; i++) {
 		const requiredField = requiredFields[i];
@@ -79,9 +85,22 @@ const register = function(req, callback) {
 		}
 	}
 
+	if( !/(.+)@(.+){2,}\.(.+){2,}/.test(newUser.email) ){
+		errors.push({
+			field: "email",
+			error: `email is not valid`
+		});
+	}
+
 	if (errors.length > 0) {
 		returnError(req, callback, errors);
 		return;
+	}
+
+	if (quick) {
+		newUser.username = `dnwu${shortid.generate()}`;
+		newUser.firstName = newUser.email.split("@")[0];
+		newUser.password = Guid.raw();
 	}
 
 	const username = newUser.username;
@@ -122,7 +141,7 @@ const register = function(req, callback) {
 			return;
 		}
 
-		createAccount(newUser, callback);
+		createAccount(newUser, callback, quick);
 	});
 };
 

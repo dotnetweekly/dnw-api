@@ -99,7 +99,7 @@ const userSchema = new Schema({
   keyUnsubscribe: {
     type: String,
     required: true,
-    default: Guid.create()
+    default: Guid.raw()
   }
 });
 

@@ -37,7 +37,7 @@ const forgotPassword = function(req, callback) {
         errors: [{ field: "email", error: "User not found or is deactivated." }]
       });
     } else {
-      currentUser.resetPassword = Guid.create();
+      currentUser.resetPassword = Guid.raw();
       currentUser.save(function(error) {
         if (!error) {
           sendForgotPasswordEmail(

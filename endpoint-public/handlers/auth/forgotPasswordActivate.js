@@ -32,7 +32,7 @@ const forgotPasswordActivate = function(req, callback) {
     }
 
     user.password = password;
-    user.resetPassword = Guid.create();
+    user.resetPassword = Guid.raw();
     user.save(function(err) {
       if (err) {
         callback.onSuccess({ errors: ErrorHelper.formatErrors(err) });
