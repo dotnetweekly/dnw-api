@@ -6,7 +6,7 @@ const NotFoundError = require("../../../error/not-found");
 const UnauthorizedError = require("../../../error/unauthorized");
 
 const userCount = function(req, callback) {
-  UserModel.count({}, function(error, count) {
+  UserModel.count({isActive: true, subscribed: true}, function(error, count) {
     callback.onSuccess(count);
   });
 };
