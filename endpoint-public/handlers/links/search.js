@@ -36,7 +36,7 @@ const search = function(req, callback, olderLinks = false) {
   
   query
     .populate("user", "username")
-    .sort({ title: "desc" });
+    .sort({ createdOn: -1 });
 
   query.exec(function(err, data) {
     if (err) {
@@ -52,9 +52,19 @@ const search = function(req, callback, olderLinks = false) {
         return;
       }
 
-      data = data.sort(function(a, b) {
+      const zeroVotes = data.filter(link => {
+        return link.upvotes.length === 0
+      });
+
+      let someVotes = data.filter(link => {
+        return link.upvotes.length > 0
+      });
+
+      someVotes = someVotes.sort(function(a, b) {
         return b.upvotes.length - a.upvotes.length;
       });
+
+      data = someVotes.concat(zeroVotes);
 
       data = data.filter(link => {
         let newLink = link._doc;
