@@ -10,7 +10,7 @@ class Email {
         sandbox: false
       },
       content: {
-        from: "info@dotnetweekly.com",
+        from: { "name" : "dotNET Weekly", "email" : "info@dotnetweekly.com" },
         subject: subject,
         html: html
       },
