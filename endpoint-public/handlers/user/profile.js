@@ -6,7 +6,6 @@ const profile = function(callback) {
 		'firstName',
 		'lastName',
 		'username',
-		'subscribed',
 		'twitter',
 		'github',
 		'email'

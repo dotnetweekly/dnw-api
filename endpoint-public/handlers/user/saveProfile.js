@@ -18,7 +18,6 @@ const updateUser = function(data, updatedUser, callback) {
   data.username = updatedUser.username;
   data.twitter = updatedUser.twitter;
   data.github = updatedUser.github;
-  data.subscribed = updatedUser.subscribed;
   
   if (updatedUser.newPassword) {
     data.password = updatedUser.newPassword;

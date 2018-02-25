@@ -13,8 +13,10 @@ const currentNewsletter = function(req, callback) {
   const now = new Date(Date.now());
 
   if (!week || !year) {
-    week = CalendarHelper.getWeek(now);
+    week = parseInt(CalendarHelper.getWeek(now)) - 1;
     year = now.getFullYear();
+  } else {
+    week = parseInt(week) - 1;
   }
 
   var searchParams = { isActive: true };
