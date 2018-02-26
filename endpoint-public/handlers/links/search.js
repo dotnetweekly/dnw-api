@@ -9,6 +9,18 @@ const config = require("../../../config/");
 const search = function(req, callback, olderLinks = false) {
   let week = sanitize(req.query.week);
   let year = sanitize(req.query.year);
+
+  if ( year && week ) {
+    if (parseInt(year) < 2012) {
+      year = 2012;
+      week = 19;
+    }
+    if (parseInt(year) == 2012 && parseInt(week) < 19) {
+      year = 2012;
+      week = 19;
+    }
+  }
+
   const category = sanitize(req.query.category);
   const now = new Date(Date.now());
   const userId = callback.user ? callback.user.id : null;
@@ -100,7 +112,13 @@ const search = function(req, callback, olderLinks = false) {
 
       const returnData = {
         links: olderLinks ? [] : data,
-        olderLinks: olderLinks ? data : []
+        olderLinks: olderLinks ? data : [],
+        serverWeek: CalendarHelper.getWeek(now),
+        serverYear: now.getFullYear(),
+        serverMonth: now.getMonth(),
+        serverDate: now.getDate(),
+        week: olderLinks ? CalendarHelper.getWeek(now) : week,
+        year: olderLinks ? now.getFullYear() : year
       };
 
       callback.onSuccess(returnData);
