@@ -31,6 +31,7 @@ const search = function(req, callback, olderLinks = false) {
     "slug",
     "upvotes",
     "category",
+    "content",
     "tags"
   ]);
   
@@ -92,6 +93,11 @@ const search = function(req, callback, olderLinks = false) {
         return;
       }
 
+      data = data.map(link => {
+        link.content = "";
+        return link;
+      })
+
       const returnData = {
         links: olderLinks ? [] : data,
         olderLinks: olderLinks ? data : []
@@ -103,10 +109,18 @@ const search = function(req, callback, olderLinks = false) {
 };
 
 function getFeed(data, week, year) {
+  const now = new Date(Date.now());
+  const currentWeek = CalendarHelper.getWeek(now);
+  const currentYear = now.getFullYear();
+  const isNow = week == currentWeek && year == currentYear;
+
+  const feedId = isNow ? `${config.clientDomain}?feed=rss` : `${config.clientDomain}week/${week}/year/${year}?feed=rss`
+  const feedTitle = isNow ? `dotNET Weekly | A free weekly newsletter on .NET latest` : `dotNET Weekly - Week ${week} Year ${year}`
+
   var feed = new Feed({
-    id: `${config.clientDomain}feed/week/${week}/year/${year}`,
-    title: `dotNET Weekly - Week ${week} Year ${year}`,
-    link: `${config.clientDomain}feed/week/${week}/year/${year}`,
+    id: feedId,
+    title: feedTitle,
+    link: feedId,
     updated: new Date()
   });
   const feedCategories = [];
@@ -116,18 +130,26 @@ function getFeed(data, week, year) {
       title:  link.title,
       id: `${config.clientDomain}articles/${link.slug}`,
       link: `${config.clientDomain}articles/${link.slug}`,
-      date: link.createdOn
+      date: link.createdOn,
+      content: link.content,
+      author: [{ 
+        name: link.user.username,
+        link: `${config.clientDomain}users/${link.user.username}`
+      }],
+      updated: link.createdOn
     });
     let feedCategory = categories.filter(category => {
       return category.slug == link.category;
     })
     if (feedCategory.length > 0) {
       feedCategory = feedCategory[0];
-      feed.addCategory(feedCategory.name);
-      feedCategories.push(feedCategory.name);
+      if (!feedCategories.includes(feedCategory.name)) {
+        feed.addCategory(feedCategory.name);
+        feedCategories.push(feedCategory.name);
+      }
     }
   }
-  return feed.atom1();
+  return feed.rss2();
 }
 
 module.exports = search;

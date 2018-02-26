@@ -71,9 +71,14 @@ function getFeed(link) {
 		id: `${config.clientDomain}articles/${link.slug}`,
 		link: `${config.clientDomain}articles/${link.slug}`,
 		date: link.createdOn,
-		content: link.content
+		description: link.content,
+		author: [{ 
+			name: link.user.username,
+			link: `${config.clientDomain}users/${link.user.username}`
+		}],
+		updated: link.createdOn
   });
-  return feed.atom1();
+  return feed.rss2();
 }
 
 module.exports = getSingle;
