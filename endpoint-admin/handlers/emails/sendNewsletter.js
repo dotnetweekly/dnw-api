@@ -14,7 +14,7 @@ const EmailHelper = require("../../../helpers/email.helper");
 const emailSender = new EmailModal();
 
 const sendEmailToUsers = function(html, params, callback, {week, year}, onlyAdmin){
-  var query = User.find({});
+  var query = User.find({isActive: true, subscribed: true});
   if (onlyAdmin) {
     query = User.find({ isAdmin: true });
   }
