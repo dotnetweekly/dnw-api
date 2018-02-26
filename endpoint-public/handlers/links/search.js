@@ -13,11 +13,11 @@ const search = function(req, callback, olderLinks = false) {
   if ( year && week ) {
     if (parseInt(year) < 2012) {
       year = 2012;
-      week = 19;
+      week = 20;
     }
     if (parseInt(year) == 2012 && parseInt(week) < 19) {
       year = 2012;
-      week = 19;
+      week = 20;
     }
   }
 

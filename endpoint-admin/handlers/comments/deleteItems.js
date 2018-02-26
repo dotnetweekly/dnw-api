@@ -45,7 +45,6 @@ const updateItems = function (req, callback) {
       const link = links[i];
       (function (link, ids) {
         for (var j in ids) {
-          console.log(link.comments)
           link.comments.id(ids[j]).remove();
         }
         link.save(function (err) {
