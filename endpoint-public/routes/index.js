@@ -7,5 +7,6 @@ router.use("/categories", require("./categories"));
 router.use("/user", require("./user"));
 router.use("/newsletters", require("./newsletters"));
 router.use("/tags", require("./tags"));
+router.use("/sitemap", require("./sitemap"));
 
 module.exports = router;
