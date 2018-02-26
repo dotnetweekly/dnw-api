@@ -60,6 +60,8 @@ const currentNewsletter = function(req, callback) {
       axios
         .post(`${config.newsletterDomain}api/v1/newsletters/current`, {
           links: data,
+          week,
+          year,
           save
         })
         .then(response => {

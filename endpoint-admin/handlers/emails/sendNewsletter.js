@@ -42,8 +42,10 @@ const sendNewsletter = function(req, callback) {
   let year = sanitize(req.query.year);
 
   if (!week || !year) {
-    week = CalendarHelper.getWeek(now);
+    week = parseInt(CalendarHelper.getWeek(now)) - 1;
     year = now.getFullYear();
+  } else {
+    week = parseInt(week) - 1;
   }
 
   axios.get(`${config.newsletterDomain}issues/${year}/${week}/`)
