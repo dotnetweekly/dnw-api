@@ -12,27 +12,71 @@ const ErrorHelper = require("../../../helpers/errors.helper");
 const EmailHelper = require("../../../helpers/email.helper");
 
 const emailSender = new EmailModal();
+const intervalToSend = 500;
 
-const sendEmailToUsers = function(html, params, callback, {week, year}, onlyAdmin){
-  var query = User.find({isActive: true, subscribed: true});
-  if (onlyAdmin) {
-    query = User.find({ isAdmin: true });
-  }
-  var promises = [];
-  query.exec(function(err, users) {
-    if (err) {
-      callback.onError([]);
-      return;
-    } else {
-      for (var i = 0; i < users.length; i++) {
-        const user = users[i];
-        const userHtml = EmailHelper.replaceVars(html, user);
-        emailSender.send(user.email, params.subject, userHtml, `DNW-${year}-${week}`);
-      }
-      callback.onSuccess({usersCount: users.length});
-      return;
+function sendEmailInChunks(alreadySentTo, take, html, params, callback, {week, year}, onlyAdmin){
+  return new Promise((resolve, reject) => {
+    var query = User.find({isActive: true, subscribed: true}, [
+      "keyUnsubscribe",
+      "username",
+      "resetPassword",
+      "firstName",
+      "email",
+      "_id"
+    ]).limit(take)
+    .skip(alreadySentTo)
+    ;
+  
+    if (onlyAdmin) {
+      query = User.find({ isAdmin: true });
     }
-  });
+  
+    var promises = [];
+    query.exec(function(err, users) {
+      if (err) {
+        callback.onError([]);
+        return;
+      } else {
+        for (var i = 0; i < users.length; i++) {
+          const user = users[i];
+          if (user && user.email) {
+            const userHtml = EmailHelper.replaceVars(html, user);
+            emailSender.send(user.email, params.subject, userHtml, `DNW-${year}-${week}`);
+          }
+        }
+        resolve();
+      }
+    });
+  })
+}
+
+const sendEmailToUsers = async function(html, params, callback, {week, year}, onlyAdmin){
+
+  let count = 0;
+  let alreadySentTo = 0;
+  var query = {isActive: true, subscribed: true};
+  if (onlyAdmin) {
+    query = { isAdmin: true };
+  }
+
+  User.count(query).exec(function(err, total){
+    const loops = Math.ceil(total / intervalToSend);// 3467
+    if (loops > 0 && loops < 10) {
+      for (var loop = 0; loop < loops; loop++) {
+        let take = intervalToSend;
+        if ((alreadySentTo + intervalToSend) > total) {
+          take = total - (alreadySentTo);
+        }
+        sendEmailInChunks(alreadySentTo, take, html, params, callback, {week, year}, onlyAdmin).then(() => {
+          count += intervalToSend;
+          if (count >= total) {
+            callback.onSuccess({usersCount: total});
+          }
+        });
+        alreadySentTo += intervalToSend;
+      }
+    }
+  })
 }
 
 const sendNewsletter = function(req, callback) {

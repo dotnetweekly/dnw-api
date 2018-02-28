@@ -13,7 +13,12 @@ const getSitemap = function(req, callback) {
   const currentWeek = CalendarHelper.getWeek(now);
   const currentYear = now.getFullYear();
   while (firstYear < currentYear || (firstYear == currentYear && firstWeek <= currentWeek)) {
-    weekSitemaps.push(`${config.clientDomain}sitemap-${firstYear}-${firstWeek}.xml`);
+    if (!((firstYear == 2013 && firstWeek == 7) || 
+    (firstYear == 2014 && firstWeek == 22) || 
+    (firstYear == 2012 && firstWeek == 47) || 
+    (firstYear == 2012 && firstWeek == 48))) {
+      weekSitemaps.push(`${config.clientDomain}sitemap-${firstYear}-${firstWeek}.xml`);
+    }
     firstWeek++;
     if (firstWeek > CalendarHelper.weeksInYear(firstYear)) {
       firstWeek = 1;
