@@ -1,6 +1,6 @@
 const jwt = require('jsonwebtoken');
 const Guid = require('guid');
-const axios = require("axios");
+const axios = require('axios');
 const sanitize = require('mongo-sanitize');
 const shortid = require('shortid');
 
@@ -8,8 +8,10 @@ const config = require('../../../config');
 const User = require('../../../db/models/user.model');
 const NotFoundError = require('../../../error/not-found');
 const UnauthorizedError = require('../../../error/unauthorized');
-const EmailModal = require("../../../email");
-const ErrorHelper = require("../../../helpers/errors.helper");
+
+const EmailModal = require('../../../email');
+const ErrorHelper = require('../../../helpers/errors.helper');
+const EmailHelper = require('../../../helpers/email.helper');
 
 const emailSender = new EmailModal();
 
@@ -19,7 +21,7 @@ const returnError = function(req, callback, errors) {
 
 const createAccount = function(user, callback, quick) {
 	const credentialName = {
-		$and: [ { $or: [ { username: user.username }, { email: user.email } ] }, { $or: [ { isActive: false } ] } ]
+		$and: [{ $or: [{ username: user.username }, { email: user.email }] }, { $or: [{ isActive: false }] }]
 	};
 
 	User.remove(credentialName, () => {
@@ -36,43 +38,44 @@ const createAccount = function(user, callback, quick) {
 		});
 
 		pendingUser.save(function(err) {
-			
-			if(err){
+			if (err) {
 				callback.onSuccess({ errors: ErrorHelper.formatErrors(err) });
-				
+
 				return;
 			}
 
-			sendEmail(pendingUser.email, pendingUser.guid, callback, quick ? user.password : "");
+			sendEmail(pendingUser, pendingUser.guid, callback, quick ? user.password : '');
 		});
 	});
 };
 
-const sendEmail = function(email, token, callback, password) {
+const sendEmail = function(user, token, callback, password) {
 	return new Promise((resolve, reject) => {
 		axios
-		.get(`${config.newsletterDomain}api/v1/user/activate?token=${token}&password=${password}`)
-		.then((response) => {
-			emailSender.send(email, "[Call to action] Activate your account", response.data.data);
-			callback.onSuccess({});
-			resolve();
-		})
-		.catch((error) => {
-			callback.onError(error);
-			reject();
-		});
-	})
-}
+			.get(`${config.newsletterDomain}api/v1/user/activate?token=${token}&password=${password}`)
+			.then(response => {
+				const userSubstitutions = [];
+				userSubstitutions.push(EmailHelper.replaceVars(user));
+				emailSender.send(userSubstitutions, '[Call to action] Activate your account', response.data.data);
+				callback.onSuccess({});
+				resolve();
+			})
+			.catch(error => {
+				callback.onError(error);
+				reject();
+			});
+	});
+};
 
 const register = async function(req, callback) {
-	let requiredFields = [ 'firstName', 'username', 'email', 'password' ];
+	let requiredFields = ['firstName', 'username', 'email', 'password'];
 	const errors = [];
 
 	let newUser = sanitize(req.body.user);
 	const quick = sanitize(req.query.quick);
 
 	if (quick) {
-		requiredFields = ["email"];
+		requiredFields = ['email'];
 	}
 
 	for (var i = 0; i < requiredFields.length; i++) {
@@ -85,9 +88,9 @@ const register = async function(req, callback) {
 		}
 	}
 
-	if( !/(.+)@(.+){2,}\.(.+){2,}/.test(newUser.email) ){
+	if (!/(.+)@(.+){2,}\.(.+){2,}/.test(newUser.email)) {
 		errors.push({
-			field: "email",
+			field: 'email',
 			error: `email is not valid`
 		});
 	}
@@ -99,7 +102,7 @@ const register = async function(req, callback) {
 
 	if (quick) {
 		newUser.username = `dnwu${shortid.generate()}`;
-		newUser.firstName = newUser.email.split("@")[0];
+		newUser.firstName = newUser.email.split('@')[0];
 		newUser.password = Guid.raw();
 	}
 
@@ -107,16 +110,16 @@ const register = async function(req, callback) {
 	const password = newUser.password;
 
 	const credentialName = {
-		$and: [ { $or: [ { username: newUser.username }, { email: newUser.email } ] }, { $or: [ { isActive: true } ] } ]
+		$and: [{ $or: [{ username: newUser.username }, { email: newUser.email }] }, { $or: [{ isActive: true }] }]
 	};
 
 	User.find(credentialName, function(error, users) {
 		if (users.length > 0) {
-			const usernameExists = users.find((user) => {
+			const usernameExists = users.find(user => {
 				return user.username === newUser.username;
 			});
 
-			const emailExists = users.find((user) => {
+			const emailExists = users.find(user => {
 				return user.email === newUser.email;
 			});
 
