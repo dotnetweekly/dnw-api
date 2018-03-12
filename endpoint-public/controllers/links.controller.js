@@ -1,98 +1,106 @@
-const BaseController = require("./base.controller");
-const LinkHandler = require("../handlers/links");
-const RecaptchaError = require("../../error/recaptcha");
+const BaseController = require('./base.controller');
+const LinkHandler = require('../handlers/links');
+const RecaptchaError = require('../../error/recaptcha');
 
 class LinkController extends BaseController {
-  constructor() {
-    super();
-    this._linkHandler = new LinkHandler();
-  }
+	constructor() {
+		super();
+		this._linkHandler = new LinkHandler();
+	}
 
-  search(req, res, next) {
-    const callback = this._responseManager.getResponseHandler(req, res, true);
+	search(req, res, next) {
+		const callback = this._responseManager.getResponseHandler(req, res, true);
 
-    if (callback) {
-      this._linkHandler.search(req, callback);
-    }
-  }
+		if (callback) {
+			this._linkHandler.search(req, callback);
+		}
+	}
 
-  getSingle(req, res, next) {
-    const response = this._responseManager.getResponseHandler(req, res, true);
+	getSingle(req, res, next) {
+		const response = this._responseManager.getResponseHandler(req, res, true);
 
-    if (response) {
-      this._linkHandler.getSingle(req, response);
-    }
-  }
+		if (response) {
+			this._linkHandler.getSingle(req, response);
+		}
+	}
 
-  getLinkComments(req, res, next) {
-    const response = this._responseManager.getResponseHandler(req, res, true);
+	getLinkComments(req, res, next) {
+		const response = this._responseManager.getResponseHandler(req, res, true);
 
-    if (response) {
-      this._linkHandler.getLinkComments(req, response);
-    }
-  }
+		if (response) {
+			this._linkHandler.getLinkComments(req, response);
+		}
+	}
 
-  upvote(req, res, next) {
-    const response = this._responseManager.getResponseHandler(req, res);
+	getMeta(req, res, next) {
+		const response = this._responseManager.getResponseHandler(req, res, true);
 
-    // if (!req.recaptcha || (req.recaptcha && req.recaptcha.error)) {
-    //   response.onError(recaptchaError.message);
+		if (response) {
+			this._linkHandler.getMeta(req, response);
+		}
+	}
 
-    //   return;
-    // }
+	upvote(req, res, next) {
+		const response = this._responseManager.getResponseHandler(req, res);
 
-    if (response) {
-      this._linkHandler.upvote(req, response);
-    }
-  }
+		// if (!req.recaptcha || (req.recaptcha && req.recaptcha.error)) {
+		//   response.onError(recaptchaError.message);
 
-  downvote(req, res, next) {
-    const response = this._responseManager.getResponseHandler(req, res);
+		//   return;
+		// }
 
-    // if (!req.recaptcha || (req.recaptcha && req.recaptcha.error)) {
-    //   response.onError(recaptchaError.message);
+		if (response) {
+			this._linkHandler.upvote(req, response);
+		}
+	}
 
-    //   return;
-    // }
-    
-    if (response) {
-      this._linkHandler.downvote(req, response);
-    }
-  }
+	downvote(req, res, next) {
+		const response = this._responseManager.getResponseHandler(req, res);
 
-  comment(req, res, next) {
-    const response = this._responseManager.getResponseHandler(req, res);
+		// if (!req.recaptcha || (req.recaptcha && req.recaptcha.error)) {
+		//   response.onError(recaptchaError.message);
 
-    if (!req.recaptcha || (req.recaptcha && req.recaptcha.error)) {
-      const recaptchaError = new RecaptchaError();
-      response.onSuccess({
-        errors: [{field: "recaptcha", error: recaptchaError.message}]
-      });
+		//   return;
+		// }
 
-      return;
-    }
-    
-    if (response) {
-      this._linkHandler.comment(req, response);
-    }
-  }
+		if (response) {
+			this._linkHandler.downvote(req, response);
+		}
+	}
 
-  add(req, res, next) {
-    const response = this._responseManager.getResponseHandler(req, res);
+	comment(req, res, next) {
+		const response = this._responseManager.getResponseHandler(req, res);
 
-    if (!req.recaptcha || (req.recaptcha && req.recaptcha.error)) {
-      const recaptchaError = new RecaptchaError();
-      response.onSuccess({
-        errors: [{field: "recaptcha", error: recaptchaError.message}]
-      });
+		if (!req.recaptcha || (req.recaptcha && req.recaptcha.error)) {
+			const recaptchaError = new RecaptchaError();
+			response.onSuccess({
+				errors: [{ field: 'recaptcha', error: recaptchaError.message }]
+			});
 
-      return;
-    }
+			return;
+		}
 
-    if (response) {
-      this._linkHandler.add(req, response);
-    }
-  }
+		if (response) {
+			this._linkHandler.comment(req, response);
+		}
+	}
+
+	add(req, res, next) {
+		const response = this._responseManager.getResponseHandler(req, res);
+
+		if (!req.recaptcha || (req.recaptcha && req.recaptcha.error)) {
+			const recaptchaError = new RecaptchaError();
+			response.onSuccess({
+				errors: [{ field: 'recaptcha', error: recaptchaError.message }]
+			});
+
+			return;
+		}
+
+		if (response) {
+			this._linkHandler.add(req, response);
+		}
+	}
 }
 
 module.exports = LinkController;

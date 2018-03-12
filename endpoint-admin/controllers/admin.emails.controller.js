@@ -7,12 +7,12 @@ class EmailsController extends AdminBaseController {
 		this._handler = new EmailHandler();
 	}
 
-  sendNewsletter(req, res, next) {
-    const response = this._adminResponseManager.getResponseHandler(req, res);
-    if (response) {
-      this._handler.sendNewsletter(req, response);
-    }
-  }
+	sendNewsletter(req, res, next) {
+		const response = this._adminResponseManager.getResponseHandler(req, res);
+		if (response) {
+			this._handler.sendNewsletter(req, response);
+		}
+	}
 
 	currentNewsletter(req, res, next) {
 		const response = this._adminResponseManager.getResponseHandler(req, res);
@@ -20,14 +20,28 @@ class EmailsController extends AdminBaseController {
 			this._handler.currentNewsletter(req, response);
 		}
 	}
-	
+
 	activateUser(req, res, next) {
 		const response = this._adminResponseManager.getResponseHandler(req, res);
 		if (response) {
 			this._handler.activateUser(req, response);
 		}
 	}
-	
+
+	forgotPassword(req, res, next) {
+		const response = this._adminResponseManager.getResponseHandler(req, res);
+		if (response) {
+			this._handler.forgotPassword(req, response);
+		}
+	}
+
+	updateEmail(req, res, next) {
+		const response = this._adminResponseManager.getResponseHandler(req, res);
+		if (response) {
+			this._handler.updateEmail(req, response);
+		}
+	}
+
 	sendCustom(req, res, next) {
 		const response = this._adminResponseManager.getResponseHandler(req, res);
 		if (response) {
