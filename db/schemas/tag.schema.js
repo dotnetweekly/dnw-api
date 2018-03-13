@@ -1,31 +1,33 @@
-var mongoose = require("mongoose");
-var Schema = mongoose.Schema;
-var stringValidate = require("../validations/strings.validate");
+const mongoose = require('mongoose');
+const Schema = mongoose.Schema;
 
-var tagSchema = new Schema({
-  name: {
-    type: String,
-    required: true,
+const stringValidate = require('../validations/strings.validate');
+const CalendarHelper = require('../../helpers/calendar.helper');
+
+const tagSchema = new Schema({
+	name: {
+		type: String,
+		required: true,
 		validate: {
 			validator: function(v) {
-				return v && v.length <= 20
+				return v && v.length <= 20;
 			},
 			message: '{VALUE} is required and max size is 20 characters'
 		}
-  },
-  slug: {
-    type: String,
-    required: true,
+	},
+	slug: {
+		type: String,
+		required: true,
 		validate: {
 			validator: function(v) {
-				return v && v.length <= 300
+				return v && v.length <= 300;
 			},
 			message: '{VALUE} is required and max size is 300 characters'
 		}
-  },
-  isActive: { type: Boolean, default: true },
-  user: { type: Schema.ObjectId, ref: "User" },
-  createdOn: { type: Date, default: Date.now() }
+	},
+	isActive: { type: Boolean, default: true },
+	user: { type: Schema.ObjectId, ref: 'User' },
+	createdOn: { type: Date, default: CalendarHelper.getUtcNow() }
 });
 
 module.exports = tagSchema;

@@ -1,5 +1,7 @@
+var CalendarHelper = require('../../../helpers/calendar.helper');
+
 const getMeta = function(req, callback) {
-	callback.onSuccess({ date: new Date(Date.now()) });
+	callback.onSuccess({ date: CalendarHelper.getUtcNow() });
 
 	return;
 };

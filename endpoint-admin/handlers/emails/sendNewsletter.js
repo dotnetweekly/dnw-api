@@ -80,7 +80,7 @@ const sendEmailToUsers = async function(html, params, callback, { week, year }, 
 
 const sendNewsletter = function(req, callback) {
 	const onlyAdmin = req.query.onlyAdmin ? sanitize(req.query.onlyAdmin) : false;
-	const now = new Date(Date.now());
+	const now = CalendarHelper.getUtcNow();
 	let week = sanitize(req.query.week);
 	let year = sanitize(req.query.year);
 

@@ -10,6 +10,19 @@ const getWeek = function(dateValue) {
 	return 1 + Math.ceil((firstThursday - target) / 604800000);
 };
 
+const getUtcNow = function() {
+	const now = new Date(Date.now());
+	return new Date(
+		now.getUTCFullYear(),
+		now.getUTCMonth(),
+		now.getUTCDate(),
+		now.getUTCHours(),
+		now.getUTCMinutes(),
+		now.getUTCSeconds(),
+		now.getUTCMilliseconds()
+	);
+};
+
 function getWeekNumber(d) {
 	// Copy date so don't modify original
 	d = new Date(+d);
@@ -40,7 +53,7 @@ const getDateRangeOfWeek = function(week, year) {
 	fromDate.setHours(0, 0, 0, 0);
 
 	let toDate = new Date(date.setDate(date.getDate() + 6));
-	toDate.setHours(23, 59, 59, 0);
+	toDate.setHours(0, 0, 0, 0);
 
 	const dateRange = {
 		from: fromDate,
@@ -49,4 +62,4 @@ const getDateRangeOfWeek = function(week, year) {
 	return dateRange;
 };
 
-module.exports = { getWeek, getDateRangeOfWeek, weeksInYear };
+module.exports = { getWeek, getDateRangeOfWeek, weeksInYear, getUtcNow };

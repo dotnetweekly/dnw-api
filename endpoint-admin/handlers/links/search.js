@@ -1,6 +1,6 @@
 const sanitize = require('mongo-sanitize');
-var Link = require('../../../db/models/link.model');
-var CalendarHelper = require('../../../helpers/calendar.helper');
+const Link = require('../../../db/models/link.model');
+const CalendarHelper = require('../../../helpers/calendar.helper');
 
 const getAll = function(req, callback) {
 	let week = sanitize(req.query.week);
@@ -8,7 +8,7 @@ const getAll = function(req, callback) {
 	const category = sanitize(req.query.category);
 	const name = sanitize(req.query.name);
 
-	const now = new Date(Date.now());
+	const now = CalendarHelper.getUtcNow();
 
 	if (!week || !year) {
 		week = CalendarHelper.getWeek(now);
