@@ -13,7 +13,7 @@ const EmailHelper = require('../../../helpers/email.helper');
 const emailSender = new EmailModal();
 const intervalToSend = 500;
 
-function sendEmailInChunks(alreadySentTo, take, html, params, callback, { week, year }, onlyAdmin) {
+function sendEmailInChunks(alreadySentTo, take, html, params, callback, onlyAdmin) {
 	return new Promise((resolve, reject) => {
 		var query = User.find({ isActive: true, subscribed: true }, [
 			'keyUnsubscribe',
@@ -26,7 +26,7 @@ function sendEmailInChunks(alreadySentTo, take, html, params, callback, { week, 
 			.limit(take)
 			.skip(alreadySentTo);
 
-		if (onlyAdmin) {
+		if (onlyAdmin || onlyAdmin === undefined) {
 			query = User.find({ isAdmin: true });
 		}
 
@@ -43,18 +43,18 @@ function sendEmailInChunks(alreadySentTo, take, html, params, callback, { week, 
 						userSubstitutions.push(EmailHelper.replaceVars(user));
 					}
 				}
-				emailSender.send(userSubstitutions, params.subject, html, `DNW-${year}-${week}`);
+				emailSender.send(userSubstitutions, params.subject, html, '');
 				resolve();
 			}
 		});
 	});
 }
 
-const sendEmailToUsers = async function(html, params, callback, { week, year }, onlyAdmin) {
+const sendEmailToUsers = async function(html, params, callback, onlyAdmin) {
 	let count = 0;
 	let alreadySentTo = 0;
 	var query = { isActive: true, subscribed: true };
-	if (onlyAdmin) {
+	if (onlyAdmin || onlyAdmin === undefined) {
 		query = { isAdmin: true };
 	}
 
@@ -66,7 +66,7 @@ const sendEmailToUsers = async function(html, params, callback, { week, year }, 
 				if (alreadySentTo + intervalToSend > total) {
 					take = total - alreadySentTo;
 				}
-				sendEmailInChunks(alreadySentTo, take, html, params, callback, { week, year }, onlyAdmin).then(() => {
+				sendEmailInChunks(alreadySentTo, take, html, params, callback, onlyAdmin).then(() => {
 					count += intervalToSend;
 					if (count >= total) {
 						callback.onSuccess({ usersCount: total });
@@ -80,6 +80,7 @@ const sendEmailToUsers = async function(html, params, callback, { week, year }, 
 
 const sendCustom = function(req, callback) {
 	const onlyAdmin = req.query.onlyAdmin ? sanitize(req.query.onlyAdmin) : false;
+
 	axios.get(`${config.newsletterDomain}api/v1/email/template`, { params: req.body }).then(response => {
 		sendEmailToUsers(response.data.data, req.body, callback, onlyAdmin);
 	});

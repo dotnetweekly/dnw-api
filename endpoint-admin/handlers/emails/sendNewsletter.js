@@ -26,7 +26,7 @@ function sendEmailInChunks(alreadySentTo, take, html, params, callback, { week, 
 			.limit(take)
 			.skip(alreadySentTo);
 
-		if (onlyAdmin) {
+		if (onlyAdmin || onlyAdmin === undefined) {
 			query = User.find({ isAdmin: true });
 		}
 
@@ -54,7 +54,7 @@ const sendEmailToUsers = async function(html, params, callback, { week, year }, 
 	let count = 0;
 	let alreadySentTo = 0;
 	var query = { isActive: true, subscribed: true };
-	if (onlyAdmin) {
+	if (onlyAdmin || onlyAdmin === undefined) {
 		query = { isAdmin: true };
 	}
 
@@ -80,6 +80,7 @@ const sendEmailToUsers = async function(html, params, callback, { week, year }, 
 
 const sendNewsletter = function(req, callback) {
 	const onlyAdmin = req.query.onlyAdmin ? sanitize(req.query.onlyAdmin) : false;
+
 	const now = CalendarHelper.getUtcNow();
 	let week = sanitize(req.query.week);
 	let year = sanitize(req.query.year);
@@ -91,11 +92,16 @@ const sendNewsletter = function(req, callback) {
 		week = parseInt(week) - 1;
 	}
 
-	axios.get(`${config.newsletterDomain}issues/${year}/${week}/`).then(response => {
-		if (response && response.data) {
-			sendEmailToUsers(response.data, req.body, callback, { week, year }, onlyAdmin);
-		}
-	});
+	axios
+		.get(`${config.newsletterDomain}issues/${year}/${week}/`)
+		.then(response => {
+			if (response && response.data) {
+				sendEmailToUsers(response.data, req.body, callback, { week, year }, onlyAdmin);
+			}
+		})
+		.catch(error => {
+			console.log(error);
+		});
 };
 
 module.exports = sendNewsletter;
