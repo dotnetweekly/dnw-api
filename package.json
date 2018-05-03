@@ -24,15 +24,14 @@
     "shortid": "^2.2.8",
     "sitemap": "^1.13.0",
     "sparkpost": "^2.1.2",
-    "xml-escape": "^1.1.0"
+    "xml-escape": "^1.1.0",
+    "nodemon": "^1.17.3",
+    "npm": "5.5.1"
   },
   "scripts": {
     "start": "node server.js",
     "startdev": "nodemon server.js",
     "seed": "node ./db/seed/"
-  },
-  "devDependencies": {
-    "nodemon": "^1.17.3"
   },
   "engines": {
     "node": "8.9.3",
