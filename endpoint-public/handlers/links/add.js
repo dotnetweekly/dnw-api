@@ -34,7 +34,8 @@ function saveLink(newLink, user, errors, callback) {
       isActive: user.isAdmin,
       user: user.id,
       upvotes: [],
-      comments: []
+      comments: [],
+      createdOn: new Date(Date.now())
     });
     link.save(function(err) {
       if (err || errors.length > 0) {

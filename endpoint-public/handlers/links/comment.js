@@ -20,7 +20,7 @@ const saveCommentAction = function(user, data, commentData, callback) {
     content: commentData,
     isActive: false,
     user: user,
-    createdOn: new Date(Date.now)
+    createdOn: new Date(Date.now())
   });
 
   data.comments.push(comment);

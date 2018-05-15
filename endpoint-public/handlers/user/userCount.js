@@ -7,7 +7,7 @@ const UnauthorizedError = require("../../../error/unauthorized");
 
 const userCount = function(req, callback) {
   UserModel.count({isActive: true, subscribed: true}, function(error, count) {
-    callback.onSuccess({count, time: new Date(Date.now)});
+    callback.onSuccess({count, time: new Date(Date.now())});
   });
 };
 
