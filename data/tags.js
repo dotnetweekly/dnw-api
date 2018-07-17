@@ -38,6 +38,7 @@ const tags = [
 	'iot',
 	'javascript',
 	'kibana',
+	'kubernetes',
 	'kudu',
 	'linux',
 	'local-storage',

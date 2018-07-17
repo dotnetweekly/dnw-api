@@ -10,6 +10,12 @@ const getWeek = function(dateValue) {
 	return 1 + Math.ceil((firstThursday - target) / 604800000);
 };
 
+Date.prototype.addDays = function(days) {
+	var date = new Date(this.valueOf());
+	date.setDate(date.getDate() + days);
+	return date;
+}
+
 const getUtcNow = function() {
 	const now = new Date(Date.now());
 	return new Date(

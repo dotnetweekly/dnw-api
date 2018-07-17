@@ -24,7 +24,7 @@ const currentNewsletter = function(req, callback) {
 	const dateRange = CalendarHelper.getDateRangeOfWeek(week, year);
 	searchParams.createdOn = { $gte: dateRange.from, $lte: dateRange.to };
 
-	var query = Link.find(searchParams, ['title', 'url', 'createdOn', 'slug', 'upvotes', 'tags', 'category']);
+	var query = Link.find(searchParams, ['title', 'url', 'content', 'createdOn', 'slug', 'upvotes', 'tags', 'category']);
 	query.populate('user', 'username').sort({ title: 'desc' });
 
 	query.exec(function(err, data) {

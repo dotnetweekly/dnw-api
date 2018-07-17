@@ -1,7 +1,15 @@
 const categories = [
   {
+    name: "Sponsored",
+    slug: "sponsored"
+  },
+  {
     name: "Articles",
     slug: "articles"
+  },
+  {
+    name: "Job Listing",
+    slug: "job-listing"
   },
   {
     name: "Books",

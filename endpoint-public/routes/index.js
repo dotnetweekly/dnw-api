@@ -8,5 +8,6 @@ router.use("/user", require("./user"));
 router.use("/newsletters", require("./newsletters"));
 router.use("/tags", require("./tags"));
 router.use("/sitemap", require("./sitemap"));
+router.use("/emails", require("./emails"));
 
 module.exports = router;

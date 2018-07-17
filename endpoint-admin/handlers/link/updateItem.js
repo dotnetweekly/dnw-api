@@ -18,12 +18,18 @@ const updateItem = function(req, callback) {
 		const updatedProperties = {};
 		for (var prop in itemToUpdate) {
 			if (prop === 'category') {
-				updatedProperties[prop] = itemToUpdate[prop].slug;
+				if (itemToUpdate[prop].slug) {
+					updatedProperties[prop] = itemToUpdate[prop].slug;
+				} else {
+					updatedProperties[prop] = itemToUpdate[prop];
+				}
+			} else if (prop === 'user') {
+				updatedProperties[prop] = itemToUpdate[prop]._id;
+			} else if (prop === "__v") {
 			} else {
 				updatedProperties[prop] = itemToUpdate[prop];
 			}
 		}
-
 		Link.update(idOptions, { $set: updatedProperties }, { upsert: true }, function(err) {
 			if (err) {
 				console.log(err);
