@@ -35,6 +35,7 @@ const search = function(req, callback, olderLinks = false) {
 
 	const dateRange = CalendarHelper.getDateRangeOfWeek(week, year);
 	searchParams.createdOn = { $gte: dateRange.from, $lte: dateRange.to };
+	searchParams.category = { $nin: ["sponsored", "job-listing"] };
 
 	var query = Link.find(searchParams, [
 		'title',

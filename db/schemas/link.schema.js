@@ -52,8 +52,8 @@ const linkSchema = new Schema({
 	},
 	imageUrl: {
 		type: String,
-		required: true,
-		unique: true,
+		required: false,
+		unique: false,
 		validate: {
 			validator: function(v) {
 				return v && v.length <= 2000;

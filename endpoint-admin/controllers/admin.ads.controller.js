@@ -1,5 +1,5 @@
 const AdminBaseController = require("./admin.base.controller");
-const AdsHandler = require("../handlers/ads");
+const AdsHandler = require("../handlers/links");
 
 class AdsController extends AdminBaseController {
   constructor() {
@@ -10,21 +10,9 @@ class AdsController extends AdminBaseController {
   search(req, res, next) {
     const response = this._adminResponseManager.getResponseHandler(req, res);
     if (response) {
+      req.query = req.query || {};
+      req.query.sponsored = true;
       this._handler.search(req, response);
-    }
-  }
-
-  update(req, res, next) {
-    const response = this._adminResponseManager.getResponseHandler(req, res);
-    if (response) {
-      this._handler.update(req, response);
-    }
-  }
-
-  deleteAds(req, res, next) {
-    const response = this._adminResponseManager.getResponseHandler(req, res);
-    if (response) {
-      this._handler.deleteAds(req, response);
     }
   }
 }

@@ -10,6 +10,12 @@ const getWeek = function(dateValue) {
 	return 1 + Math.ceil((firstThursday - target) / 604800000);
 };
 
+const addDays = function(date, days) {
+	var date = new Date(date);
+	date.setDate(date.getDate() + days);
+	return date;
+}
+
 Date.prototype.addDays = function(days) {
 	var date = new Date(this.valueOf());
 	date.setDate(date.getDate() + days);
@@ -68,4 +74,4 @@ const getDateRangeOfWeek = function(week, year) {
 	return dateRange;
 };
 
-module.exports = { getWeek, getDateRangeOfWeek, weeksInYear, getUtcNow };
+module.exports = { getWeek, getDateRangeOfWeek, weeksInYear, getUtcNow, addDays };

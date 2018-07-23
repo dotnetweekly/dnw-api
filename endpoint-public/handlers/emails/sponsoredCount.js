@@ -16,8 +16,8 @@ const getSponsoredCount = async function(dateRange) {
   return new Promise((resolve, reject) => {
     query.exec(function(err, data) {
       resolve({
-        sponsoredCount: data.filter( x => x.category === "sponsored").length,
-        jobListingCount: data.filter( x => x.category === "job-listing" ).length
+        sponsoredCount: data.filter( x => x.category === "sponsored" && x.isActive && x.isPayed ).length,
+        jobListingCount: data.filter( x => x.category === "job-listing" && x.isActive && x.isPayed ).length
       })
     });
   });
@@ -43,8 +43,8 @@ const sponsoredCount = async function(req, callback) {
     nextWeeks
   };
 
-  for(var i = 1; i < 5; i++) {
-    let nextWeek = parseInt(week) + i;
+  for(var i = 1; i < 6; i++) {
+    let nextWeek = parseInt(week) + i - 1;
     let nextYear = parseInt(year);
     if (nextWeek > weeksCount) {
       nextWeek = nextWeek - weeksCount;
@@ -52,7 +52,9 @@ const sponsoredCount = async function(req, callback) {
     }
 
     const dateRange = CalendarHelper.getDateRangeOfWeek(parseInt(nextWeek), parseInt(nextYear));
-    const sponsorCount = await getSponsoredCount(nextWeek, nextYear, dateRange);
+    const sponsorCount = await getSponsoredCount(dateRange);
+
+    console.log(dateRange, sponsorCount);
 
     returnData.nextWeeks.push({
       week: nextWeek,

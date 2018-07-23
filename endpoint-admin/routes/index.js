@@ -19,7 +19,7 @@ router.use("/user", require("./user"));
 router.use("/comments", require("./comments"));
 router.use("/comment", require("./comment"));
 
-// router.use("/ads", require("./ads"));
+router.use("/ads", require("./ads"));
 // router.use("/ad", require("./ad"));
 
 router.use("/emails", require("./emails"));

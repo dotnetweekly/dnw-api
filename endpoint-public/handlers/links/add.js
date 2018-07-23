@@ -3,6 +3,7 @@ const LinkModel = require("../../../db/models/link.model");
 const UserModel = require("../../../db/models/user.model");
 const ErrorHelper = require("../../../helpers/errors.helper");
 const stringHelper = require("../../../helpers/string.helper");
+const CalendarHelper = require('../../../helpers/calendar.helper');
 
 const dbcategories = require("../../../data/categories");
 const dbtags = require("../../../data/tags");
@@ -35,7 +36,8 @@ function saveLink(newLink, user, errors, callback) {
       user: user.id,
       upvotes: [],
       comments: [],
-      createdOn: new Date(Date.now())
+      createdOn: newLink.date || new Date(Date.now()),
+      isPayed: false
     });
     link.save(function(err) {
       if (err || errors.length > 0) {
@@ -71,6 +73,9 @@ const addLink = function(req, callback) {
     });
   } else {
     newLink.category = category[0].slug;
+    if (category !== "sponsored") {
+      newLink.imageUrl = "";
+    }
   }
 
   if (!tagsExist) {
@@ -79,9 +84,32 @@ const addLink = function(req, callback) {
       error: `Between 1 and 5 tags`
     });
   }
+
+  if ((newLink.category === "sponsored" || newLink.category === "job-listing")) {
+    if (!newLink.date) {
+      errors.push({
+        field: "date",
+        error: `Date not selected`
+      });
+    } else {
+      newLink.createdOn = CalendarHelper.addDays(newLink.date, -3);
+    }
+    if (!newLink.title || newLink.title.length > 80) {
+      errors.push({
+        field: "title",
+        error: `Max 80 characters`
+      });
+    }
+    if (!newLink.content || newLink.content.length > 200) {
+      errors.push({
+        field: "content",
+        error: `Max 200 characters`
+      });
+    }
+  }
   
   if (errors.length > 0) {
-    callback.success({ errors });
+    callback.onSuccess({ errors });
     return;
   }
   saveLink(newLink, callback.user, errors, callback);

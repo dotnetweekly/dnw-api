@@ -7,20 +7,25 @@ const getAll = function(req, callback) {
 	let year = sanitize(req.query.year);
 	const category = sanitize(req.query.category);
 	const name = sanitize(req.query.name);
+	const sponsored = sanitize(req.query.sponsored);
 
 	const now = CalendarHelper.getUtcNow();
 
-	if (!week || !year) {
-		week = CalendarHelper.getWeek(now);
-		year = now.getFullYear();
-	}
-	const dateRange = CalendarHelper.getDateRangeOfWeek(parseInt(week), parseInt(year));
 	var searchParams = {};
-	searchParams.createdOn = { $gte: dateRange.from, $lte: dateRange.to };
-
-	if (name) {
-		const regexSearch = new RegExp(`.*?${name}.*?`);
-		searchParams.title = { $regex: regexSearch, $options: 'i' };
+	if (sponsored) {
+		searchParams = { category: { "$in" : ["sponsored", "job-listing"]} }
+	} else {
+		if (!week || !year) {
+			week = CalendarHelper.getWeek(now);
+			year = now.getFullYear();
+		}
+		const dateRange = CalendarHelper.getDateRangeOfWeek(parseInt(week), parseInt(year));
+		searchParams.createdOn = { $gte: dateRange.from, $lte: dateRange.to };
+	
+		if (name) {
+			const regexSearch = new RegExp(`.*?${name}.*?`);
+			searchParams.title = { $regex: regexSearch, $options: 'i' };
+		}
 	}
 
 	var query = Link.find(searchParams);

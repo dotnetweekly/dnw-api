@@ -13,11 +13,21 @@ const currentNewsletter = function (req, callback) {
   const category = sanitize(req.query.category);
   const now = CalendarHelper.getUtcNow();
 
-  if (!week || !year || week === "undefined" || year === "undefined") {
-    week = parseInt(CalendarHelper.getWeek(now)) - 1;
+  if (!year || year === "undefined") {
     year = now.getFullYear();
+  }
+
+  const weeksCount = CalendarHelper.weeksInYear(year);
+
+  if (!week || week === "undefined") {
+    week = parseInt(CalendarHelper.getWeek(now));
   } else {
     week = parseInt(week) - 1;
+  }
+
+  if (week > weeksCount) {
+    week = week - weeksCount;
+    year = parseInt(year) + 1;
   }
 
   var searchParams = {
