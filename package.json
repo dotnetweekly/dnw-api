@@ -19,14 +19,14 @@
     "mongo-sanitize": "^1.0.0",
     "mongodb": "^2.2.35",
     "mongoose": "^4.13.12",
-    "morgan": "^1.9.0",
+    "morgan": "^1.9.1",
+    "nodemon": "^1.17.3",
+    "npm": "^6.4.1",
     "serve-favicon": "^2.5.0",
     "shortid": "^2.2.8",
     "sitemap": "^1.13.0",
     "sparkpost": "^2.1.2",
-    "xml-escape": "^1.1.0",
-    "nodemon": "^1.17.3",
-    "npm": "5.5.1"
+    "xml-escape": "^1.1.0"
   },
   "scripts": {
     "start": "node server.js",
@@ -34,7 +34,7 @@
     "seed": "node ./db/seed/"
   },
   "engines": {
-    "node": "~8.9.4",
-    "npm": "~5.5.1"
+    "node": "~10.10",
+    "npm": "~6.4.1"
   }
 }

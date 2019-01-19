@@ -20,6 +20,27 @@ class LinkController extends AdminBaseController {
       this._handler.getItem(req, response);
     }
   }
+
+  newsletterSent(req, res, next) {
+    const response = this._adminResponseManager.getResponseHandler(req, res);
+    if (response) {
+      this._handler.newsletterSent(req, response);
+    }
+  }
+
+  newsletterOpen(req, res, next) {
+    const response = this._adminResponseManager.getResponseHandler(req, res);
+    if (response) {
+      this._handler.newsletterOpen(req, response);
+    }
+  }
+
+  newsletterClick(req, res, next) {
+    const response = this._adminResponseManager.getResponseHandler(req, res);
+    if (response) {
+      this._handler.newsletterClick(req, response);
+    }
+  }
 }
 
 module.exports = LinkController;

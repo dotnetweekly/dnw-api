@@ -84,6 +84,18 @@ const linkSchema = new Schema({
 			message: 'at least 3 {VALUE}'
 		}
 	},
+	newsletterSent: {
+		type: Number,
+		default: 0
+	},
+	newsletterOpen: {
+		type: Number,
+		default: 0
+	},
+	newsletterClick: {
+		type: Number,
+		default: 0
+	},
 	comments: [commentSchema],
 	user: { type: Schema.ObjectId, ref: 'User' },
 	createdOn: { type: Date, default: CalendarHelper.getUtcNow() }

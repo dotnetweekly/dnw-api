@@ -1,9 +1,9 @@
-const sanitize = require('mongo-sanitize');
+const sanitize = require("mongo-sanitize");
 const LinkModel = require("../../../db/models/link.model");
 const UserModel = require("../../../db/models/user.model");
 const ErrorHelper = require("../../../helpers/errors.helper");
 const stringHelper = require("../../../helpers/string.helper");
-const CalendarHelper = require('../../../helpers/calendar.helper');
+const CalendarHelper = require("../../../helpers/calendar.helper");
 
 const dbcategories = require("../../../data/categories");
 const dbtags = require("../../../data/tags");
@@ -25,6 +25,17 @@ function tagsExistSearch(tags) {
 
 function saveLink(newLink, user, errors, callback) {
   try {
+    let newDay = newLink.date || new Date(Date.now());
+    if (newDay.getDay() === 1) {
+      newDay = CalendarHelper.addDays(newDay, 1);
+    }
+    if (newDay.getDay() === 6) {
+      newDay = CalendarHelper.addDays(newDay, -1);
+    }
+    if (newDay.getDay() === 0) {
+      newDay = CalendarHelper.addDays(newDay, -2);
+    }
+
     const link = new LinkModel({
       title: newLink.title,
       content: newLink.content,
@@ -36,7 +47,7 @@ function saveLink(newLink, user, errors, callback) {
       user: user.id,
       upvotes: [],
       comments: [],
-      createdOn: newLink.date || new Date(Date.now()),
+      createdOn: newDay,
       isPayed: false
     });
     link.save(function(err) {
@@ -53,7 +64,7 @@ function saveLink(newLink, user, errors, callback) {
     });
   } catch (error) {
     console.log(error);
-		callback.onError(error);
+    callback.onError(error);
   }
 }
 
@@ -62,11 +73,11 @@ const addLink = function(req, callback) {
   const newLink = sanitize(req.body);
   const newLinkCategory = newLink.category.slug || newLink.category;
   const category = dbcategories.filter(c => {
-    return newLinkCategory === c.slug
+    return newLinkCategory === c.slug;
   });
   const tagsExist = tagsExistSearch(newLink.tags);
-  
-  if(category.length === 0){
+
+  if (category.length === 0) {
     errors.push({
       field: "category",
       error: `Category not found`
@@ -85,7 +96,7 @@ const addLink = function(req, callback) {
     });
   }
 
-  if ((newLink.category === "sponsored" || newLink.category === "job-listing")) {
+  if (newLink.category === "sponsored" || newLink.category === "job-listing") {
     if (!newLink.date) {
       errors.push({
         field: "date",
@@ -107,7 +118,7 @@ const addLink = function(req, callback) {
       });
     }
   }
-  
+
   if (errors.length > 0) {
     callback.onSuccess({ errors });
     return;
