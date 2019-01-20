@@ -37,7 +37,7 @@ const newsletterLog = function(req, callback, updateType) {
     !itemToUpdate.target_link_name ||
     !itemToUpdate.target_link_url
   ) {
-    callback.onError("");
+    callback.onError(itemToUpdate);
     return;
   }
 
@@ -58,13 +58,19 @@ const newsletterLog = function(req, callback, updateType) {
     parseInt(campaignParts[1])
   );
 
-  var query = Link.findOne({
+  const queryOptions = {
     title: itemToUpdate.target_link_name,
     url: { $regex: `/(${subStringUrl})*/` },
-    createdOn: { $gte: dateRange.from, $lte: dateRange.to }
-  }).populate("user");
+    createdOn: {
+      $gte: CalendarHelper.addDays(dateRange.from, -3),
+      $lte: CalendarHelper.addDays(dateRange.to, 3)
+    }
+  };
+
+  var query = Link.findOne(queryOptions);
 
   query.exec(function(err, data) {
+    console.log("PAAD", err, data, queryOptions);
     if (err || !data) {
       callback.onError("Not Found");
     } else {
