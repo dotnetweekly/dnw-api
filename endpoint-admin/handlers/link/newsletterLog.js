@@ -32,11 +32,7 @@ const updateData = function(data, callback, updateType) {
 
 const newsletterLog = function(req, callback, updateType) {
   const itemToUpdate = sanitize(req.body);
-  if (
-    !itemToUpdate.campaign_id ||
-    !itemToUpdate.target_link_name ||
-    !itemToUpdate.target_link_url
-  ) {
+  if (!itemToUpdate.campaign_id || !itemToUpdate.target_link_url) {
     callback.onError(itemToUpdate);
     return;
   }
