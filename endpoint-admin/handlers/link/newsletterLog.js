@@ -55,7 +55,7 @@ const newsletterLog = function(req, callback, updateType) {
   );
 
   const queryOptions = {
-    url: { $regex: `/(${subStringUrl})*/` },
+    url: { $regex: `^${subStringUrl}*` },
     createdOn: {
       $gte: CalendarHelper.addDays(dateRange.from, -3),
       $lte: CalendarHelper.addDays(dateRange.to, 3)
