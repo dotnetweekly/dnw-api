@@ -59,18 +59,17 @@ const newsletterLog = function(req, callback, updateType) {
   );
 
   const queryOptions = {
-    title: itemToUpdate.target_link_name,
     url: { $regex: `/(${subStringUrl})*/` },
     createdOn: {
       $gte: CalendarHelper.addDays(dateRange.from, -3),
       $lte: CalendarHelper.addDays(dateRange.to, 3)
-    }
+    },
+    isActive: true
   };
 
   var query = Link.findOne(queryOptions);
 
   query.exec(function(err, data) {
-    console.log("PAAD", err, data, queryOptions);
     if (err || !data) {
       callback.onError("Not Found");
     } else {
