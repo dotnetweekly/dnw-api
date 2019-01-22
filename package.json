@@ -26,7 +26,8 @@
     "shortid": "^2.2.8",
     "sitemap": "^1.13.0",
     "sparkpost": "^2.1.2",
-    "xml-escape": "^1.1.0"
+    "xml-escape": "^1.1.0",
+    "weekly-calendar-helper": "^0.0.5"
   },
   "scripts": {
     "start": "node server.js",

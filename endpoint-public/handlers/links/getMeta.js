@@ -1,9 +1,9 @@
-var CalendarHelper = require('../../../helpers/calendar.helper');
+const weeklyCalendarHelper = require("weekly-calendar-helper");
 
 const getMeta = function(req, callback) {
-	callback.onSuccess({ date: CalendarHelper.getUtcNow() });
+  callback.onSuccess({ date: weeklyCalendarHelper.baseHelper.getUtcNow() });
 
-	return;
+  return;
 };
 
 module.exports = getMeta;

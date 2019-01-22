@@ -5,7 +5,7 @@ const stringValidate = require("../validations/strings.validate");
 const tagSchema = require("./tag.schema");
 const commentSchema = require("./comment.schema");
 const userSchema = require("./user.schema");
-const CalendarHelper = require("../../helpers/calendar.helper");
+const weeklyCalendarHelper = require("weekly-calendar-helper");
 
 const linkSchema = new Schema({
   title: {
@@ -94,7 +94,10 @@ const linkSchema = new Schema({
   },
   comments: [commentSchema],
   user: { type: Schema.ObjectId, ref: "User" },
-  createdOn: { type: Date, default: CalendarHelper.getUtcNow() }
+  createdOn: {
+    type: Date,
+    default: weeklyCalendarHelper.baseHelper.getUtcNow()
+  }
 });
 
 module.exports = linkSchema;

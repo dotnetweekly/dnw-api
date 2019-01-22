@@ -2,7 +2,7 @@ const mongoose = require("mongoose");
 const sanitize = require("mongo-sanitize");
 const Schema = mongoose.Schema;
 const Link = require("../../../db/models/link.model");
-const CalendarHelper = require("../../../helpers/calendar.helper");
+const weeklyCalendarHelper = require("weekly-calendar-helper");
 
 const updateData = function(data, callback, updateType) {
   return new Promise((resolve, reject) => {
@@ -49,7 +49,7 @@ const newsletterLog = function(req, callback, updateType) {
     return;
   }
 
-  const dateRange = CalendarHelper.getDateRangeOfWeek(
+  const dateRange = weeklyCalendarHelper.weekHelper.getDateRangeOfWeek(
     parseInt(campaignParts[2]),
     parseInt(campaignParts[1])
   );
@@ -57,8 +57,8 @@ const newsletterLog = function(req, callback, updateType) {
   const queryOptions = {
     url: { $regex: `^${subStringUrl}*` },
     createdOn: {
-      $gte: CalendarHelper.addDays(dateRange.from, -3),
-      $lte: CalendarHelper.addDays(dateRange.to, 3)
+      $gte: weeklyCalendarHelper.baseHelper.addDays(dateRange.from, -3),
+      $lte: weeklyCalendarHelper.baseHelper.addDays(dateRange.to, 3)
     },
     isActive: true
   };

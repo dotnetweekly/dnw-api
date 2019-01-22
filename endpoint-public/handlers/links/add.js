@@ -3,7 +3,7 @@ const LinkModel = require("../../../db/models/link.model");
 const UserModel = require("../../../db/models/user.model");
 const ErrorHelper = require("../../../helpers/errors.helper");
 const stringHelper = require("../../../helpers/string.helper");
-const CalendarHelper = require("../../../helpers/calendar.helper");
+const weeklyCalendarHelper = require("weekly-calendar-helper");
 
 const dbcategories = require("../../../data/categories");
 const dbtags = require("../../../data/tags");
@@ -26,14 +26,11 @@ function tagsExistSearch(tags) {
 function saveLink(newLink, user, errors, callback) {
   try {
     let newDay = newLink.date || new Date(Date.now());
-    if (newDay.getDay() === 1) {
-      newDay = CalendarHelper.addDays(newDay, 1);
-    }
     if (newDay.getDay() === 6) {
-      newDay = CalendarHelper.addDays(newDay, -1);
+      newDay = weeklyCalendarHelper.baseHelper.addDays(newDay, -1);
     }
     if (newDay.getDay() === 0) {
-      newDay = CalendarHelper.addDays(newDay, -2);
+      newDay = weeklyCalendarHelper.baseHelper.addDays(newDay, 1);
     }
 
     const link = new LinkModel({
@@ -103,7 +100,10 @@ const addLink = function(req, callback) {
         error: `Date not selected`
       });
     } else {
-      newLink.createdOn = CalendarHelper.addDays(newLink.date, -3);
+      newLink.createdOn = weeklyCalendarHelper.baseHelper.addDays(
+        newLink.date,
+        -3
+      );
     }
     if (!newLink.title || newLink.title.length > 80) {
       errors.push({

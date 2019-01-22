@@ -2,7 +2,7 @@ const axios = require("axios");
 const sanitize = require("mongo-sanitize");
 
 const Link = require("../../../db/models/link.model");
-const CalendarHelper = require("../../../helpers/calendar.helper");
+const weeklyCalendarHelper = require("weekly-calendar-helper");
 const User = require("../../../db/models/user.model");
 const config = require("../../../config");
 
@@ -40,12 +40,12 @@ const sendEmailToUsers = async function(
 const sendNewsletter = function(req, callback) {
   const onlyAdmin = req.query.onlyAdmin ? sanitize(req.query.onlyAdmin) : false;
 
-  const now = CalendarHelper.getUtcNow();
+  const now = weeklyCalendarHelper.baseHelper.getUtcNow();
   let week = sanitize(req.query.week);
   let year = sanitize(req.query.year);
 
   if (!week || !year) {
-    week = parseInt(CalendarHelper.getWeek(now)) - 1;
+    week = parseInt(weeklyCalendarHelper.weekHelper.getWeekNumber(now)) - 1;
     year = now.getFullYear();
   } else {
     week = parseInt(week) - 1;

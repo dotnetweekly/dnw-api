@@ -1,26 +1,26 @@
-const axios = require('axios');
-const sanitize = require('mongo-sanitize');
+const axios = require("axios");
+const sanitize = require("mongo-sanitize");
 
-const config = require('../../../config');
-const Link = require('../../../db/models/link.model');
-const CalendarHelper = require('../../../helpers/calendar.helper');
+const config = require("../../../config");
+const Link = require("../../../db/models/link.model");
+const weeklyCalendarHelper = require("weekly-calendar-helper");
 
-const currentNewsletter = function (req, callback) {
+const currentNewsletter = function(req, callback) {
   const save = sanitize(req.body.save);
   let template = sanitize(req.query.template);
   let week = sanitize(req.query.week);
   let year = sanitize(req.query.year);
   const category = sanitize(req.query.category);
-  const now = CalendarHelper.getUtcNow();
+  const now = weeklyCalendarHelper.baseHelper.getUtcNow();
 
   if (!year || year === "undefined") {
     year = now.getFullYear();
   }
 
-  const weeksCount = CalendarHelper.weeksInYear(year);
+  const weeksCount = weeklyCalendarHelper.weekHelper.weeksInYear(year);
 
   if (!week || week === "undefined") {
-    week = parseInt(CalendarHelper.getWeek(now));
+    week = parseInt(weeklyCalendarHelper.weekHelper.getWeekNumber(now));
   } else {
     week = parseInt(week) - 1;
   }
@@ -34,18 +34,30 @@ const currentNewsletter = function (req, callback) {
     isActive: true
   };
 
-  const dateRange = CalendarHelper.getDateRangeOfWeek(week, year);
+  const dateRange = weeklyCalendarHelper.weekHelper.getDateRangeOfWeek(
+    week,
+    year
+  );
   searchParams.createdOn = {
     $gte: dateRange.from,
     $lte: dateRange.to
   };
 
-  var query = Link.find(searchParams, ['title', 'url', 'content', 'createdOn', 'slug', 'upvotes', 'tags', 'category']);
-  query.populate('user', 'username').sort({
-    title: 'desc'
+  var query = Link.find(searchParams, [
+    "title",
+    "url",
+    "content",
+    "createdOn",
+    "slug",
+    "upvotes",
+    "tags",
+    "category"
+  ]);
+  query.populate("user", "username").sort({
+    title: "desc"
   });
 
-  query.exec(function (err, data) {
+  query.exec(function(err, data) {
     if (err) {
       callback.onError([]);
       return;
@@ -58,36 +70,36 @@ const currentNewsletter = function (req, callback) {
         });
       }
 
-      data = data.sort(function (a, b) {
+      data = data.sort(function(a, b) {
         return b.upvotes.length - a.upvotes.length;
       });
 
       if (template === "job-listing") {
         data.push({
-          title: '',
-          content: '',
-          url: '',
-          category: 'job-listing',
-          slug: '',
-          user: { username: '' },
+          title: "",
+          content: "",
+          url: "",
+          category: "job-listing",
+          slug: "",
+          user: { username: "" },
           createdOn: new Date(now),
-          tags: [ '' ],
-          upvotes: [ '' ],
+          tags: [""],
+          upvotes: [""],
           template: true
         });
       }
 
       if (template === "sponsored") {
         data.push({
-          title: '',
-          content: '',
-          url: '',
-          category: 'sponsored',
-          slug: '',
-          user: { username: '' },
+          title: "",
+          content: "",
+          url: "",
+          category: "sponsored",
+          slug: "",
+          user: { username: "" },
           createdOn: new Date(now),
-          tags: [ '' ],
-          upvotes: [ '' ],
+          tags: [""],
+          upvotes: [""],
           template: true
         });
       }
