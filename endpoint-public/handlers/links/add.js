@@ -25,7 +25,7 @@ function tagsExistSearch(tags) {
 
 function saveLink(newLink, user, errors, callback) {
   try {
-    let newDay = newLink.date || new Date(Date.now());
+    let newDay = newLink.date || weeklyCalendarHelper.baseHelper.getUtcNow();
     if (newDay.getDay() === 6) {
       newDay = weeklyCalendarHelper.baseHelper.addDays(newDay, -1);
     }
