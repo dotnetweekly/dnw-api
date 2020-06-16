@@ -21,7 +21,7 @@
     "mongoose": "^4.13.12",
     "morgan": "^1.9.1",
     "nodemon": "^1.17.3",
-    "npm": "^6.4.1",
+    "npm": "^6.13.4",
     "serve-favicon": "^2.5.0",
     "shortid": "^2.2.8",
     "sitemap": "^1.13.0",
