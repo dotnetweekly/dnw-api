@@ -2,3 +2,5 @@
 #cd "../wwwroot"
 #rm -rf node_modules
 #npm install
+cd "../wwwroot"
+npm start
