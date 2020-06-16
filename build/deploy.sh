@@ -3,4 +3,5 @@
 #rm -rf node_modules
 #npm install
 cd "../wwwroot"
+npm install
 npm start
