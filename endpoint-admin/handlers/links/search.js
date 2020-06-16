@@ -2,7 +2,7 @@ const sanitize = require("mongo-sanitize");
 const Link = require("../../../db/models/link.model");
 const weeklyCalendarHelper = require("weekly-calendar-helper");
 
-const getAll = function(req, callback) {
+const getAll = function (req, callback) {
   let week = sanitize(req.query.week);
   let year = sanitize(req.query.year);
   const category = sanitize(req.query.category);
@@ -35,14 +35,14 @@ const getAll = function(req, callback) {
 
   query.populate("user").sort({ createdOn: "desc" });
 
-  query.exec(function(err, data) {
+  query.exec(function (err, data) {
     if (err) {
       callback.onError([]);
 
       return;
     } else {
       if (category) {
-        data = data.filter(link => {
+        data = data.filter((link) => {
           if (!category || (link.category && link.category === category)) {
             return link;
           }
