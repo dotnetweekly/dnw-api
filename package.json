@@ -5,7 +5,7 @@
   "private": true,
   "dependencies": {
     "auto-bind": "^1.2.0",
-    "axios": "^0.17.1",
+    "axios": "^0.19.2",
     "body-parser": "^1.18.2",
     "cookie-parser": "^1.4.3",
     "crypto": "^1.0.1",
@@ -17,17 +17,17 @@
     "jsonwebtoken": "^8.2.1",
     "lru-cache": "^4.1.2",
     "mongo-sanitize": "^1.0.0",
-    "mongodb": "^2.2.35",
-    "mongoose": "^4.13.12",
+    "mongodb": "^3.5.9",
+    "mongoose": "^5.9.19",
     "morgan": "^1.9.1",
-    "nodemon": "^1.17.3",
-    "npm": "^6.4.1",
+    "nodemon": "^2.0.4",
+    "npm": "^6.14.5",
     "serve-favicon": "^2.5.0",
     "shortid": "^2.2.8",
     "sitemap": "^1.13.0",
     "sparkpost": "^2.1.2",
-    "xml-escape": "^1.1.0",
-    "weekly-calendar-helper": "^0.0.5"
+    "weekly-calendar-helper": "^0.0.5",
+    "xml-escape": "^1.1.0"
   },
   "scripts": {
     "start": "node server.js",
@@ -35,7 +35,7 @@
     "seed": "node ./db/seed/"
   },
   "engines": {
-    "node": "~10.10",
-    "npm": "~6.4.1"
+    "node": "~12.10",
+    "npm": "~6.11.3"
   }
 }
