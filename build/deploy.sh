@@ -1,7 +1,5 @@
 #cp -TR "./" "../wwwroot/"
-#cd "../wwwroot"
 #rm -rf node_modules
-#npm install
 cd "../wwwroot"
-npm install
+#npm install
 npm start
