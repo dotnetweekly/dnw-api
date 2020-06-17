@@ -21,7 +21,6 @@
     "mongoose": "^5.9.19",
     "morgan": "^1.9.1",
     "nodemon": "^2.0.4",
-    "npm": "^6.14.5",
     "serve-favicon": "^2.5.0",
     "shortid": "^2.2.8",
     "sitemap": "^1.13.0",
@@ -33,9 +32,5 @@
     "start": "node server.js",
     "startdev": "nodemon server.js",
     "seed": "node ./db/seed/"
-  },
-  "engines": {
-    "node": "~12.13.0",
-    "npm": "~6.12.0"
   }
 }
